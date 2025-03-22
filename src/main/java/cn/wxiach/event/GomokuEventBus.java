@@ -3,12 +3,13 @@ package cn.wxiach.event;
 import javax.swing.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 
 public class GomokuEventBus {
 
     private static GomokuEventBus instance;
 
-    private final ConcurrentHashMap<Class<?>, CopyOnWriteArraySet<Subscriber>> subscribers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<? extends GomokuEvent>, CopyOnWriteArraySet<Consumer<? super GomokuEvent>>> subscribers = new ConcurrentHashMap<>();
 
     public static synchronized GomokuEventBus getInstance() {
         if (instance == null) {
@@ -17,11 +18,12 @@ public class GomokuEventBus {
         return instance;
     }
 
-    public <T> void subscribe(Class<T> eventType, Subscriber<T> subscriber) {
-        subscribers.computeIfAbsent(eventType, k->new CopyOnWriteArraySet<>()).add(subscriber);
+    public <E extends GomokuEvent> void subscribe(Class<E> eventType, Consumer<? super E> subscriber) {
+        subscribers.computeIfAbsent(eventType, k -> new CopyOnWriteArraySet<>())
+                .add(createTypeSafeConsumer(eventType, subscriber));
     }
 
-    public void publish(Object event) {
+    public void publish(GomokuEvent event) {
         if (SwingUtilities.isEventDispatchThread()) {
             dispatch(event);
         } else {
@@ -29,14 +31,26 @@ public class GomokuEventBus {
         }
     }
 
-    public void dispatch(Object event) {
-        CopyOnWriteArraySet<Subscriber> handlers = subscribers.get(event.getClass());
+    private void dispatch(GomokuEvent event) {
+        Class<? extends GomokuEvent> eventType = event.getClass();
+        CopyOnWriteArraySet<Consumer<? super GomokuEvent>> handlers = subscribers.get(eventType);
         if (handlers != null) {
-            handlers.forEach(handler -> handler.handle(event));
+            handlers.forEach(handler -> handler.accept(event));
         }
     }
 
-    public interface Subscriber<T> {
-        void handle(T event);
+    private <E extends GomokuEvent> Consumer<GomokuEvent> createTypeSafeConsumer(
+            Class<E> eventType, Consumer<? super E> subscriber) {
+
+        Class<?> parameterType = subscriber.getClass().getDeclaredMethods()[0].getParameterTypes()[0];
+        return event -> {
+            if (parameterType.isAssignableFrom(eventType)) {
+                subscriber.accept(eventType.cast(event));
+            } else {
+                throw new IllegalArgumentException(
+                        String.format("Subscriber for %s cannot handle %s.", eventType.getName(), parameterType.getName())
+                );
+            }
+        };
     }
 }

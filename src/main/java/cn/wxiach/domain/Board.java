@@ -1,4 +1,4 @@
-package cn.wxiach.core.model;
+package cn.wxiach.domain;
 
 import java.util.Arrays;
 

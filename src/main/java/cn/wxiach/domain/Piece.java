@@ -1,4 +1,4 @@
-package cn.wxiach.core.model;
+package cn.wxiach.domain;
 
 public class Piece {
     private final int x;

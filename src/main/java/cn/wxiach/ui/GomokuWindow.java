@@ -1,16 +1,24 @@
 package cn.wxiach.ui;
 
+import cn.wxiach.event.GomokuEventBus;
+import cn.wxiach.event.support.GameStartEvent;
+
 import javax.swing.*;
 
-public class GomokuWindow {
+public class GomokuWindow extends JFrame {
+
+    private final BoardPanel boardPanel = new BoardPanel();
 
     public GomokuWindow() {
-        JFrame frame = new JFrame("Gomoku - Battle with AI");
-        frame.add(new BoardPanel());
-        frame.setVisible(true);
+        setTitle("Gomoku - Battle with AI");
+        add(boardPanel);
+
+        GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
+            this.setVisible(true);
+        });
     }
 
-    public static void run() {
-        new GomokuWindow();
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
     }
 }
