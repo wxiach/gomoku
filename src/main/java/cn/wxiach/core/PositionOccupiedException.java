@@ -1,4 +1,4 @@
-package cn.wxiach.domain;
+package cn.wxiach.core;
 
 public class PositionOccupiedException extends RuntimeException {
     public PositionOccupiedException(String message) {

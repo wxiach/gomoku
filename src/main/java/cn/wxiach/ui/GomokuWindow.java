@@ -1,19 +1,22 @@
 package cn.wxiach.ui;
 
-import cn.wxiach.domain.Board;
+
+import cn.wxiach.core.GameFlow;
+import cn.wxiach.core.GameMessageBox;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.GameStartEvent;
+import cn.wxiach.event.support.*;
+import cn.wxiach.model.Piece;
 
 import javax.swing.*;
 
 public class GomokuWindow extends JFrame {
 
-    private final BoardPanel boardPanel = new BoardPanel();
-    private final Board board = new Board();
+    private final GameFlow gameFlow = new GameFlow();
+    private final GomokuPanel gomokuPanel = new GomokuPanel();
 
     public GomokuWindow() {
         setTitle("Gomoku - Battle with AI");
-        add(boardPanel);
+        add(gomokuPanel);
 
         pack();
         setResizable(false);
@@ -22,10 +25,27 @@ public class GomokuWindow extends JFrame {
 
         GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
             this.setVisible(true);
+            Piece.Color selectedPieceColor = GameMessageBox.showPieceSelectionDialog(this);
+            GomokuEventBus.getInstance().publish(new PieceSelectionEvent(this, selectedPieceColor));
+        });
+
+        GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
+            boolean isRestart = GameMessageBox.showGameOverOptionDialog(this, event.getWinner());
+            if (isRestart) {
+                GomokuEventBus.getInstance().publish(new GameRestartEvent(this));
+            }
+        });
+
+        GomokuEventBus.getInstance().subscribe(GameExitEvent.class, event -> {
+            this.dispose();
         });
     }
 
-    public BoardPanel getBoardPanel() {
-        return boardPanel;
+    public GomokuPanel getGomokuPanel() {
+        return gomokuPanel;
+    }
+
+    public GameFlow getGameFlow() {
+        return gameFlow;
     }
 }

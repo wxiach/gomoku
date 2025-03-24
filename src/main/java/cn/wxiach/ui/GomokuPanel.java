@@ -1,10 +1,10 @@
 package cn.wxiach.ui;
 
-import cn.wxiach.domain.Board;
-import cn.wxiach.domain.Piece;
+import cn.wxiach.core.BoardManager;
+import cn.wxiach.model.Piece;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.PiecePlacedEvent;
+import cn.wxiach.event.support.HumanClickEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
-public class BoardPanel extends JPanel {
+public class GomokuPanel extends JPanel {
 
     public static final int BOARD_PANEL_UNIT_SIZE = 40;
     public static final int BOARD_POINT_SIZE = 6;
@@ -30,9 +30,9 @@ public class BoardPanel extends JPanel {
     private Image whitePiece;
     private int[][] board;
 
-    public BoardPanel() {
-        int width = Board.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
-        int height = Board.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
+    public GomokuPanel() {
+        int width = BoardManager.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
+        int height = BoardManager.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
         setPreferredSize(new Dimension(width, height));
 
         addMouseListener(new MouseAdapter() {
@@ -40,12 +40,11 @@ public class BoardPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 int x = Math.round((float) e.getX() / BOARD_PANEL_UNIT_SIZE - 1);
                 int y = Math.round((float) e.getY() / BOARD_PANEL_UNIT_SIZE - 1);
-                Piece piece = new Piece(x, y, Piece.Color.WHITE);
-                GomokuEventBus.getInstance().publish(new PiecePlacedEvent(this, piece));
+                GomokuEventBus.getInstance().publish(new HumanClickEvent(this, x, y));
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(BoardUpdateEvent.class, event -> {
+        GomokuEventBus.getInstance().subscribe(PiecePlacedEvent.class, event -> {
             this.board = event.getLatestBord();
             repaint();
         });
@@ -68,13 +67,13 @@ public class BoardPanel extends JPanel {
         g.drawImage(gomokuBoardImage, 0, 0, getWidth(), getHeight(), this);
 
         // Draw board lines with a margin around the edges.
-        for (int i = 1; i < Board.BOARD_SIZE; i++) {
+        for (int i = 1; i < BoardManager.BOARD_SIZE; i++) {
             // Vertical lines
             g.drawLine(i * BOARD_PANEL_UNIT_SIZE, BOARD_PANEL_UNIT_SIZE,
-                    i * BOARD_PANEL_UNIT_SIZE, (Board.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE);
+                    i * BOARD_PANEL_UNIT_SIZE, (BoardManager.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE);
             // Horizontal lines
             g.drawLine(BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE,
-                    (Board.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
+                    (BoardManager.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
         }
 
         // Draw Tengen and four corners star points
@@ -104,8 +103,8 @@ public class BoardPanel extends JPanel {
 
         // Draw pieces
         if (board != null) {
-            for (int i = 0; i < Board.BOARD_SIZE; i++) {
-                for (int j = 0; j < Board.BOARD_SIZE; j++) {
+            for (int i = 0; i < BoardManager.BOARD_SIZE; i++) {
+                for (int j = 0; j < BoardManager.BOARD_SIZE; j++) {
                     int pieceColor = board[i][j];
 
                     Image pieceImage = null;
@@ -117,7 +116,6 @@ public class BoardPanel extends JPanel {
                     }
 
                     if (pieceImage == null) continue;
-                    System.out.println(i + "" + j);
 
                     g.drawImage(
                             pieceImage,

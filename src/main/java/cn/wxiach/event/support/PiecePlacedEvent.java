@@ -1,17 +1,16 @@
 package cn.wxiach.event.support;
 
-import cn.wxiach.domain.Piece;
 import cn.wxiach.event.GomokuEvent;
 
 public class PiecePlacedEvent extends GomokuEvent {
-    private final Piece piece;
+    private final int[][] latestBord;
 
-    public PiecePlacedEvent(Object source, Piece piece) {
+    public PiecePlacedEvent(Object source, int[][] latestBoard) {
         super(source);
-        this.piece = piece;
+        this.latestBord = latestBoard;
     }
 
-    public Piece getPiece() {
-        return piece;
+    public int[][] getLatestBord() {
+        return latestBord;
     }
 }

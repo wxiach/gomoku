@@ -1,28 +1,30 @@
-package cn.wxiach.domain;
+package cn.wxiach.core;
 
+import cn.wxiach.model.Piece;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.PiecePlacedEvent;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
-public class Board {
+public class BoardManager {
 
     public static final int BOARD_SIZE = 15;
 
-    private final HashSet<Piece> pieces = new HashSet<>();
-    int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
+    private final LinkedHashSet<Piece> pieces = new LinkedHashSet<>();
+    private int[][] board = new int[BOARD_SIZE][BOARD_SIZE];
 
-    public Board() {
-        GomokuEventBus.getInstance().subscribe(PiecePlacedEvent.class, event -> {
-            addPiece(event.getPiece());
-        });
+    public BoardManager() {
     }
 
     public int[][] getBoard() {
         // Return a copy to protect the board not be modified.
         return Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+    }
+
+    public Piece getLastPiece() {
+        return pieces.isEmpty() ? null : pieces.getLast();
     }
 
     public void addPiece(Piece piece) {
@@ -32,9 +34,12 @@ public class Board {
         if (hasPiece(piece.getX(), piece.getY())) {
             throw new PositionOccupiedException("There has been a piece.");
         }
+
         pieces.add(piece);
         convertToArray();
-        GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, board));
+
+
+        GomokuEventBus.getInstance().publish(new PiecePlacedEvent(this, board));
     }
 
     private void convertToArray() {

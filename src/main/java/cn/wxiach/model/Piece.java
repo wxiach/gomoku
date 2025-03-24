@@ -1,4 +1,4 @@
-package cn.wxiach.domain;
+package cn.wxiach.model;
 
 public class Piece {
     private final int x;
@@ -19,7 +19,7 @@ public class Piece {
         return y;
     }
 
-    Color getColor() {
+    public Color getColor() {
         return color;
     }
 
