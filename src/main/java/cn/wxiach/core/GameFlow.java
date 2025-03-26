@@ -1,6 +1,5 @@
 package cn.wxiach.core;
 
-import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.model.Piece;
@@ -48,6 +47,9 @@ public class GameFlow {
                 GomokuEventBus.getInstance().publish(new GameOverEvent(this, winner));
             } else {
                 turnHandler.switchTurn();
+                if (turnHandler.isRobotTurn()) {
+                    GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardManager.getBoard()));
+                }
             }
         });
     }

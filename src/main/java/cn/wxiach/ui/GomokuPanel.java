@@ -3,7 +3,7 @@ package cn.wxiach.ui;
 import cn.wxiach.core.BoardManager;
 import cn.wxiach.model.Piece;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.PiecePlacedEvent;
+import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.HumanClickEvent;
 
 import javax.imageio.ImageIO;
@@ -31,8 +31,8 @@ public class GomokuPanel extends JPanel {
     private int[][] board;
 
     public GomokuPanel() {
-        int width = BoardManager.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
-        int height = BoardManager.BOARD_SIZE * BOARD_PANEL_UNIT_SIZE;
+        int width = (BoardManager.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+        int height = (BoardManager.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
         setPreferredSize(new Dimension(width, height));
 
         addMouseListener(new MouseAdapter() {
@@ -44,7 +44,7 @@ public class GomokuPanel extends JPanel {
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(PiecePlacedEvent.class, event -> {
+        GomokuEventBus.getInstance().subscribe(BoardUpdateEvent.class, event -> {
             this.board = event.getLatestBord();
             repaint();
         });
@@ -67,22 +67,22 @@ public class GomokuPanel extends JPanel {
         g.drawImage(gomokuBoardImage, 0, 0, getWidth(), getHeight(), this);
 
         // Draw board lines with a margin around the edges.
-        for (int i = 1; i < BoardManager.BOARD_SIZE; i++) {
+        for (int i = 1; i <= BoardManager.BOARD_SIZE; i++) {
             // Vertical lines
             g.drawLine(i * BOARD_PANEL_UNIT_SIZE, BOARD_PANEL_UNIT_SIZE,
-                    i * BOARD_PANEL_UNIT_SIZE, (BoardManager.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE);
+                    i * BOARD_PANEL_UNIT_SIZE, (BoardManager.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
             // Horizontal lines
             g.drawLine(BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE,
-                    (BoardManager.BOARD_SIZE - 1) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
+                    (BoardManager.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
         }
 
         // Draw Tengen and four corners star points
         int[][] fourPointPosition = {
-                {7 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 7 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
+                {8 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 8 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
                 {4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 11 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {11 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {11 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 11 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
+                {4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
+                {12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
+                {12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
         };
 
         for (int[] point : fourPointPosition) {

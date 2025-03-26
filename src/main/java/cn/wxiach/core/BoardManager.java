@@ -1,11 +1,11 @@
 package cn.wxiach.core;
 
+import cn.wxiach.event.support.PiecePlacedEvent;
 import cn.wxiach.model.Piece;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.PiecePlacedEvent;
+import cn.wxiach.event.support.BoardUpdateEvent;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 public class BoardManager {
@@ -39,7 +39,8 @@ public class BoardManager {
         convertToArray();
 
 
-        GomokuEventBus.getInstance().publish(new PiecePlacedEvent(this, board));
+        GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, board));
+        GomokuEventBus.getInstance().publish(new PiecePlacedEvent(this));
     }
 
     private void convertToArray() {
