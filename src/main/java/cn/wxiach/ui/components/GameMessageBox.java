@@ -23,7 +23,7 @@ public class GameMessageBox {
     public static boolean showGameOverOptionDialog(JFrame parent, Color winner) {
         String winnerStr = winner == Color.BLACK ? "Black" : "White";
         int option = JOptionPane.showConfirmDialog(parent, String.format("%s win. Want to go for another round?", winnerStr),
-                        "确认", JOptionPane.YES_NO_OPTION);
+                        "Game Over", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
             return true;
         } else {

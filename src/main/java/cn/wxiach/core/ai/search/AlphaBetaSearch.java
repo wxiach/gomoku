@@ -9,7 +9,7 @@ import cn.wxiach.model.Point;
 
 public class AlphaBetaSearch {
 
-    public static final int ALPHA_BETA_SEARCH_DEFAULT_DEEP = 2;
+    public static final int ALPHA_BETA_SEARCH_DEFAULT_DEEP = 4;
 
     private final int depth;
     private final CandidatePointSearch candidatePointSearch;
@@ -18,6 +18,8 @@ public class AlphaBetaSearch {
 
     private final int[][] board;
     private final Color robotColor;
+
+    private Point move;
 
     public AlphaBetaSearch(int[][] board, Color robotColor) {
         this(ALPHA_BETA_SEARCH_DEFAULT_DEEP, board, robotColor);
@@ -28,43 +30,33 @@ public class AlphaBetaSearch {
         this.board = board;
         this.robotColor = robotColor;
         this.candidatePointSearch = new CandidatePointSearch(board);
-        this.evaluator = new FeatureBasedEvaluator(robotColor);
+        this.evaluator = new FeatureBasedEvaluator();
     }
 
     public Point execute() {
-        MoveDecision move = new MoveDecision(Point.of(7, 7), Integer.MIN_VALUE);
-        for (Point point : candidatePointSearch.getAllCandidatePoints()) {
-            board[point.x()][point.y()] = robotColor.getValue();
-            int score = alphaBeta(depth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-            board[point.x()][point.y()] = Color.BLANK.getValue();
-            if (move.score() < score) {
-                move = new MoveDecision(point, score);
-            }
-        }
-        return move.point();
+        alphaBeta(depth, Integer.MIN_VALUE+10000, Integer.MAX_VALUE-10000, robotColor);
+        return move;
     }
 
 
-    public int alphaBeta(int depth, int alpha, int beta, boolean maximizing) {
+    public int alphaBeta(int depth, int alpha, int beta, Color color) {
         if (depth == 0 || GameStateCheck.isGameOver(board)) {
-            return evaluator.evaluate(board);
+            return evaluator.evaluate(board, color);
         }
-
-        int currentScore = maximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        Color currentColor = maximizing ? robotColor : PieceColorState.reverseColor(robotColor);
 
         for (Point point : candidatePointSearch.getAllCandidatePoints()) {
-            board[point.x()][point.y()] = currentColor.getValue();
-            int score = alphaBeta(depth - 1, alpha, beta, !maximizing);
+            board[point.x()][point.y()] = color.getValue();
+            int score = -alphaBeta(depth - 1, -beta, -alpha, PieceColorState.reverseColor(color));
             board[point.x()][point.y()] = Color.BLANK.getValue();
-            currentScore = maximizing ? Math.max(currentScore, score) : Math.min(currentScore, score);
-            if (maximizing) {
-                alpha = Math.max(alpha, currentScore);
-            } else {
-                beta = Math.min(beta, currentScore);
+            if (score >= beta) return beta;
+            if (score > alpha) {
+                alpha = score;
+                if (depth == this.depth) {
+                    this.move = point;
+                }
             }
-            if (beta <= alpha) break;
         }
-        return currentScore;
+
+        return alpha;
     }
 }

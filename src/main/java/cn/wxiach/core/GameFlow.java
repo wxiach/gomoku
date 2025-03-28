@@ -8,6 +8,7 @@ import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
+import cn.wxiach.model.Point;
 
 
 public class GameFlow {
@@ -26,7 +27,7 @@ public class GameFlow {
 
             // If human choose white piece, robot move first.
             if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
-                GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardState.getBoard()));
+                GomokuEventBus.getInstance().publish(new RobotClickEvent(this, Point.of(7, 7)));
             }
         });
 

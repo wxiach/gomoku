@@ -9,6 +9,7 @@ import cn.wxiach.model.Color;
 import cn.wxiach.ui.components.GomokuPanel;
 
 import javax.swing.*;
+import java.util.Locale;
 
 public class GomokuWindow extends JFrame {
 

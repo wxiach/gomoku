@@ -2,7 +2,6 @@ package cn.wxiach.core.ai.evaluator;
 
 import cn.wxiach.config.GomokuConf;
 import cn.wxiach.core.ai.evaluator.pattern.FeaturePatternDetector;
-import cn.wxiach.core.state.PieceColorState;
 import cn.wxiach.model.Color;
 
 import java.util.ArrayList;
@@ -23,8 +22,7 @@ public class FeatureBasedEvaluator extends Evaluator {
 
     private final List<int[]> lines = new ArrayList<>();
 
-    public FeatureBasedEvaluator(Color color) {
-        super(color);
+    public FeatureBasedEvaluator() {
         preStoreAllLines();
     }
 
@@ -73,16 +71,9 @@ public class FeatureBasedEvaluator extends Evaluator {
     }
 
     @Override
-    protected int evaluateMineScore(int[][] board) {
+    protected int evaluateScore(int[][] board, Color color) {
         FeaturePatternDetector featurePatternDetector = new FeaturePatternDetector(board, color);
         return lines.stream().mapToInt(featurePatternDetector::detect).sum();
     }
 
-    @Override
-    protected int evaluateOpponentScore(int[][] board) {
-        // Obtain the opponent piece color
-        Color color = PieceColorState.reverseColor(this.color);
-        FeaturePatternDetector featurePatternDetector = new FeaturePatternDetector(board, color);
-        return lines.stream().mapToInt(featurePatternDetector::detect).sum();
-    }
 }

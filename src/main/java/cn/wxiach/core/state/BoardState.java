@@ -31,8 +31,7 @@ public class BoardState extends PieceColorState {
     }
 
     public void addPiece(Piece piece) {
-        if (PositionCheck.isOutOfBounds(piece.point().x(), piece.point().y())
-                || !PositionCheck.isEmpty(board, piece.point())) return;
+        if (PositionCheck.isOutOfBounds(piece.point()) || !PositionCheck.isEmpty(board, piece.point())) return;
         pieces.add(piece);
         convertToArray();
         GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, board));

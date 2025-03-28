@@ -1,5 +1,7 @@
 package cn.wxiach.core.ai.search;
 
+import cn.wxiach.core.ai.evaluator.Evaluator;
+import cn.wxiach.core.ai.evaluator.FeatureBasedEvaluator;
 import cn.wxiach.core.rule.PositionCheck;
 import cn.wxiach.model.Point;
 
@@ -24,6 +26,9 @@ public class CandidatePointSearch {
                 addSurroundingPoints(x, y, DEFAULT_SURROUNDING_RANGE, candidates, board);
             }
         }
+
+        Evaluator evaluator = new FeatureBasedEvaluator();
+
         return candidates;
     }
 
@@ -32,7 +37,7 @@ public class CandidatePointSearch {
             for (int dy = -range; dy <= range; dy++) {
                 int nx = x + dx;
                 int ny = y + dy;
-                if (!PositionCheck.isOutOfBounds(nx, ny) && PositionCheck.isEmpty(board, Point.of(nx, ny))) {
+                if (!PositionCheck.isOutOfBounds(Point.of(nx, ny)) && PositionCheck.isEmpty(board, Point.of(nx, ny))) {
                     candidates.add(Point.of(nx, ny));
                 }
             }
