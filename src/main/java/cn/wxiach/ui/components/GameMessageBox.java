@@ -1,14 +1,14 @@
-package cn.wxiach.core;
+package cn.wxiach.ui.components;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameExitEvent;
-import cn.wxiach.model.Piece;
+import cn.wxiach.model.Color;
 
 import javax.swing.*;
 
 public class GameMessageBox {
 
-    public static Piece.Color showPieceSelectionDialog(JFrame parent) {
+    public static Color showPieceSelectionDialog(JFrame parent) {
         Object[] options = {"Black", "White"};
         int option = JOptionPane.showOptionDialog(parent, "Please select your piece .", "Piece Selection",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
@@ -17,11 +17,11 @@ public class GameMessageBox {
             GomokuEventBus.getInstance().publish(new GameExitEvent(parent));
         }
 
-        return option == 0 ? Piece.Color.BLACK : Piece.Color.WHITE;
+        return option == 0 ? Color.BLACK : Color.WHITE;
     }
 
-    public static boolean showGameOverOptionDialog(JFrame parent, Piece.Color winner) {
-        String winnerStr = winner == Piece.Color.BLACK ? "Black" : "White";
+    public static boolean showGameOverOptionDialog(JFrame parent, Color winner) {
+        String winnerStr = winner == Color.BLACK ? "Black" : "White";
         int option = JOptionPane.showConfirmDialog(parent, String.format("%s win. Want to go for another round?", winnerStr),
                         "确认", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {

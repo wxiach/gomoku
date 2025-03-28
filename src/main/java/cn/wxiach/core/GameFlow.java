@@ -1,54 +1,63 @@
 package cn.wxiach.core;
 
+import cn.wxiach.core.ai.RobotEngine;
+import cn.wxiach.core.rule.GameStateCheck;
+import cn.wxiach.core.rule.RuleEngine;
+import cn.wxiach.core.state.BoardState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
+import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
 
 
 public class GameFlow {
 
-    private final BoardManager boardManager = new BoardManager();
-    private final TurnHandler turnHandler = new TurnHandler();
-    private final RobotEngine robotEngine = new RobotEngine();
+    private final RuleEngine ruleEngine;
+    private final BoardState boardState;
 
     public GameFlow() {
+
+        this.ruleEngine = new RuleEngine();
+        this.boardState = new BoardState();
+        RobotEngine robotEngine = new RobotEngine(boardState);
+
         GomokuEventBus.getInstance().subscribe(PieceSelectionEvent.class, event -> {
-            turnHandler.setHumanPieceColor(event.getSelectedPieceColor());
-            if (turnHandler.isRobotTurn()) {
-                GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardManager.getBoard()));
+            boardState.setHumanColor(event.getSelectedPieceColor());
+
+            // If human choose white piece, robot move first.
+            if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
+                GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardState.getBoard()));
             }
         });
 
         GomokuEventBus.getInstance().subscribe(HumanClickEvent.class, event -> {
-
             // Block multiple quick clicks
-            Piece lastPiece = boardManager.getLastPiece();
-            if (lastPiece != null && lastPiece.getColor() == turnHandler.getCurrentTurn()) {
+            Piece lastPiece = boardState.getLastPiece();
+            if (lastPiece != null && lastPiece.color() == ruleEngine.getCurrentTurn()) {
                 return;
             }
 
-
-            if (turnHandler.isHumanTurn()) {
-                boardManager.addPiece(new Piece(event.getX(), event.getY(), turnHandler.getCurrentTurn()));
+            if (ruleEngine.isHumanTurn(boardState.getHumanColor())){
+                boardState.addPiece(Piece.of(event.getPoint(), ruleEngine.getCurrentTurn()));
             }
         });
 
 
         GomokuEventBus.getInstance().subscribe(RobotClickEvent.class, event -> {
-            if (turnHandler.isRobotTurn()) {
-                boardManager.addPiece(new Piece(event.getX(), event.getY(), turnHandler.getCurrentTurn()));
+            if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
+                boardState.addPiece(Piece.of(event.getPoint(), ruleEngine.getCurrentTurn()));
             }
         });
 
         GomokuEventBus.getInstance().subscribe(PiecePlacedEvent.class, event -> {
-            boolean isGameOver = GameRule.checkGameOver(boardManager.getBoard());
+            boolean isGameOver = GameStateCheck.isGameOver(boardState.getBoard());
             if (isGameOver) {
-                Piece.Color winner = boardManager.getLastPiece().getColor();
+                Color winner = boardState.getLastPiece().color();
                 GomokuEventBus.getInstance().publish(new GameOverEvent(this, winner));
             } else {
-                turnHandler.switchTurn();
-                if (turnHandler.isRobotTurn()) {
-                    GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardManager.getBoard()));
+                ruleEngine.switchTurn();
+                if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
+                    GomokuEventBus.getInstance().publish(new RobotComputeEvent(this, boardState.getBoard()));
                 }
             }
         });
@@ -57,6 +66,5 @@ public class GameFlow {
     public void startGame() {
         GomokuEventBus.getInstance().publish(new GameStartEvent(this));
     }
-
 
 }

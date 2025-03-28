@@ -1,22 +1,19 @@
 package cn.wxiach.event.support;
 
 import cn.wxiach.event.GomokuEvent;
+import cn.wxiach.model.Point;
 
 public class RobotClickEvent  extends GomokuEvent {
-    private int x;
-    private int y;
 
-    public RobotClickEvent(Object source, int x, int y) {
+    private final Point point;
+
+    public RobotClickEvent(Object source, Point point) {
         super(source);
-        this.x = x;
-        this.y = y;
+        this.point = point;
     }
 
-    public int getX() {
-        return x;
+    public Point getPoint() {
+        return this.point;
     }
 
-    public int getY() {
-        return y;
-    }
 }

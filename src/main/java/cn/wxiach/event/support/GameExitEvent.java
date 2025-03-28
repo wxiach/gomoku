@@ -7,6 +7,4 @@ public class GameExitEvent extends GomokuEvent {
     public GameExitEvent(Object source) {
         super(source);
     }
-
-
 }

@@ -2,10 +2,11 @@ package cn.wxiach.ui;
 
 
 import cn.wxiach.core.GameFlow;
-import cn.wxiach.core.GameMessageBox;
+import cn.wxiach.ui.components.GameMessageBox;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
-import cn.wxiach.model.Piece;
+import cn.wxiach.model.Color;
+import cn.wxiach.ui.components.GomokuPanel;
 
 import javax.swing.*;
 
@@ -25,7 +26,7 @@ public class GomokuWindow extends JFrame {
 
         GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
             this.setVisible(true);
-            Piece.Color selectedPieceColor = GameMessageBox.showPieceSelectionDialog(this);
+            Color selectedPieceColor = GameMessageBox.showPieceSelectionDialog(this);
             GomokuEventBus.getInstance().publish(new PieceSelectionEvent(this, selectedPieceColor));
         });
 

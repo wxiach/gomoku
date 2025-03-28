@@ -1,22 +1,17 @@
 package cn.wxiach.event.support;
 
 import cn.wxiach.event.GomokuEvent;
+import cn.wxiach.model.Point;
 
 public class HumanClickEvent extends GomokuEvent {
-    private int x;
-    private int y;
+    private final Point point;
 
-    public HumanClickEvent(Object source, int x, int y) {
+    public HumanClickEvent(Object source, Point point) {
         super(source);
-        this.x = x;
-        this.y = y;
+        this.point = point;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+    public Point getPoint() {
+        return this.point;
     }
 }

@@ -1,10 +1,10 @@
-package cn.wxiach.ui;
+package cn.wxiach.ui.components;
 
-import cn.wxiach.core.BoardManager;
-import cn.wxiach.model.Piece;
+import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.HumanClickEvent;
+import cn.wxiach.model.Point;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,8 +31,8 @@ public class GomokuPanel extends JPanel {
     private int[][] board;
 
     public GomokuPanel() {
-        int width = (BoardManager.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
-        int height = (BoardManager.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+        int width = (GomokuConf.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+        int height = (GomokuConf.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
         setPreferredSize(new Dimension(width, height));
 
         addMouseListener(new MouseAdapter() {
@@ -40,7 +40,7 @@ public class GomokuPanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 int x = Math.round((float) e.getX() / BOARD_PANEL_UNIT_SIZE - 1);
                 int y = Math.round((float) e.getY() / BOARD_PANEL_UNIT_SIZE - 1);
-                GomokuEventBus.getInstance().publish(new HumanClickEvent(this, x, y));
+                GomokuEventBus.getInstance().publish(new HumanClickEvent(this, Point.of(x, y)));
             }
         });
 
@@ -67,13 +67,13 @@ public class GomokuPanel extends JPanel {
         g.drawImage(gomokuBoardImage, 0, 0, getWidth(), getHeight(), this);
 
         // Draw board lines with a margin around the edges.
-        for (int i = 1; i <= BoardManager.BOARD_SIZE; i++) {
+        for (int i = 1; i <= GomokuConf.BOARD_SIZE; i++) {
             // Vertical lines
             g.drawLine(i * BOARD_PANEL_UNIT_SIZE, BOARD_PANEL_UNIT_SIZE,
-                    i * BOARD_PANEL_UNIT_SIZE, (BoardManager.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
+                    i * BOARD_PANEL_UNIT_SIZE, (GomokuConf.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
             // Horizontal lines
             g.drawLine(BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE,
-                    (BoardManager.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
+                    (GomokuConf.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
         }
 
         // Draw Tengen and four corners star points
@@ -103,15 +103,15 @@ public class GomokuPanel extends JPanel {
 
         // Draw pieces
         if (board != null) {
-            for (int i = 0; i < BoardManager.BOARD_SIZE; i++) {
-                for (int j = 0; j < BoardManager.BOARD_SIZE; j++) {
+            for (int i = 0; i < GomokuConf.BOARD_SIZE; i++) {
+                for (int j = 0; j < GomokuConf.BOARD_SIZE; j++) {
                     int pieceColor = board[i][j];
 
                     Image pieceImage = null;
-                    if (pieceColor == Piece.Color.BLACK.getValue()) {
+                    if (pieceColor == cn.wxiach.model.Color.BLACK.getValue()) {
                         pieceImage = blackPiece;
                     }
-                    if (pieceColor == Piece.Color.WHITE.getValue()) {
+                    if (pieceColor == cn.wxiach.model.Color.WHITE.getValue()) {
                         pieceImage = whitePiece;
                     }
 
