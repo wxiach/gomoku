@@ -44,7 +44,7 @@ public class AlphaBetaSearch {
             return evaluator.evaluate(board, color);
         }
 
-        for (Point point : candidatePointSearch.getAllCandidatePoints()) {
+        for (Point point : candidatePointSearch.obtainCandidatePoints(color)) {
             board[point.x()][point.y()] = color.getValue();
             int score = -alphaBeta(depth - 1, -beta, -alpha, PieceColorState.reverseColor(color));
             board[point.x()][point.y()] = Color.BLANK.getValue();

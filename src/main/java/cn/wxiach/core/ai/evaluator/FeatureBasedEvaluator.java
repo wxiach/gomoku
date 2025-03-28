@@ -73,7 +73,7 @@ public class FeatureBasedEvaluator extends Evaluator {
     @Override
     protected int evaluateScore(int[][] board, Color color) {
         FeaturePatternDetector featurePatternDetector = new FeaturePatternDetector(board, color);
-        return lines.stream().mapToInt(featurePatternDetector::detect).sum();
+        return lines.parallelStream().mapToInt(featurePatternDetector::detect).sum();
     }
 
 }
