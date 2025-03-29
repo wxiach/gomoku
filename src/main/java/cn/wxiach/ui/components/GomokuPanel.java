@@ -1,9 +1,10 @@
 package cn.wxiach.ui.components;
 
-import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.HumanClickEvent;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 
 import javax.imageio.ImageIO;
@@ -28,11 +29,11 @@ public class GomokuPanel extends JPanel {
     private Image gomokuBoardImage;
     private Image blackPiece;
     private Image whitePiece;
-    private int[][] board;
+    private Board board;
 
     public GomokuPanel() {
-        int width = (GomokuConf.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
-        int height = (GomokuConf.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+        int width = (Board.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+        int height = (Board.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
         setPreferredSize(new Dimension(width, height));
 
         addMouseListener(new MouseAdapter() {
@@ -45,7 +46,7 @@ public class GomokuPanel extends JPanel {
         });
 
         GomokuEventBus.getInstance().subscribe(BoardUpdateEvent.class, event -> {
-            this.board = event.getLatestBord();
+            this.board = event.getBoard();
             repaint();
         });
     }
@@ -67,13 +68,13 @@ public class GomokuPanel extends JPanel {
         g.drawImage(gomokuBoardImage, 0, 0, getWidth(), getHeight(), this);
 
         // Draw board lines with a margin around the edges.
-        for (int i = 1; i <= GomokuConf.BOARD_SIZE; i++) {
+        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
             // Vertical lines
             g.drawLine(i * BOARD_PANEL_UNIT_SIZE, BOARD_PANEL_UNIT_SIZE,
-                    i * BOARD_PANEL_UNIT_SIZE, (GomokuConf.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
+                    i * BOARD_PANEL_UNIT_SIZE, (Board.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
             // Horizontal lines
             g.drawLine(BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE,
-                    (GomokuConf.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
+                    (Board.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
         }
 
         // Draw Tengen and four corners star points
@@ -89,7 +90,7 @@ public class GomokuPanel extends JPanel {
             g.fillRect(point[0], point[1], BOARD_POINT_SIZE, BOARD_POINT_SIZE);
         }
 
-        // Draw pieces
+        // Load pieces image resources
         if (whitePiece == null || blackPiece == null) {
             URL blackPieceResource = getClass().getResource(BLACK_PIECE_IMAGE_PATH);
             URL whitePieceResource = getClass().getResource(WHITE_PIECE_IMAGE_PATH);
@@ -103,32 +104,14 @@ public class GomokuPanel extends JPanel {
 
         // Draw pieces
         if (board != null) {
-            for (int i = 0; i < GomokuConf.BOARD_SIZE; i++) {
-                for (int j = 0; j < GomokuConf.BOARD_SIZE; j++) {
-                    int pieceColor = board[i][j];
-
-                    Image pieceImage = null;
-                    if (pieceColor == cn.wxiach.model.Color.BLACK.getValue()) {
-                        pieceImage = blackPiece;
-                    }
-                    if (pieceColor == cn.wxiach.model.Color.WHITE.getValue()) {
-                        pieceImage = whitePiece;
-                    }
-
-                    if (pieceImage == null) continue;
-
-                    g.drawImage(
-                            pieceImage,
-                            (i + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2),
-                            (j + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2),
-                            PIECE_SIZE,
-                            PIECE_SIZE,
-                            this
-                    );
-
-                }
-            }
+            board.pieces().forEach(piece -> {
+                Image image = piece.color() == Color.BLACK ? blackPiece : whitePiece;
+                int x = (piece.point().x() + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2);
+                int y = (piece.point().y() + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2);
+                g.drawImage(image, x, y, PIECE_SIZE, PIECE_SIZE, this);
+            });
         }
 
+        // Todo Highlight last piece
     }
 }

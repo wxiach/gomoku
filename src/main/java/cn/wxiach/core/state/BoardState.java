@@ -1,53 +1,35 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.config.GomokuConf;
-import cn.wxiach.core.rule.*;
+import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.event.support.PiecePlacedEvent;
-import cn.wxiach.model.Color;
+import cn.wxiach.model.EditableBoard;
 import cn.wxiach.model.Piece;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.List;
 
 public class BoardState extends PieceColorState {
 
-    private final LinkedHashSet<Piece> pieces = new LinkedHashSet<>();
-    private int[][] board = new int[GomokuConf.BOARD_SIZE][GomokuConf.BOARD_SIZE];
+    private static final Logger logger = LoggerFactory.getLogger(BoardState.class);
 
-    public void setHumanColor(Color humanColor) {
-        this.humanColor = humanColor;
-        this.robotColor = humanColor == Color.WHITE ? Color.BLACK : Color.WHITE;
+    private final EditableBoard board = new EditableBoard();
+
+    public List<Piece> pieces() {
+        return board.pieces();
     }
 
-    public int[][] getBoard() {
-        // Return a copy to protect the board not be modified.
-        return deepCopyBoardArray(board);
-    }
-
-    public Piece getLastPiece() {
-        return pieces.isEmpty() ? null : pieces.getLast();
+    public char[][] board() {
+        return board.board();
     }
 
     public void addPiece(Piece piece) {
-        if (PositionCheck.isOutOfBounds(piece.point()) || !PositionCheck.isEmpty(board, piece.point())) return;
-        pieces.add(piece);
-        convertToArray();
+        if (BoardCheck.isOccupied(board.board(), piece.point())) return;
+        board.addPiece(piece);
+        logger.info("A {} piece is placed at ({}, {}).", piece.color().toString(), piece.point().x(), piece.point().y());
         GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, board));
         GomokuEventBus.getInstance().publish(new PiecePlacedEvent(this));
     }
-
-    private void convertToArray() {
-        board = new int[GomokuConf.BOARD_SIZE][GomokuConf.BOARD_SIZE];
-        pieces.forEach(piece -> {
-            board[piece.point().x()][piece.point().y()] = piece.color().getValue();
-        });
-    }
-
-    public static int[][] deepCopyBoardArray(int[][] board) {
-        return Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
-    }
-
-
 }

@@ -1,25 +1,31 @@
 package cn.wxiach.model;
 
 public enum Color {
-    BLANK(0),
-    BLACK(1),
-    WHITE(2);
+    EMPTY('0'),
+    BLACK('1'),
+    WHITE('2');
 
-    private final int value;
+    private final char value;
 
-    Color(int value) {
+    Color(char value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public char getValue() {
         return value;
     }
 
-    public static Color getColor(int value) {
+    public String toString() {
+        if (value == BLACK.value) return "black";
+        else if (value == WHITE.value) return "white";
+        return "empty";
+    }
+
+    public static Color getColor(char value) {
         return switch (value) {
-            case 0 -> BLANK;
-            case 1 -> BLACK;
-            case 2 -> WHITE;
+            case '0' -> EMPTY;
+            case '1' -> BLACK;
+            case '2' -> WHITE;
             default -> throw new IllegalArgumentException("Unexpected value: " + value);
         };
     }

@@ -20,43 +20,46 @@ public class AhoCorasickAutomaton {
 
     public void insert(Pattern<String> pattern) {
         // Each time, a new node is added starting from the root node
-        TrieNode node = root;
-        for (char c: pattern.pattern().toCharArray()) {
-            node = node.children.computeIfAbsent(c, k -> new TrieNode());
+        TrieNode current = root;
+        for (char c : pattern.pattern().toCharArray()) {
+            current = current.children.computeIfAbsent(c, k -> new TrieNode());
         }
         // Store the full pattern at the end of the node
-        node.patterns.add(pattern);
+        current.patterns.add(pattern);
     }
 
     public void buildFailPointers() {
         Queue<TrieNode> queue = new LinkedList<>();
-        // The failure pointer of the root node points to itself
-        root.fail = root;
-        queue.add(root);
+
+        // The first-tier node failure pointer points to root
+        for (TrieNode child : root.children.values()) {
+            child.fail = root;
+            queue.add(child);
+        }
 
         // Use BFS to traverse the Trie tree
         while (!queue.isEmpty()) {
-            TrieNode node = queue.poll();
-            for (Map.Entry<Character, TrieNode> characterTrieNodeEntry : node.children.entrySet()) {
+            TrieNode current = queue.poll();
+
+            for (Map.Entry<Character, TrieNode> characterTrieNodeEntry : current.children.entrySet()) {
                 char c = characterTrieNodeEntry.getKey();
                 TrieNode child = characterTrieNodeEntry.getValue();
-                // The failure pointer of the parent node
-                TrieNode failNode = node.fail;
+
+                // Look for the longest valid prefix
+                TrieNode fail = current.fail;
 
                 // Let failNode jump up along the fail pointer until it finds a node that can match c
-                while (failNode != root && !failNode.children.containsKey(c)) {
-                    failNode = failNode.fail;
+                while (fail != null && !fail.children.containsKey(c)) {
+                    fail = fail.fail;
                 }
-                // If there is a c in the failNode, a suitable failure pointer has been found
-                if (failNode.children.containsKey(c) && failNode.children.get(c) != child) {
-                    child.fail = failNode.children.get(c);
-                } else {
-                    // Otherwise, fall back to the root node
-                    child.fail = root;
-                }
+                // If there is a c in the failure node, a suitable failure pointer has been found
+                // Otherwise, fall back to the root node
+                child.fail = (fail == null) ? root : fail.children.get(c);
 
                 // Inherit the matching pattern of the fail pointer
-                child.patterns.addAll(child.fail.patterns);
+                if (child.fail != null) {
+                    child.patterns.addAll(child.fail.patterns);
+                }
 
                 queue.add(child);
             }
@@ -65,15 +68,13 @@ public class AhoCorasickAutomaton {
 
     public Set<Pattern<String>> search(String text) {
         Set<Pattern<String>> matches = new HashSet<>();
-        TrieNode node = root;
+        TrieNode current = root;
         for (char c : text.toCharArray()) {
-            while (node != root && !node.children.containsKey(c)) {
-                node = node.fail;
+            while (current != null && !current.children.containsKey(c)) {
+                current = current.fail;
             }
-            if (node.children.containsKey(c)) {
-                node = node.children.get(c);
-            }
-            matches.addAll(node.patterns);
+            current = (current == null) ? root : current.children.get(c);
+            matches.addAll(current.patterns);
         }
         return matches;
     }

@@ -1,21 +1,20 @@
 package cn.wxiach.core.rule;
 
 
-import cn.wxiach.config.GomokuConf;
+import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
-import cn.wxiach.model.Point;
 
 public interface GameStateCheck {
 
     int WIN_CONDITION = 5;
 
-    static boolean isGameOver(int[][] board) {
+    static boolean isGameOver(char[][] board) {
         boolean empty = false;
-        for (int x = 0; x < GomokuConf.BOARD_SIZE; x++) {
-            for (int y = 0; y < GomokuConf.BOARD_SIZE; y++) {
-                int color = board[x][y];
-                if (color == 0) {
+        for (int x = 0; x < Board.BOARD_SIZE; x++) {
+            for (int y = 0; y < Board.BOARD_SIZE; y++) {
+                char color = board[x][y];
+                if (color == '0') {
                     empty = true;
                     continue;
                 }
@@ -26,7 +25,7 @@ public interface GameStateCheck {
     }
 
 
-    private static boolean checkWin(int[][] board, int x, int y, int color) {
+    private static boolean checkWin(char[][] board, int x, int y, char color) {
         int[][] directions = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
         for (int[] dir : directions) {
             int positive = count(board, x, y, dir[0], dir[1], color);
@@ -38,12 +37,11 @@ public interface GameStateCheck {
         return false;
     }
 
-    private static int count(int[][] board, int x, int y, int dx, int dy, int color) {
+    private static int count(char[][] board, int x, int y, int dx, int dy, char color) {
         int cnt = 0;
         for (int i = 1; i < WIN_CONDITION; i++) {
             int nx = x + i * dx, ny = y + i * dy;
-            if (PositionCheck.isOutOfBounds(Point.of(nx, ny))
-                    || !PositionCheck.hasPiece(board, Piece.of(nx, ny, Color.getColor(color)))) break;
+            if (BoardCheck.absentPiece(board, Piece.of(nx, ny, Color.getColor(color)))) break;
             cnt++;
         }
         return cnt;

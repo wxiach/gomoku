@@ -1,16 +1,18 @@
 package cn.wxiach.event.support;
 
 import cn.wxiach.event.GomokuEvent;
+import cn.wxiach.model.Board;
 
 public class BoardUpdateEvent extends GomokuEvent {
-    private final int[][] latestBord;
 
-    public BoardUpdateEvent(Object source, int[][] latestBoard) {
+    private final Board board;
+
+    public BoardUpdateEvent(Object source, Board board) {
         super(source);
-        this.latestBord = latestBoard;
+        this.board = board;
     }
 
-    public int[][] getLatestBord() {
-        return latestBord;
+    public Board getBoard() {
+        return board;
     }
 }

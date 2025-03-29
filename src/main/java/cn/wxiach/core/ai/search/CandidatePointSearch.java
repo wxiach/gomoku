@@ -2,7 +2,7 @@ package cn.wxiach.core.ai.search;
 
 import cn.wxiach.core.ai.evaluator.Evaluator;
 import cn.wxiach.core.ai.evaluator.feature.FeatureBasedEvaluator;
-import cn.wxiach.core.rule.PositionCheck;
+import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 
@@ -15,9 +15,9 @@ public class CandidatePointSearch {
 
     public static final int DEFAULT_SURROUNDING_RANGE = 2;
 
-    private final int[][] board;
+    private final char[][] board;
 
-    public CandidatePointSearch(int[][] board) {
+    public CandidatePointSearch(char[][] board) {
         this.board = board;
     }
 
@@ -26,7 +26,7 @@ public class CandidatePointSearch {
         Set<Candidate> candidates = ConcurrentHashMap.newKeySet();
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
-                if (board[x][y] == 0) continue;
+                if (board[x][y] == Color.EMPTY.getValue()) continue;
                 addSurroundingPoints(x, y, DEFAULT_SURROUNDING_RANGE, candidates, board);
             }
         }
@@ -37,7 +37,7 @@ public class CandidatePointSearch {
             board[candidate.getPoint().x()][candidate.getPoint().y()] = color.getValue();
             int score = evaluator.evaluate(board, color);
             candidate.setScore(score);
-            board[candidate.getPoint().x()][candidate.getPoint().y()] = Color.BLANK.getValue();
+            board[candidate.getPoint().x()][candidate.getPoint().y()] = Color.EMPTY.getValue();
         });
 
         return candidates.stream()
@@ -47,12 +47,12 @@ public class CandidatePointSearch {
                 .toList();
     }
 
-    private void addSurroundingPoints(int x, int y, int range, Set<Candidate> candidates, int[][] board) {
+    private void addSurroundingPoints(int x, int y, int range, Set<Candidate> candidates, char[][] board) {
         for (int dx = -range; dx <= range; dx++) {
             for (int dy = -range; dy <= range; dy++) {
                 int nx = x + dx;
                 int ny = y + dy;
-                if (!PositionCheck.isOutOfBounds(Point.of(nx, ny)) && PositionCheck.isEmpty(board, Point.of(nx, ny))) {
+                if (BoardCheck.isEmpty(board, Point.of(nx, ny))) {
                     candidates.add(new Candidate(Point.of(nx, ny)));
                 }
             }

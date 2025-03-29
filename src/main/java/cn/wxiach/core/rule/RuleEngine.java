@@ -3,7 +3,7 @@ package cn.wxiach.core.rule;
 import cn.wxiach.core.state.PieceColorState;
 import cn.wxiach.model.Color;
 
-public class RuleEngine implements TurnSwitch, GameStateCheck, PositionCheck {
+public class RuleEngine implements TurnSwitch, GameStateCheck, BoardCheck {
 
     // The black piece move first by default.
     private Color currentTurn = Color.BLACK;

@@ -9,32 +9,26 @@ import cn.wxiach.model.Point;
 
 public class AlphaBetaSearch {
 
-    public static final int ALPHA_BETA_SEARCH_DEFAULT_DEEP = 4;
+    public static final int DEFAULT_SEARCH_DEPTH = 4;
 
-    private final int depth;
     private final CandidatePointSearch candidatePointSearch;
 
     private final Evaluator evaluator;
 
-    private final int[][] board;
-    private final Color robotColor;
+    private final char[][] board;
+    private final Color color;
 
     private Point move;
 
-    public AlphaBetaSearch(int[][] board, Color robotColor) {
-        this(ALPHA_BETA_SEARCH_DEFAULT_DEEP, board, robotColor);
-    }
-
-    public AlphaBetaSearch(int depth, int[][] board, Color robotColor) {
-        this.depth = depth;
+    public AlphaBetaSearch(char[][] board, Color color) {
         this.board = board;
-        this.robotColor = robotColor;
+        this.color = color;
         this.candidatePointSearch = new CandidatePointSearch(board);
         this.evaluator = new FeatureBasedEvaluator();
     }
 
     public Point execute() {
-        alphaBeta(depth, Integer.MIN_VALUE+10000, Integer.MAX_VALUE-10000, robotColor);
+        alphaBeta(DEFAULT_SEARCH_DEPTH, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
         return move;
     }
 
@@ -47,11 +41,11 @@ public class AlphaBetaSearch {
         for (Point point : candidatePointSearch.obtainCandidatePoints(color)) {
             board[point.x()][point.y()] = color.getValue();
             int score = -alphaBeta(depth - 1, -beta, -alpha, PieceColorState.reverseColor(color));
-            board[point.x()][point.y()] = Color.BLANK.getValue();
+            board[point.x()][point.y()] = Color.EMPTY.getValue();
             if (score >= beta) return beta;
             if (score > alpha) {
                 alpha = score;
-                if (depth == this.depth) {
+                if (depth == DEFAULT_SEARCH_DEPTH) {
                     this.move = point;
                 }
             }

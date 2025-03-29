@@ -2,6 +2,9 @@ package cn.wxiach.core.state;
 
 import cn.wxiach.model.Color;
 
+/**
+ * Manage all player's piece color
+ */
 public abstract class PieceColorState {
 
     protected Color humanColor;
@@ -15,6 +18,11 @@ public abstract class PieceColorState {
 
     public Color getRobotColor() {
         return this.robotColor;
+    }
+
+    public void setColor(Color humanColor, Color robotColor) {
+        this.humanColor = humanColor;
+        this.robotColor = reverseColor(humanColor);
     }
 
     public static Color reverseColor(Color color) {

@@ -6,9 +6,9 @@ import cn.wxiach.model.Color;
 
 public abstract class Evaluator {
 
-    public int evaluate(int[][] board, Color color) {
+    public int evaluate(char[][] board, Color color) {
         return evaluateScore(board, color) - evaluateScore(board, PieceColorState.reverseColor(color));
     }
 
-    abstract protected int evaluateScore(int[][] board, Color color);
+    abstract protected int evaluateScore(char[][] board, Color color);
 }

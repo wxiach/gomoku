@@ -9,7 +9,6 @@ import cn.wxiach.model.Color;
 import cn.wxiach.ui.components.GomokuPanel;
 
 import javax.swing.*;
-import java.util.Locale;
 
 public class GomokuWindow extends JFrame {
 
@@ -28,7 +27,7 @@ public class GomokuWindow extends JFrame {
         GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
             this.setVisible(true);
             Color selectedPieceColor = GameMessageBox.showPieceSelectionDialog(this);
-            GomokuEventBus.getInstance().publish(new PieceSelectionEvent(this, selectedPieceColor));
+            GomokuEventBus.getInstance().publish(new PieceColorSelectEvent(this, selectedPieceColor));
         });
 
         GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
