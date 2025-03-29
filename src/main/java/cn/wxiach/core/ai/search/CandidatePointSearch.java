@@ -1,13 +1,12 @@
 package cn.wxiach.core.ai.search;
 
 import cn.wxiach.core.ai.evaluator.Evaluator;
-import cn.wxiach.core.ai.evaluator.FeatureBasedEvaluator;
+import cn.wxiach.core.ai.evaluator.feature.FeatureBasedEvaluator;
 import cn.wxiach.core.rule.PositionCheck;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

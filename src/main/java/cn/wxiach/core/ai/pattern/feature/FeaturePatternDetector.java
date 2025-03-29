@@ -1,14 +1,16 @@
-package cn.wxiach.core.ai.evaluator.pattern;
+package cn.wxiach.core.ai.pattern.feature;
 
 import cn.wxiach.config.GomokuConf;
+import cn.wxiach.core.ai.pattern.support.AhoCorasickAutomaton;
+import cn.wxiach.core.ai.pattern.Pattern;
 import cn.wxiach.model.Color;
 
-import java.util.List;
+import java.util.Comparator;
 
 
 public class FeaturePatternDetector {
 
-    private final List<String> sortedPatterns;
+    private final AhoCorasickAutomaton ahoCorasickAutomaton = new AhoCorasickAutomaton(FeaturePattern.getPatterns());
 
     private final int[][] board;
     private final Color color;
@@ -16,16 +18,13 @@ public class FeaturePatternDetector {
     public FeaturePatternDetector(int[][] board, Color color) {
         this.board = board;
         this.color = color;
-        sortedPatterns = FeaturePattern.getSortedPatterns();
     }
 
     public int detect(int[] line) {
-        for (String pattern : sortedPatterns) {
-            if (convertToLineStr(line).contains(pattern)) {
-                return FeaturePattern.getScore(pattern);
-            }
-        }
-        return 0;
+        return ahoCorasickAutomaton.search(convertToLineStr(line)).stream()
+                .max(Comparator.naturalOrder())
+                .map(Pattern::score)
+                .orElse(0);
     }
 
     private String convertToLineStr(int[] line) {

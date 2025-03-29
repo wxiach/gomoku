@@ -1,7 +1,7 @@
 package cn.wxiach.core.ai.search;
 
 import cn.wxiach.core.ai.evaluator.Evaluator;
-import cn.wxiach.core.ai.evaluator.FeatureBasedEvaluator;
+import cn.wxiach.core.ai.evaluator.feature.FeatureBasedEvaluator;
 import cn.wxiach.core.rule.GameStateCheck;
 import cn.wxiach.core.state.PieceColorState;
 import cn.wxiach.model.Color;

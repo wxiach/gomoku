@@ -1,7 +1,8 @@
-package cn.wxiach.core.ai.evaluator;
+package cn.wxiach.core.ai.evaluator.feature;
 
 import cn.wxiach.config.GomokuConf;
-import cn.wxiach.core.ai.evaluator.pattern.FeaturePatternDetector;
+import cn.wxiach.core.ai.evaluator.Evaluator;
+import cn.wxiach.core.ai.pattern.feature.FeaturePatternDetector;
 import cn.wxiach.model.Color;
 
 import java.util.ArrayList;
