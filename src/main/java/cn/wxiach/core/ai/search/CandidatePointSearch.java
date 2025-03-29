@@ -4,11 +4,11 @@ import cn.wxiach.core.ai.evaluator.Evaluator;
 import cn.wxiach.core.ai.evaluator.feature.FeatureBasedEvaluator;
 import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.model.Color;
+import cn.wxiach.model.Piece;
 import cn.wxiach.model.Point;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CandidatePointSearch {
@@ -17,46 +17,48 @@ public class CandidatePointSearch {
 
     private final char[][] board;
 
+    private final Evaluator evaluator = new FeatureBasedEvaluator();
+
     public CandidatePointSearch(char[][] board) {
         this.board = board;
     }
 
     public List<Point> obtainCandidatePoints(Color color) {
-        // Search all candidates
-        Set<Candidate> candidates = ConcurrentHashMap.newKeySet();
+        Map<Point, Integer> candidates = new ConcurrentHashMap<>();
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 if (board[x][y] == Color.EMPTY.getValue()) continue;
-                addSurroundingPoints(x, y, DEFAULT_SURROUNDING_RANGE, candidates, board);
+                addSurroundingPoints(x, y, color, DEFAULT_SURROUNDING_RANGE, board, candidates);
             }
         }
 
-        // Sorted all candidates
-        Evaluator evaluator = new FeatureBasedEvaluator();
-        candidates.forEach(candidate -> {
-            board[candidate.getPoint().x()][candidate.getPoint().y()] = color.getValue();
-            int score = evaluator.evaluate(board, color);
-            candidate.setScore(score);
-            board[candidate.getPoint().x()][candidate.getPoint().y()] = Color.EMPTY.getValue();
-        });
-
-        return candidates.stream()
-                .sorted(Comparator.reverseOrder())
-                .map(Candidate::getPoint)
+        return candidates.entrySet().stream()
+                .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
+                .map(Map.Entry::getKey)
                 .limit(10)
                 .toList();
     }
 
-    private void addSurroundingPoints(int x, int y, int range, Set<Candidate> candidates, char[][] board) {
+    private void addSurroundingPoints(int x, int y, Color color, int range, char[][] board, Map<Point, Integer> candidates) {
         for (int dx = -range; dx <= range; dx++) {
             for (int dy = -range; dy <= range; dy++) {
-                int nx = x + dx;
-                int ny = y + dy;
+                int nx = x + dx, ny = y + dy;
                 if (BoardCheck.isEmpty(board, Point.of(nx, ny))) {
-                    candidates.add(new Candidate(Point.of(nx, ny)));
+                    Piece piece = Piece.of(nx, ny, color);
+                    candidates.put(piece.point(), evaluateCandidatePoint(piece));
                 }
             }
         }
+    }
+
+    /**
+     * Rating the board where the candidate points are located
+     */
+    private int evaluateCandidatePoint(Piece piece) {
+        board[piece.point().x()][piece.point().y()] = piece.color().getValue();
+        int score = evaluator.evaluate(board, piece.color());
+        board[piece.point().x()][piece.point().y()] = Color.EMPTY.getValue();
+        return score;
     }
 
 }
