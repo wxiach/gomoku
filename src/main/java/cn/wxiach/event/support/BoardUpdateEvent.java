@@ -1,18 +1,18 @@
 package cn.wxiach.event.support;
 
+import cn.wxiach.core.state.support.GameStateReadable;
 import cn.wxiach.event.GomokuEvent;
-import cn.wxiach.model.Board;
 
 public class BoardUpdateEvent extends GomokuEvent {
 
-    private final Board board;
+    private final GameStateReadable state;
 
-    public BoardUpdateEvent(Object source, Board board) {
+    public BoardUpdateEvent(Object source, GameStateReadable state) {
         super(source);
-        this.board = board;
+        this.state = state;
     }
 
-    public Board getBoard() {
-        return board;
+    public GameStateReadable getState() {
+        return state;
     }
 }

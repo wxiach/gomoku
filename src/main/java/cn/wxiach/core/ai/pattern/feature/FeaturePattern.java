@@ -6,7 +6,8 @@ import java.util.List;
 
 public class FeaturePattern {
 
-    // Create a unmodifiable pattern list by using List.of(E... elements)
+    // Create an unmodifiable pattern list by using List.of()
+    // List.of() is ordered, so the order of the code is important
     private static final List<Pattern<String>> blackPatterns = List.of(
             new Pattern<>("11111", 50000),
             new Pattern<>("011110", 4320),

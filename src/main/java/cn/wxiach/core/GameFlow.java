@@ -1,83 +1,83 @@
 package cn.wxiach.core;
 
+import cn.wxiach.config.GomokuConf;
 import cn.wxiach.core.ai.RobotEngine;
-import cn.wxiach.core.rule.GameStateCheck;
-import cn.wxiach.core.rule.RuleEngine;
-import cn.wxiach.core.state.BoardState;
-import cn.wxiach.core.state.PieceColorState;
+import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
-import cn.wxiach.model.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
 
 
 public class GameFlow {
 
     private static final Logger logger = LoggerFactory.getLogger(GameFlow.class);
 
-    private final RuleEngine ruleEngine;
-    private final BoardState boardState;
-    private final RobotEngine robotEngine;
+    private final GameState state = new GameState();
+    private final RobotEngine robot = new RobotEngine();
 
     public GameFlow() {
+        subscribeToGameStateEvents();
+        subscribeToGameSettingsEvents();
+        subscribeToGameInteractionEvents();
+    }
 
-        this.ruleEngine = new RuleEngine();
-        this.boardState = new BoardState();
-        this.robotEngine = new RobotEngine();
+    private void subscribeToGameStateEvents() {
+        GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
+            state.run();
+            GomokuEventBus.getInstance().publish(new NewTurnEvent(this));
+        });
 
-        GomokuEventBus.getInstance().subscribe(PieceColorSelectEvent.class, event -> {
-            logger.info("Game start.");
-            // Set the color of the chess pieces for the human and the robot respectively
-            Color robotColor = PieceColorState.reverseColor(event.getHumanColor());
-            boardState.setColor(event.getHumanColor(), robotColor);
-            robotEngine.setColor(robotColor);
-
-            // If human choose white piece, robot move first.
-            if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
-                GomokuEventBus.getInstance().publish(new RobotMoveEvent(this, Point.of(7, 7)));
+        GomokuEventBus.getInstance().subscribe(NewTurnEvent.class, event -> {
+            if (state.isOpponentTurn()) {
+                robot.startCompute(state);
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(HumanClickEvent.class, event -> {
-            logger.debug("Human clicked at ({}, {}).", event.getPoint().x(), event.getPoint().y());
+        GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
+            state.end();
+        });
+    }
+
+    private void subscribeToGameInteractionEvents() {
+        GomokuEventBus.getInstance().subscribe(PiecePlaceEvent.class, event -> {
+            if (state.isOver()) return;
 
             // Prevent multiple quick clicks
-            if (!boardState.pieces().isEmpty() && boardState.pieces().getLast().color() == ruleEngine.getCurrentTurn()) {
+            List<Piece> pieces = state.pieces();
+            if (!pieces.isEmpty() && pieces.getLast().color() == state.currentTurn()) {
                 return;
             }
 
-            if (ruleEngine.isHumanTurn(boardState.getHumanColor())) {
-                boardState.addPiece(Piece.of(event.getPoint(), ruleEngine.getCurrentTurn()));
-            }
-        });
+            state.addPiece(event.getPiece());
 
+            // If the code runs here, it means the piece has been placed successfully.
 
-        GomokuEventBus.getInstance().subscribe(RobotMoveEvent.class, event -> {
-            if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
-                boardState.addPiece(Piece.of(event.getPoint(), ruleEngine.getCurrentTurn()));
-            }
-        });
+            GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
 
-        GomokuEventBus.getInstance().subscribe(PiecePlacedEvent.class, event -> {
-            boolean isGameOver = GameStateCheck.isGameOver(boardState.board());
-            if (isGameOver) {
-                Color winner = boardState.pieces().getLast().color();
-                GomokuEventBus.getInstance().publish(new GameOverEvent(this, winner));
+            if (state.isOver()) {
+                GomokuEventBus.getInstance().publish(new GameOverEvent(this, state.winner()));
             } else {
-                ruleEngine.switchTurn();
-                if (ruleEngine.isRobotTurn(boardState.getRobotColor())) {
-                    logger.info("Robot start thinking.");
-                    robotEngine.startCompute(boardState.board());
-                }
+                state.switchTurn();
+                GomokuEventBus.getInstance().publish(new NewTurnEvent(this));
             }
         });
     }
 
-    public void startGame() {
-        GomokuEventBus.getInstance().publish(new GameStartEvent(this));
+    private void subscribeToGameSettingsEvents() {
+        GomokuEventBus.getInstance().subscribe(PieceSelectEvent.class, event -> {
+            state.setSelfColor(event.getColor());
+        });
     }
 
+    public void updateGameSettings(Map<String, Object> config) {
+        if (config.get(GomokuConf.SELF_PIECE_COLOR) instanceof Color selfColor) {
+            state.setSelfColor(selfColor);
+        }
+    }
 }

@@ -29,5 +29,10 @@ public enum Color {
             default -> throw new IllegalArgumentException("Unexpected value: " + value);
         };
     }
+
+    // Used to switch between black and white
+    public static Color reverse(Color color) {
+        return color == Color.BLACK ? Color.WHITE : Color.BLACK;
+    }
 }
 
