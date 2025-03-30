@@ -1,6 +1,8 @@
 package cn.wxiach.core.ai;
 
 import cn.wxiach.core.ai.search.AlphaBetaSearch;
+import cn.wxiach.core.ai.search.support.TranspositionTable;
+import cn.wxiach.core.ai.search.support.ZobristHash;
 import cn.wxiach.core.state.support.BoardStateReadable;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.PiecePlaceEvent;
@@ -18,14 +20,16 @@ public class RobotEngine {
     private static final Logger logger = LoggerFactory.getLogger(RobotEngine.class);
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ZobristHash zobristHash = new ZobristHash();
+    private final TranspositionTable transpositionTable = new TranspositionTable();
 
     public void startCompute(BoardStateReadable board) {
-        AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board.board(), board.opponentColor());
+        AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board.board(), board.opponentColor(), zobristHash, transpositionTable);
         executorService.submit(() -> {
             try {
                 Piece piece;
                 if (board.pieces().isEmpty()) {
-                    piece = Piece.of(Board.BOARD_SIZE / 2, Board.BOARD_SIZE / 2, Color.BLACK);
+                    piece = Piece.of(Board.SIZE / 2, Board.SIZE / 2, Color.BLACK);
                 } else {
                     piece = alphaBetaSearch.execute();
                 }

@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Board {
 
-    public static final int BOARD_SIZE = 15;
+    public static final int SIZE = 15;
 
     private final List<Piece> pieces = new ArrayList<>();
-    private final char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
+    private final char[][] board = new char[SIZE][SIZE];
 
     public Board() {
         for (char[] chars : board) {

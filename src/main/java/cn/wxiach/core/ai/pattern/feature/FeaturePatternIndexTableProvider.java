@@ -11,12 +11,12 @@ import java.util.stream.Stream;
 
 public class FeaturePatternIndexTableProvider {
 
-    private static final int[][] indexTable = new int[Board.BOARD_SIZE][Board.BOARD_SIZE];
+    private static final int[][] indexTable = new int[Board.SIZE][Board.SIZE];
 
     static {
         int count = 0;
-        for (int x = 0; x < Board.BOARD_SIZE; x++) {
-            for (int y = 0; y < Board.BOARD_SIZE; y++) {
+        for (int x = 0; x < Board.SIZE; x++) {
+            for (int y = 0; y < Board.SIZE; y++) {
                 indexTable[x][y] = count++;
             }
         }
@@ -44,25 +44,25 @@ public class FeaturePatternIndexTableProvider {
 
     private void preStoreAllLines() {
         // horizontal
-        for (int x = 0; x < Board.BOARD_SIZE; x++) {
+        for (int x = 0; x < Board.SIZE; x++) {
            horizontalIndexLines.add(new FeatureLine(indexTable[x]));
         }
 
         // vertical
-        for (int y = 0; y < Board.BOARD_SIZE; y++) {
-            int[] line = new int[Board.BOARD_SIZE];
-            for (int x = 0; x < Board.BOARD_SIZE; x++) {
+        for (int y = 0; y < Board.SIZE; y++) {
+            int[] line = new int[Board.SIZE];
+            for (int x = 0; x < Board.SIZE; x++) {
                 line[x] = indexTable[x][y];
             }
             verticalIndexLines.add(new FeatureLine(line));
         }
 
         // left diagonal
-        for (int start = 0; start < Board.BOARD_SIZE * 2 - 1; start++) {
+        for (int start = 0; start < Board.SIZE * 2 - 1; start++) {
             List<Integer> numList = new ArrayList<>();
-            for (int x = 0; x < Board.BOARD_SIZE; x++) {
+            for (int x = 0; x < Board.SIZE; x++) {
                 int y = start - x;
-                if (y >= 0 && y < Board.BOARD_SIZE) {
+                if (y >= 0 && y < Board.SIZE) {
                     numList.add(indexTable[x][y]);
                 }
             }
@@ -72,11 +72,11 @@ public class FeaturePatternIndexTableProvider {
         }
 
         // right diagonal
-        for (int start = 0; start < Board.BOARD_SIZE * 2 - 1; start++) {
+        for (int start = 0; start < Board.SIZE * 2 - 1; start++) {
             List<Integer> numList = new ArrayList<>();
-            for (int x = 0; x < Board.BOARD_SIZE; x++) {
-                int y = start - (Board.BOARD_SIZE - 1 - x);
-                if (y >= 0 && y < Board.BOARD_SIZE) {
+            for (int x = 0; x < Board.SIZE; x++) {
+                int y = start - (Board.SIZE - 1 - x);
+                if (y >= 0 && y < Board.SIZE) {
                     numList.add(indexTable[x][y]);
                 }
             }

@@ -19,12 +19,12 @@ import java.awt.event.MouseEvent;
 
 public class BoardPanel extends JPanel {
 
-    public static final int BOARD_PANEL_UNIT_SIZE = 40;
-    public static final int BOARD_POINT_SIZE = 6;
+    public static final int UNIT_SIZE = 40;
+    public static final int STAR_SIZE = 6;
     public static final int PIECE_SIZE = 30;
 
-    private static final int width = (Board.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
-    private static final int height = (Board.BOARD_SIZE + 1) * BOARD_PANEL_UNIT_SIZE;
+    private static final int width = (Board.SIZE + 1) * UNIT_SIZE;
+    private static final int height = (Board.SIZE + 1) * UNIT_SIZE;
 
     private GameStateReadable state;
 
@@ -47,34 +47,35 @@ public class BoardPanel extends JPanel {
         g2d.drawImage(ImageAssets.getBoardImage(), 0, 0, getWidth(), getHeight(), this);
 
         // Draw board lines with a margin around the edges.
-        for (int i = 1; i <= Board.BOARD_SIZE; i++) {
+        g2d.setStroke(new BasicStroke(1.6f));
+        for (int i = 1; i <= Board.SIZE; i++) {
             // Vertical lines
-            g2d.drawLine(i * BOARD_PANEL_UNIT_SIZE, BOARD_PANEL_UNIT_SIZE,
-                    i * BOARD_PANEL_UNIT_SIZE, (Board.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE);
+            g2d.drawLine(i * UNIT_SIZE, UNIT_SIZE,
+                    i * UNIT_SIZE, (Board.SIZE) * UNIT_SIZE);
             // Horizontal lines
-            g2d.drawLine(BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE,
-                    (Board.BOARD_SIZE) * BOARD_PANEL_UNIT_SIZE, i * BOARD_PANEL_UNIT_SIZE);
+            g2d.drawLine(UNIT_SIZE, i * UNIT_SIZE,
+                    (Board.SIZE) * UNIT_SIZE, i * UNIT_SIZE);
         }
 
         // Draw Tengen and four corners star points
         int[][] fourPointPosition = {
-                {8 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 8 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 4 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
-                {12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2), 12 * BOARD_PANEL_UNIT_SIZE - (BOARD_POINT_SIZE / 2)},
+                {8 * UNIT_SIZE - (STAR_SIZE / 2), 8 * UNIT_SIZE - (STAR_SIZE / 2)},
+                {4 * UNIT_SIZE - (STAR_SIZE / 2), 4 * UNIT_SIZE - (STAR_SIZE / 2)},
+                {4 * UNIT_SIZE - (STAR_SIZE / 2), 12 * UNIT_SIZE - (STAR_SIZE / 2)},
+                {12 * UNIT_SIZE - (STAR_SIZE / 2), 4 * UNIT_SIZE - (STAR_SIZE / 2)},
+                {12 * UNIT_SIZE - (STAR_SIZE / 2), 12 * UNIT_SIZE - (STAR_SIZE / 2)},
         };
 
         for (int[] point : fourPointPosition) {
-            g2d.fillRect(point[0], point[1], BOARD_POINT_SIZE, BOARD_POINT_SIZE);
+            g2d.fillRect(point[0], point[1], STAR_SIZE, STAR_SIZE);
         }
 
         // Draw pieces
         if (state != null) {
             state.pieces().forEach(piece -> {
                 Image image = piece.color() == Color.BLACK ? ImageAssets.getBlackPiece() : ImageAssets.getWhitePiece();
-                int x = (piece.point().x() + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2);
-                int y = (piece.point().y() + 1) * BOARD_PANEL_UNIT_SIZE - (PIECE_SIZE / 2);
+                int x = (piece.point().x() + 1) * UNIT_SIZE - (PIECE_SIZE / 2);
+                int y = (piece.point().y() + 1) * UNIT_SIZE - (PIECE_SIZE / 2);
                 g2d.drawImage(image, x, y, PIECE_SIZE, PIECE_SIZE, this);
             });
         }
@@ -86,10 +87,10 @@ public class BoardPanel extends JPanel {
             g2d.setColor(java.awt.Color.BLACK);
             String text;
             if (state.winner() == Color.EMPTY) {
-                text = "游戏结束！";
+                text = "游戏结束";
             } else {
                 String winner = state.winner() == Color.WHITE ? "白棋" : "黑棋";
-                text = String.format("%s获胜！", winner);
+                text = String.format("%s获胜", winner);
             }
 
             // Calculate the text width so that it is centered
@@ -136,12 +137,12 @@ public class BoardPanel extends JPanel {
                 // Prevent JPanel from responding to mouse click events
                 if (isEnabled()) {
                     long currentTime = System.currentTimeMillis();
-                    if (currentTime - time < 1000) {
+                    if (currentTime - time < 2000) {
                         return;
                     }
                     time = currentTime;
-                    int x = Math.round((float) e.getX() / BOARD_PANEL_UNIT_SIZE - 1);
-                    int y = Math.round((float) e.getY() / BOARD_PANEL_UNIT_SIZE - 1);
+                    int x = Math.round((float) e.getX() / UNIT_SIZE - 1);
+                    int y = Math.round((float) e.getY() / UNIT_SIZE - 1);
 
                     Piece piece;
                     if (state == null) {

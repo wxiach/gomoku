@@ -8,7 +8,7 @@ import cn.wxiach.model.Point;
 public interface BoardCheck {
 
     static boolean isOnBoard(Point point) {
-        if (point.x() >= 0 && point.x() < Board.BOARD_SIZE && point.y() >= 0 && point.y() < Board.BOARD_SIZE) {
+        if (point.x() >= 0 && point.x() < Board.SIZE && point.y() >= 0 && point.y() < Board.SIZE) {
             return true;
         } else {
             throw new OutOfBoardException(String.format("The Piece [%s, %s] is out of board", point.x(), point.y()));

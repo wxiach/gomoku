@@ -21,7 +21,7 @@ public class FeatureLine {
     private String extractLineStringFromIndices(char[][] board, int[] index) {
         char[] line = new char[index.length];
         for (int i = 0; i < index.length; i++) {
-            line[i] = board[index[i] / Board.BOARD_SIZE][index[i] % Board.BOARD_SIZE];
+            line[i] = board[index[i] / Board.SIZE][index[i] % Board.SIZE];
         }
         return new String(line);
     }

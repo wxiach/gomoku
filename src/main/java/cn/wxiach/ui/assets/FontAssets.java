@@ -7,15 +7,14 @@ import java.io.InputStream;
 
 public class FontAssets {
 
-    private static final String path = "/fonts/LXGWWenKaiMonoScreen.ttf";
+    private static final String LXGWWenKaiMonoScreenPath = "/fonts/LXGWWenKaiMonoScreen.ttf";
 
     public static final Font LXGWWenKaiMonoScreen;
 
     static {
-        try {
-            InputStream resource = FontAssets.class.getResourceAsStream(path);
+        try (InputStream resource = FontAssets.class.getResourceAsStream(LXGWWenKaiMonoScreenPath)) {
             if (resource == null) {
-                throw new RuntimeException(String.format("[%s] resource is not founded.", path));
+                throw new RuntimeException(String.format("[%s] resource is not founded.", LXGWWenKaiMonoScreenPath));
             }
             LXGWWenKaiMonoScreen = Font.createFont(Font.TRUETYPE_FONT, resource).deriveFont(16f);
 

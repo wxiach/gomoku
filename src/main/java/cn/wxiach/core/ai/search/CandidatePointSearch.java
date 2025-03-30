@@ -36,7 +36,7 @@ public class CandidatePointSearch {
         return candidates.entrySet().stream()
                 .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
                 .map(Map.Entry::getKey)
-                .limit(10)
+                .limit(8)
                 .toList();
     }
 

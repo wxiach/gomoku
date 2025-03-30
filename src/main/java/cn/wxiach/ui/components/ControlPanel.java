@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class ControlPanel extends JPanel {
 
-    private static final int CONTROL_PANEL_WIDTH = 200;
+    private static final int PANEL_WIDTH = 200;
 
     private final StartGameButton startGameButton;
     private final SurrenderButton surrenderButton;
@@ -20,7 +20,7 @@ public class ControlPanel extends JPanel {
 
     public ControlPanel() {
 
-        setPreferredSize(new Dimension(CONTROL_PANEL_WIDTH, 0));
+        setPreferredSize(new Dimension(PANEL_WIDTH, 0));
 
         setBorder(new EmptyBorder(24, 16, 24, 16));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
