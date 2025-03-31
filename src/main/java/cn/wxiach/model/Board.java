@@ -40,10 +40,9 @@ public class Board {
 
     public void reset() {
         pieces.clear();
-        ((ArrayList<Piece>)pieces).trimToSize();
-
         for (char[] chars : board) {
             Arrays.fill(chars, Color.EMPTY.getValue());
         }
     }
+
 }

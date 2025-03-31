@@ -1,17 +1,17 @@
 package cn.wxiach.event.support;
 
+import cn.wxiach.core.state.support.TurnStateReadable;
 import cn.wxiach.event.GomokuEvent;
-import cn.wxiach.model.Color;
 
 public class NewTurnEvent extends GomokuEvent {
-    private final Color currentTurn;
+    private final TurnStateReadable turn;
 
-    public NewTurnEvent(Object source, Color currentTurn) {
+    public NewTurnEvent(Object source, TurnStateReadable turn) {
         super(source);
-        this.currentTurn = currentTurn;
+        this.turn = turn;
     }
 
-    public Color getCurrentTurn() {
-        return this.currentTurn;
+    public TurnStateReadable getTurn() {
+        return this.turn;
     }
 }

@@ -27,6 +27,13 @@ public class BoardState extends TurnState implements BoardCheck, BoardStateReada
         }
     }
 
+    public void revert(int count) {
+        while (count > 0 && !board.pieces().isEmpty()) {
+            board.deletePiece(board.pieces().getLast());
+            count--;
+        }
+    }
+
     @Override
     protected void reset() {
         super.reset();

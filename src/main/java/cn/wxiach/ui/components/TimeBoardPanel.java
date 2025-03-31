@@ -65,7 +65,7 @@ public class TimeBoardPanel extends JPanel {
         });
 
         GomokuEventBus.getInstance().subscribe(NewTurnEvent.class, event -> {
-            if (event.getCurrentTurn() == Color.BLACK) {
+            if (event.getTurn().currentTurn() == Color.BLACK) {
                 blackTimer.start();
                 whiteTimer.stop();
             } else {

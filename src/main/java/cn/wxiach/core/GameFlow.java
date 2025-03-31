@@ -31,7 +31,7 @@ public class GameFlow {
             state.run();
             // The game state has been recharged, so the UI has also been updated
             GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
-            GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state.currentTurn()));
+            GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state));
         });
 
         GomokuEventBus.getInstance().subscribe(NewTurnEvent.class, event -> {
@@ -62,7 +62,14 @@ public class GameFlow {
                 GomokuEventBus.getInstance().publish(new GameOverEvent(this, state.winner()));
             } else {
                 state.switchTurn();
-                GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state.currentTurn()));
+                GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state));
+            }
+        });
+
+        GomokuEventBus.getInstance().subscribe(RevertChessEvent.class, event -> {
+            if (state.isSelfTurn()) {
+                state.revert(2);
+                GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
             }
         });
     }
