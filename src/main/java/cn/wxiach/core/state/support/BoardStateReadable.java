@@ -4,7 +4,7 @@ import cn.wxiach.model.Piece;
 
 import java.util.List;
 
-public interface BoardStateReadable extends PieceStateReadable {
+public interface BoardStateReadable extends TurnStateReadable {
 
     List<Piece> pieces();
 

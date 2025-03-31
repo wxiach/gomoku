@@ -3,7 +3,6 @@ package cn.wxiach.core.ai.search;
 import cn.wxiach.core.ai.evaluator.Evaluator;
 import cn.wxiach.core.ai.evaluator.FeatureBasedEvaluator;
 import cn.wxiach.core.state.rule.BoardCheck;
-import cn.wxiach.core.state.rule.OutOfBoardException;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
 import cn.wxiach.model.Point;
@@ -36,7 +35,7 @@ public class CandidatePointSearch {
         return candidates.entrySet().stream()
                 .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
                 .map(Map.Entry::getKey)
-                .limit(8)
+                .limit(10)
                 .toList();
     }
 
@@ -44,12 +43,9 @@ public class CandidatePointSearch {
         for (int dx = -range; dx <= range; dx++) {
             for (int dy = -range; dy <= range; dy++) {
                 int nx = x + dx, ny = y + dy;
-                try {
-                    if (BoardCheck.isEmpty(board, Point.of(nx, ny))) {
-                        Piece piece = Piece.of(nx, ny, color);
-                        candidates.put(piece.point(), evaluateCandidatePoint(piece));
-                    }
-                } catch (OutOfBoardException ignore) {
+                if (BoardCheck.isEmpty(board, Point.of(nx, ny))) {
+                    Piece piece = Piece.of(nx, ny, color);
+                    candidates.put(piece.point(), evaluateCandidatePoint(piece));
                 }
             }
         }

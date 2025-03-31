@@ -4,15 +4,19 @@ import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
 import cn.wxiach.model.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public interface BoardCheck {
+
+    Logger logger = LoggerFactory.getLogger(BoardCheck.class);
 
     static boolean isOnBoard(Point point) {
         if (point.x() >= 0 && point.x() < Board.SIZE && point.y() >= 0 && point.y() < Board.SIZE) {
             return true;
-        } else {
-            throw new OutOfBoardException(String.format("The Piece [%s, %s] is out of board", point.x(), point.y()));
         }
+        logger.debug("The Piece [{}, {}] is out of board", point.x(), point.y());
+        return false;
     }
 
     static boolean isOnBoard(Piece piece) {

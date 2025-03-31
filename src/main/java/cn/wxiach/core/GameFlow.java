@@ -28,6 +28,8 @@ public class GameFlow {
     private void subscribeToGameStateEvents() {
         GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
             state.run();
+            // The game state has been recharged, so the UI has also been updated
+            GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
             GomokuEventBus.getInstance().publish(new NewTurnEvent(this));
         });
 
