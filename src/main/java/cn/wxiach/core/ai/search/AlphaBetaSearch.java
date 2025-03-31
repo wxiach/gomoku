@@ -12,8 +12,6 @@ import cn.wxiach.model.Point;
 
 public class AlphaBetaSearch {
 
-    public static final int DEFAULT_SEARCH_DEPTH = 4;
-
     private final ZobristHash zobristHash;
     private final TranspositionTable transpositionTable;
 
@@ -24,11 +22,14 @@ public class AlphaBetaSearch {
     private final char[][] board;
     private final Color color;
 
+    private final int depth;
+
     private Point bestPoint;
 
-    public AlphaBetaSearch(char[][] board, Color color, ZobristHash zobristHash, TranspositionTable transpositionTable) {
+    public AlphaBetaSearch(char[][] board, Color color, int depth, ZobristHash zobristHash, TranspositionTable transpositionTable) {
         this.board = board;
         this.color = color;
+        this.depth = depth;
         this.candidatePointSearch = new CandidatePointSearch(board);
         this.evaluator = new FeatureBasedEvaluator();
         this.zobristHash = zobristHash;
@@ -36,7 +37,7 @@ public class AlphaBetaSearch {
     }
 
     public Piece execute() {
-        alphaBeta(DEFAULT_SEARCH_DEPTH, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
+        alphaBeta(depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
         return Piece.of(bestPoint, color);
     }
 
@@ -45,7 +46,7 @@ public class AlphaBetaSearch {
         long hash = zobristHash.compute(board);
 
         Integer evaluation = transpositionTable.find(hash, depth, alpha, beta, color);
-        if (evaluation != null && depth != DEFAULT_SEARCH_DEPTH) {
+        if (evaluation != null && depth != this.depth) {
             return evaluation;
         }
 
@@ -71,7 +72,7 @@ public class AlphaBetaSearch {
             }
             if (score > alpha) {
                 alpha = score;
-                if (depth == DEFAULT_SEARCH_DEPTH) {
+                if (depth == depth) {
                     this.bestPoint = point;
                 }
             }

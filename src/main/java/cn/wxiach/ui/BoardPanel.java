@@ -1,4 +1,4 @@
-package cn.wxiach.ui.components;
+package cn.wxiach.ui;
 
 import cn.wxiach.core.state.rule.BoardCheck;
 import cn.wxiach.core.state.support.GameStateReadable;
@@ -13,6 +13,7 @@ import cn.wxiach.model.Piece;
 import cn.wxiach.model.Point;
 import cn.wxiach.ui.assets.FontAssets;
 import cn.wxiach.ui.assets.ImageAssets;
+import cn.wxiach.ui.support.Coordinate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -205,7 +206,7 @@ public class BoardPanel extends JPanel {
                 // Prevent JPanel from responding to mouse click events
                 if (isEnabled()) {
                     long currentTime = System.currentTimeMillis();
-                    if (currentTime - time < 2000) return;
+                    if (currentTime - time < 500) return;
                     time = currentTime;
 
                     Point point = Coordinate.of(e.getX(), e.getY()).toPoint(UNIT_DIMENSION, OFFSET);

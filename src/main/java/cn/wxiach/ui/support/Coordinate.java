@@ -1,4 +1,4 @@
-package cn.wxiach.ui.components;
+package cn.wxiach.ui.support;
 
 import cn.wxiach.model.Point;
 

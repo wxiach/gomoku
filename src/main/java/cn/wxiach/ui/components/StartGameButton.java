@@ -1,4 +1,4 @@
-package cn.wxiach.ui.components.buttons;
+package cn.wxiach.ui.components;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;

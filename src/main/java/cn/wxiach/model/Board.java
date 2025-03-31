@@ -1,6 +1,6 @@
 package cn.wxiach.model;
 
-import cn.wxiach.utils.GomokuUtils;
+import cn.wxiach.core.GomokuUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -6,9 +6,8 @@ import cn.wxiach.core.GameFlow;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.model.Color;
+import cn.wxiach.model.Difficult;
 import cn.wxiach.ui.assets.FontAssets;
-import cn.wxiach.ui.components.ControlPanel;
-import cn.wxiach.ui.components.BoardPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,6 +48,9 @@ public class GomokuWindow extends JFrame {
 
         Color selfPieceColor = controlPanel.getPieceColorSelectButton().getCurrentValue();
         config.put(GomokuConf.SELF_PIECE_COLOR, selfPieceColor);
+
+        Difficult difficult = controlPanel.getDifficultRadio().getCurrentValue();
+        config.put(GomokuConf.DIFFICULT, difficult);
 
         gameFlow.updateGameSettings(config);
     }

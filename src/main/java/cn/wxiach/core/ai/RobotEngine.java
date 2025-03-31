@@ -8,6 +8,7 @@ import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.PiecePlaceEvent;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
+import cn.wxiach.model.Difficult;
 import cn.wxiach.model.Piece;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,12 @@ public class RobotEngine {
     private final ZobristHash zobristHash = new ZobristHash();
     private final TranspositionTable transpositionTable = new TranspositionTable();
 
+    private Difficult difficult;
+
     public void startCompute(BoardStateReadable board) {
-        AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(board.board(), board.opponentColor(), zobristHash, transpositionTable);
+        AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(
+                board.board(), board.opponentColor(), getAlphaBetaSearchDepth(), zobristHash, transpositionTable);
+
         executorService.submit(() -> {
             try {
                 Piece piece;
@@ -42,5 +47,17 @@ public class RobotEngine {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void setDifficult(Difficult difficult) {
+        this.difficult = difficult;
+    }
+
+    private int getAlphaBetaSearchDepth() {
+        return switch (difficult) {
+            case DIFFICULT -> 6;
+            case NORMAL -> 4;
+            case EASY -> 2;
+        };
     }
 }

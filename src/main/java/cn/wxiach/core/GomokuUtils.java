@@ -1,4 +1,4 @@
-package cn.wxiach.utils;
+package cn.wxiach.core;
 
 import java.util.Arrays;
 

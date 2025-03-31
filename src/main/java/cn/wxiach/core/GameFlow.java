@@ -6,6 +6,7 @@ import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.model.Color;
+import cn.wxiach.model.Difficult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class GameFlow {
             state.run();
             // The game state has been recharged, so the UI has also been updated
             GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
-            GomokuEventBus.getInstance().publish(new NewTurnEvent(this));
+            GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state.currentTurn()));
         });
 
         GomokuEventBus.getInstance().subscribe(NewTurnEvent.class, event -> {
@@ -61,7 +62,7 @@ public class GameFlow {
                 GomokuEventBus.getInstance().publish(new GameOverEvent(this, state.winner()));
             } else {
                 state.switchTurn();
-                GomokuEventBus.getInstance().publish(new NewTurnEvent(this));
+                GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state.currentTurn()));
             }
         });
     }
@@ -70,11 +71,17 @@ public class GameFlow {
         GomokuEventBus.getInstance().subscribe(PieceSelectEvent.class, event -> {
             state.setSelfColor(event.getColor());
         });
+        GomokuEventBus.getInstance().subscribe(DifficultSelectEvent.class, event -> {
+            robot.setDifficult(event.getDifficult());
+        });
     }
 
     public void updateGameSettings(Map<String, Object> config) {
         if (config.get(GomokuConf.SELF_PIECE_COLOR) instanceof Color selfColor) {
             state.setSelfColor(selfColor);
+        }
+        if (config.get(GomokuConf.DIFFICULT) instanceof Difficult difficult) {
+            robot.setDifficult(difficult);
         }
     }
 }

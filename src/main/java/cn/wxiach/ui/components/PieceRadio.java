@@ -1,4 +1,4 @@
-package cn.wxiach.ui.components.buttons;
+package cn.wxiach.ui.components;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
@@ -9,22 +9,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PieceColorSelectButton extends JPanel {
+public class PieceRadio extends JPanel {
 
-    private static final Logger logger = LoggerFactory.getLogger(PieceColorSelectButton.class);
+    private static final Logger logger = LoggerFactory.getLogger(PieceRadio.class);
 
     private final JLabel radioTitle;
     private final JRadioButton blackButton;
     private final JRadioButton whiteButton;
 
-    public PieceColorSelectButton() {
+    public PieceRadio() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        radioTitle = new JLabel("选择你的棋子颜色：");
-        add(radioTitle);
+        setAlignmentX(Component.LEFT_ALIGNMENT);
 
         blackButton = new JRadioButton("黑棋（先手）");
         whiteButton = new JRadioButton("白棋（后手）");
@@ -36,6 +35,12 @@ public class PieceColorSelectButton extends JPanel {
 
         // By default, black is chosen
         blackButton.setSelected(true);
+
+        radioTitle = new JLabel("棋子颜色：");
+        add(radioTitle);
+
+
+        add(Box.createVerticalStrut(12));
 
         add(blackButton);
         add(whiteButton);
