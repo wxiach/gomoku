@@ -9,6 +9,7 @@ import cn.wxiach.model.Color;
 public interface GameStateCheck {
     Pattern<String> BLACK_WIN_CONDITION = FeaturePattern.getBlackPatterns().getFirst();
     Pattern<String> WHITE_WIN_CONDITION = FeaturePattern.getWhitePatterns().getFirst();
+    int WIN_SCORE = BLACK_WIN_CONDITION.score();
 
     FeaturePatternDetector featurePatternDetector = FeaturePatternDetector.getInstance();
 

@@ -72,6 +72,8 @@ public class BoardPanel extends JPanel {
             g2d.drawString(horizontalCoordinateValue, UNIT_DIMENSION + i * UNIT_DIMENSION - 5, 24);
         }
 
+        // Steps 3 to 6 will have been completed on the board,
+        // so move the draw origin to the top-left boundary of the board.
         g2d.translate(OFFSET, OFFSET);
 
         // 3. Draw board lines with a margin around the edges.
@@ -120,25 +122,41 @@ public class BoardPanel extends JPanel {
         if (state == null) return;
 
         // 5. Draw pieces
-        state.pieces().forEach(piece -> {
+        for (int i = 0; i < state.pieces().size(); i++) {
+            Piece piece = state.pieces().get(i);
             Image image = piece.color() == Color.BLACK ? ImageAssets.getBlackPiece() : ImageAssets.getWhitePiece();
-            Coordinate coordinate = Coordinate.fromPoint(piece.point(), UNIT_DIMENSION, -PIECE_DIMENSION / 2);
+            Coordinate coordinate = Coordinate.fromPoint(piece.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());
-            g2d.drawImage(image, 0, 0, PIECE_DIMENSION, PIECE_DIMENSION, this);
+            g2d.drawImage(image, -PIECE_DIMENSION / 2, -PIECE_DIMENSION / 2, PIECE_DIMENSION, PIECE_DIMENSION, this);
+
+            // Add an ordinal number to each piece
+            if (piece.color() == Color.BLACK) {
+                g2d.setColor(java.awt.Color.WHITE);
+            } else {
+                g2d.setColor(java.awt.Color.BLACK);
+            }
+            String text = String.valueOf(i + 1);
+            int textWidth = g2d.getFontMetrics().stringWidth(text);
+            g2d.drawString(text, -textWidth / 2, textWidth / 2);
             g2d.translate(-coordinate.x(), -coordinate.y());
-        });
+        }
 
         // 6. Highlight last piece
         if (!state.pieces().isEmpty()) {
             Coordinate coordinate = Coordinate.fromPoint(state.pieces().getLast().point(), UNIT_DIMENSION, 0);
-            int offset = PIECE_DIMENSION / 6;
 
             g2d.setColor(java.awt.Color.RED);
             g2d.setStroke(new BasicStroke(2));
 
+            int size = 4;
+            int offset = PIECE_DIMENSION / 2 + 2;
+
             g2d.translate(coordinate.x(), coordinate.y());
-            g2d.drawLine(-offset, 0, offset, 0);
-            g2d.drawLine(0, -offset, 0, offset);
+            for (int i = 0; i < 4; i++) {
+                g2d.drawLine(-offset, -offset, -offset + size, -offset);
+                g2d.drawLine(-offset, -offset, -offset, -offset + size);
+                g2d.rotate(Math.PI / 2);
+            }
             g2d.translate(-coordinate.x(), -coordinate.y());
         }
 

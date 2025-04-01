@@ -2,6 +2,7 @@ package cn.wxiach.core.ai.search;
 
 import cn.wxiach.core.ai.evaluator.Evaluator;
 import cn.wxiach.core.ai.evaluator.FeatureBasedEvaluator;
+import cn.wxiach.core.ai.search.support.IterativeDeepeningSearch;
 import cn.wxiach.core.ai.search.support.TranspositionEntry;
 import cn.wxiach.core.ai.search.support.TranspositionTable;
 import cn.wxiach.core.ai.search.support.ZobristHash;
@@ -16,37 +17,54 @@ public class AlphaBetaSearch {
     private final TranspositionTable transpositionTable;
 
     private final CandidatePointSearch candidatePointSearch;
+    private final IterativeDeepeningSearch iterativeDeepeningSearch;
 
     private final Evaluator evaluator;
 
     private final char[][] board;
     private final Color color;
 
-    private final int depth;
 
     private Point bestPoint;
 
     public AlphaBetaSearch(char[][] board, Color color, int depth, ZobristHash zobristHash, TranspositionTable transpositionTable) {
         this.board = board;
         this.color = color;
-        this.depth = depth;
         this.candidatePointSearch = new CandidatePointSearch(board);
+        this.iterativeDeepeningSearch = new IterativeDeepeningSearch(depth, 2);
         this.evaluator = new FeatureBasedEvaluator();
         this.zobristHash = zobristHash;
         this.transpositionTable = transpositionTable;
     }
 
     public Piece execute() {
-        alphaBeta(depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
+        /*
+         * Negamax search inverts alpha and beta during recursion.
+         * To prevent integer overflow:
+         * - alpha is offset by +10,000 from Integer.MIN_VALUE.
+         * - beta is offset by -10,000 from Integer.MAX_VALUE.
+         */
+        iterativeDeepeningSearch.search((depth) -> {
+            return alphaBeta(depth, depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
+        });
         return Piece.of(bestPoint, color);
     }
 
 
-    public int alphaBeta(int depth, int alpha, int beta, Color color) {
+    /**
+     *
+     * @param depth
+     * @param bound
+     * @param alpha
+     * @param beta
+     * @param color
+     * @return
+     */
+    public int alphaBeta(int depth, int bound, int alpha, int beta, Color color) {
         long hash = zobristHash.compute(board);
 
         Integer evaluation = transpositionTable.find(hash, depth, alpha, beta, color);
-        if (evaluation != null && depth != this.depth) {
+        if (evaluation != null && depth != bound) {
             return evaluation;
         }
 
@@ -61,7 +79,7 @@ public class AlphaBetaSearch {
             board[point.x()][point.y()] = color.getValue();
             hash = zobristHash.update(hash, point.x(), point.y(), color.getValue());
 
-            int score = -alphaBeta(depth - 1, -beta, -alpha, Color.reverse(color));
+            int score = -alphaBeta(depth - 1, bound, -beta, -alpha, Color.reverse(color));
 
             board[point.x()][point.y()] = Color.EMPTY.getValue();
             hash = zobristHash.update(hash, point.x(), point.y(), color.getValue());
@@ -72,7 +90,7 @@ public class AlphaBetaSearch {
             }
             if (score > alpha) {
                 alpha = score;
-                if (depth == depth) {
+                if (depth == bound) {
                     this.bestPoint = point;
                 }
             }

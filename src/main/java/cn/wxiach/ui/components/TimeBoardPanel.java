@@ -76,7 +76,7 @@ public class TimeBoardPanel extends JPanel {
 
         GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
             blackTimer.stop();
-            blackTimer.stop();
+            whiteTimer.stop();
         });
     }
 
