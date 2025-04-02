@@ -3,6 +3,7 @@ package cn.wxiach.model;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class Board {
 
@@ -40,7 +41,7 @@ public class Board {
 
     public Board copy() {
         Board copy = new Board();
-        for (Piece piece : pieces) {
+        for (Piece piece : List.copyOf(pieces).reversed()) {
             copy.add(piece);
         }
         return copy;

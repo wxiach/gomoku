@@ -1,6 +1,7 @@
 package cn.wxiach.core.state;
 
 import cn.wxiach.core.rule.BoardCheck;
+import cn.wxiach.core.rule.PositionOccupiedException;
 import cn.wxiach.core.state.support.BoardStateReadable;
 import cn.wxiach.core.utils.BoardUtils;
 import cn.wxiach.model.Board;
@@ -35,17 +36,14 @@ public class BoardState extends TurnState implements BoardCheck, BoardStateReada
 
     @Override
     public Board copyBoard() {
-        Board copy = new Board();
-        for (Piece piece : boardPieces()) {
-            copy.add(piece);
-        }
-        return copy;
+        return board.copy();
     }
 
     public void addPiece(Piece piece) {
-        if (BoardCheck.isEmpty(board.matrix(), piece.point())) {
-            board.add(piece);
+        if (BoardCheck.isOccupied(boardMatrix(), piece.point())) {
+            throw new PositionOccupiedException("");
         }
+        board.add(piece);
     }
 
     public void revert(int count) {
