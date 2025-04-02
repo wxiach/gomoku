@@ -1,5 +1,6 @@
 package cn.wxiach.ui.components;
 
+import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.DifficultSelectEvent;
 import cn.wxiach.event.support.GameOverEvent;
@@ -36,8 +37,14 @@ public class DifficultRadio extends JPanel {
         buttonGroup.add(normalButton);
         buttonGroup.add(easyButton);
 
-        // By default, normal is chosen
-        normalButton.setSelected(true);
+        // Set default choose button
+        if (GomokuConf.defaultDifficult == Difficult.DIFFICULT) {
+            difficultButton.setSelected(true);
+        } else if (GomokuConf.defaultDifficult == Difficult.EASY) {
+            easyButton.setSelected(true);
+        } else {
+            normalButton.setSelected(true);
+        }
 
         radioTitle = new JLabel("难度：");
         add(radioTitle);

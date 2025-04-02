@@ -1,7 +1,6 @@
 package cn.wxiach.core;
 
 import cn.wxiach.config.GomokuConf;
-import cn.wxiach.core.ai.RobotEngine;
 import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
@@ -79,7 +78,7 @@ public class GameFlow {
             state.setSelfColor(event.getColor());
         });
         GomokuEventBus.getInstance().subscribe(DifficultSelectEvent.class, event -> {
-            robot.setDifficult(event.getDifficult());
+            robot.updateRobotLevel(event.getDifficult());
         });
     }
 
@@ -88,7 +87,7 @@ public class GameFlow {
             state.setSelfColor(selfColor);
         }
         if (config.get(GomokuConf.DIFFICULT) instanceof Difficult difficult) {
-            robot.setDifficult(difficult);
+            robot.updateRobotLevel(difficult);
         }
     }
 }

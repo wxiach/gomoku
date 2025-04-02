@@ -1,6 +1,6 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.core.state.rule.TurnSwitch;
+import cn.wxiach.core.rule.TurnSwitch;
 import cn.wxiach.core.state.support.TurnStateReadable;
 import cn.wxiach.model.Color;
 

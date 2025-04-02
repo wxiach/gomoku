@@ -14,5 +14,13 @@ public record Piece(Point point, Color color) {
     public static Piece of(int x, int y, Color color) {
         return of(Point.of(x, y), color);
     }
+
+    public int x() {
+        return point.x();
+    }
+
+    public int y() {
+        return point.y();
+    }
 }
 

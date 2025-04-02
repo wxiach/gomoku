@@ -1,16 +1,13 @@
 package cn.wxiach.model;
 
-import cn.wxiach.core.GomokuUtils;
-
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class Board {
 
     public static final int SIZE = 15;
-
-    private final List<Piece> pieces = new ArrayList<>();
+    ArrayDeque<Piece> pieces = new ArrayDeque<>();
     private final char[][] board = new char[SIZE][SIZE];
 
     public Board() {
@@ -19,23 +16,34 @@ public class Board {
         }
     }
 
-    public List<Piece> pieces() {
-        // Return to the copy, make sure the original list cannot be modified
-        return List.copyOf(pieces);
+    public Collection<Piece> pieces() {
+        return pieces;
     }
 
-    public char[][] board() {
-        return GomokuUtils.deepCopy2D(board);
+    public char[][] matrix() {
+        return board;
     }
 
-    public void addPiece(Piece piece) {
-        pieces.add(piece);
+    public void add(Piece piece) {
+        pieces.push(piece);
         board[piece.point().x()][piece.point().y()] = piece.color().getValue();
     }
 
-    public void deletePiece(Piece piece) {
-        pieces.remove(piece);
+    public void remove() {
+        Piece piece = pieces.pop();
         board[piece.point().x()][piece.point().y()] = Color.EMPTY.getValue();
+    }
+
+    public Piece last() {
+        return pieces.peek();
+    }
+
+    public Board copy() {
+        Board copy = new Board();
+        for (Piece piece : pieces) {
+            copy.add(piece);
+        }
+        return copy;
     }
 
     public void reset() {

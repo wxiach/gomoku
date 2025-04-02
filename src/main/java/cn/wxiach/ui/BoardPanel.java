@@ -1,6 +1,6 @@
 package cn.wxiach.ui;
 
-import cn.wxiach.core.state.rule.BoardCheck;
+import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.core.state.support.GameStateReadable;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
@@ -100,7 +100,7 @@ public class BoardPanel extends JPanel {
         // 4. Draw a cursor tip
         if (cursorTip != null && BoardCheck.isOnBoard(cursorTip) && !state.isOver() && state.isSelfTurn()) {
             Coordinate coordinate = Coordinate.fromPoint(cursorTip, UNIT_DIMENSION, 0);
-            if (state == null || BoardCheck.isEmpty(state.board(), cursorTip)) {
+            if (state == null || BoardCheck.isEmpty(state.boardMatrix(), cursorTip)) {
                 g2d.setColor(java.awt.Color.GREEN);
             } else {
                 g2d.setColor(java.awt.Color.RED);
@@ -122,8 +122,8 @@ public class BoardPanel extends JPanel {
         if (state == null) return;
 
         // 5. Draw pieces
-        for (int i = 0; i < state.pieces().size(); i++) {
-            Piece piece = state.pieces().get(i);
+        for (int i = 0; i < state.boardPieces().size(); i++) {
+            Piece piece = state.boardPieces().get(i);
             Image image = piece.color() == Color.BLACK ? ImageAssets.getBlackPiece() : ImageAssets.getWhitePiece();
             Coordinate coordinate = Coordinate.fromPoint(piece.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());
@@ -137,13 +137,13 @@ public class BoardPanel extends JPanel {
             }
             String text = String.valueOf(i + 1);
             int textWidth = g2d.getFontMetrics().stringWidth(text);
-            g2d.drawString(text, -textWidth / 2, textWidth / 2);
+            g2d.drawString(text, -textWidth / 2, 4);
             g2d.translate(-coordinate.x(), -coordinate.y());
         }
 
         // 6. Highlight last piece
-        if (!state.pieces().isEmpty()) {
-            Coordinate coordinate = Coordinate.fromPoint(state.pieces().getLast().point(), UNIT_DIMENSION, 0);
+        if (!state.boardPieces().isEmpty()) {
+            Coordinate coordinate = Coordinate.fromPoint(state.lastPiece().point(), UNIT_DIMENSION, 0);
 
             g2d.setColor(java.awt.Color.RED);
             g2d.setStroke(new BasicStroke(2));

@@ -1,36 +1,61 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.core.state.rule.BoardCheck;
+import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.core.state.support.BoardStateReadable;
+import cn.wxiach.core.utils.BoardUtils;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Piece;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class BoardState extends TurnState implements BoardCheck, BoardStateReadable {
 
     private final Board board = new Board();
 
     @Override
-    public List<Piece> pieces() {
-        return board.pieces();
+    public List<Piece> boardPieces() {
+        // Return to the copy, make sure the original list cannot be modified
+        return List.copyOf(board.pieces()).reversed();
     }
 
     @Override
-    public char[][] board() {
-        return board.board();
+    public char[][] boardMatrix() {
+        return BoardUtils.deepCopy2D(board.matrix());
+    }
+
+    @Override
+    public Piece lastPiece() {
+        /*
+         * Since pieces are stored in an ArrayDeque as a stack (LIFO),
+         * the most recently placed piece is at the front (peek).
+         */
+        return board.last();
+    }
+
+    @Override
+    public Board copyBoard() {
+        Board copy = new Board();
+        for (Piece piece : boardPieces()) {
+            copy.add(piece);
+        }
+        return copy;
     }
 
     public void addPiece(Piece piece) {
-        if (BoardCheck.isEmpty(board.board(), piece.point())) {
-            board.addPiece(piece);
+        if (BoardCheck.isEmpty(board.matrix(), piece.point())) {
+            board.add(piece);
         }
     }
 
     public void revert(int count) {
-        while (count > 0 && !board.pieces().isEmpty()) {
-            board.deletePiece(board.pieces().getLast());
-            count--;
+        while (count > 0) {
+            try {
+                board.remove();
+            } catch (NoSuchElementException ignore) {
+            } finally {
+                count--;
+            }
         }
     }
 

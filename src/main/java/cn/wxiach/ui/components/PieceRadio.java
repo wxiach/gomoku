@@ -1,5 +1,6 @@
 package cn.wxiach.ui.components;
 
+import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
@@ -33,8 +34,12 @@ public class PieceRadio extends JPanel {
         buttonGroup.add(blackButton);
         buttonGroup.add(whiteButton);
 
-        // By default, black is chosen
-        blackButton.setSelected(true);
+        // Set default choose button
+        if (GomokuConf.defaultSelColor == Color.BLACK) {
+            blackButton.setSelected(true);
+        } else {
+            whiteButton.setSelected(true);
+        }
 
         radioTitle = new JLabel("棋子颜色：");
         add(radioTitle);
