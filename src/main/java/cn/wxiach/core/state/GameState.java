@@ -1,34 +1,35 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.core.rule.StandardWinArbiter;
+import cn.wxiach.core.rule.WinArbiter;
 import cn.wxiach.core.state.support.GameStateReadable;
 import cn.wxiach.model.Color;
 
 public class GameState extends BoardState implements GameStateReadable {
 
-    private boolean running = false;
-    private final StandardWinArbiter resultCheck = new StandardWinArbiter();
+    private boolean over = false;
+    private Color winner = Color.EMPTY;
 
     public void run() {
         reset();
-        this.running = true;
+        this.over = false;
     }
 
     public void end() {
-        this.running = false;
-    }
-
-    @Override
-    public boolean isOver() {
-        if (running && !boardPieces().isEmpty() && resultCheck.win(copyBoard())) {
-            running = false;
-        }
-        return !running;
+        this.over = true;
     }
 
     @Override
     public Color winner() {
-        return resultCheck.winner();
+        return winner;
+    }
+
+    @Override
+    public boolean isOver() {
+        if (!over && !boardPieces().isEmpty() && WinArbiter.checkOver(board)) {
+            over = true;
+            this.winner = board.lastPiece().color();
+        }
+        return over;
     }
 
     @Override

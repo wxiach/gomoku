@@ -25,24 +25,24 @@ public class Board {
         return board;
     }
 
-    public void add(Piece piece) {
+    public void addPiece(Piece piece) {
         pieces.push(piece);
         board[piece.point().x()][piece.point().y()] = piece.color().getValue();
     }
 
-    public void remove() {
+    public void removeLastPiece() {
         Piece piece = pieces.pop();
         board[piece.point().x()][piece.point().y()] = Color.EMPTY.getValue();
     }
 
-    public Piece last() {
+    public Piece lastPiece() {
         return pieces.peek();
     }
 
-    public Board copy() {
+    public Board copyBoard() {
         Board copy = new Board();
         for (Piece piece : List.copyOf(pieces).reversed()) {
-            copy.add(piece);
+            copy.addPiece(piece);
         }
         return copy;
     }

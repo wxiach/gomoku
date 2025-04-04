@@ -10,9 +10,9 @@ import cn.wxiach.model.Piece;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class BoardState extends TurnState implements BoardCheck, BoardStateReadable {
+public class BoardState extends TurnState implements BoardStateReadable {
 
-    private final Board board = new Board();
+    protected final Board board = new Board();
 
     @Override
     public List<Piece> boardPieces() {
@@ -31,25 +31,25 @@ public class BoardState extends TurnState implements BoardCheck, BoardStateReada
          * Since pieces are stored in an ArrayDeque as a stack (LIFO),
          * the most recently placed piece is at the front (peek).
          */
-        return board.last();
+        return board.lastPiece();
     }
 
     @Override
     public Board copyBoard() {
-        return board.copy();
+        return board.copyBoard();
     }
 
     public void addPiece(Piece piece) {
-        if (BoardCheck.isOccupied(boardMatrix(), piece.point())) {
-            throw new PositionOccupiedException("");
+        if (BoardCheck.isOccupied(board, piece.point())) {
+            throw new PositionOccupiedException(String.format("(%s, %s) has a piece", piece.x(), piece.y()));
         }
-        board.add(piece);
+        board.addPiece(piece);
     }
 
     public void revert(int count) {
         while (count > 0) {
             try {
-                board.remove();
+                board.removeLastPiece();
             } catch (NoSuchElementException ignore) {
             } finally {
                 count--;

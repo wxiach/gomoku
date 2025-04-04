@@ -1,12 +1,17 @@
 package cn.wxiach.ai.evaluate;
 
-import cn.wxiach.ai.pattern.Pattern;
-import cn.wxiach.ai.pattern.feature.FeatureDetector;
 
-public class FeatureEvaluator implements Evaluator {
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
 
-    @Override
-    public int evaluate(char[][] board) {
-        return FeatureDetector.getInstance().detect(board).stream().mapToInt(Pattern::score).sum();
-    }
+public interface FeatureEvaluator {
+
+    /**
+     * Evaluates the board's score, taking the opponent's score into account.
+     *
+     * @param board
+     * @param color Determines whether the board is evaluated from the perspective of Black or White.
+     * @return
+     */
+    int evaluate(Board board, Color color);
 }

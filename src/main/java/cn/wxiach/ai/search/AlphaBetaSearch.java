@@ -1,34 +1,32 @@
 package cn.wxiach.ai.search;
 
-import cn.wxiach.ai.evaluate.Evaluator;
 import cn.wxiach.ai.evaluate.FeatureEvaluator;
 import cn.wxiach.ai.support.TranspositionEntry;
 import cn.wxiach.ai.support.TranspositionTable;
 import cn.wxiach.ai.support.ZobristHash;
-import cn.wxiach.core.rule.StandardWinArbiter;
 import cn.wxiach.core.rule.WinArbiter;
-import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Piece;
 
 public class AlphaBetaSearch {
 
-    private final Evaluator evaluator = new FeatureEvaluator();
-    private final WinArbiter winArbiter = new StandardWinArbiter();
-    private final CandidatePieceSearch candidateSearch = new CandidatePieceSearch();
-
     private final ZobristHash zobristHash;
     private final TranspositionTable transpositionTable;
 
-    private SearchContext context;
-    private Result searchResult;
+    private final FeatureEvaluator evaluator;
+    private final ABCandidateSearch candidateSearch;
 
-    public AlphaBetaSearch(ZobristHash zobristHash, TranspositionTable transpositionTable) {
+    private SearchContext context;
+    private SearchResult result;
+
+    public AlphaBetaSearch(ZobristHash zobristHash, TranspositionTable transpositionTable, FeatureEvaluator evaluator) {
         this.zobristHash = zobristHash;
         this.transpositionTable = transpositionTable;
+        this.evaluator = evaluator;
+        this.candidateSearch = new ABCandidateSearch(evaluator);
     }
 
-    public Result execute(SearchContext context) {
+    public SearchResult execute(SearchContext context) {
         this.context = context;
         /*
          * Negamax search inverts alpha and beta during recursion.
@@ -37,7 +35,7 @@ public class AlphaBetaSearch {
          * - beta is offset by -10,000 from Integer.MAX_VALUE.
          */
         alphaBeta(context.depth(), Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, context.color());
-        return searchResult;
+        return result;
     }
 
 
@@ -56,15 +54,15 @@ public class AlphaBetaSearch {
             return evaluation;
         }
 
-        if (depth == 0 || winArbiter.win(context.board())) {
+        if (depth == 0 || WinArbiter.checkOver(context.board())) {
             return evaluator.evaluate(context.board(), color);
         }
 
         int origAlpha = alpha;
 
-        for (Piece piece : candidateSearch.obtainCandidatePoints(context.board(), color)) {
+        for (Piece piece : candidateSearch.obtainCandidates(context.board(), color)) {
 
-            context.board().add(piece);
+            context.board().addPiece(piece);
             hash = zobristHash.update(hash, piece);
 
             int score = -alphaBeta(depth - 1, -beta, -alpha, Color.reverse(color));
@@ -74,7 +72,7 @@ public class AlphaBetaSearch {
              * and since the recursive operations are serial,
              * there's no need to specify which piece to remove here.
              */
-            context.board().remove();
+            context.board().removeLastPiece();
 
             hash = zobristHash.update(hash, piece);
 
@@ -85,7 +83,7 @@ public class AlphaBetaSearch {
             if (score > alpha) {
                 alpha = score;
                 if (depth == context.depth()) {
-                    searchResult = new Result(piece, context.board().copy(), score);
+                    result = new SearchResult(piece, context.board().copyBoard(), score);
                 }
             }
         }
@@ -96,13 +94,4 @@ public class AlphaBetaSearch {
         return alpha;
     }
 
-
-    public record Result(Piece piece, Board board, int score) {
-        public Result(Piece piece, Board board, int score) {
-            this.piece = piece;
-            this.board = board;
-            this.score = score;
-            board.add(piece);
-        }
-    }
 }

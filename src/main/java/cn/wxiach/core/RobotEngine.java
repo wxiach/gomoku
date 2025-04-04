@@ -1,6 +1,6 @@
 package cn.wxiach.core;
 
-import cn.wxiach.ai.BestMoveGenerate;
+import cn.wxiach.ai.BestMoveGenerator;
 import cn.wxiach.config.GomokuConf;
 import cn.wxiach.core.state.support.GameStateReadable;
 import cn.wxiach.event.GomokuEventBus;
@@ -20,10 +20,10 @@ public class RobotEngine {
     private static final Logger logger = LoggerFactory.getLogger(RobotEngine.class);
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final BestMoveGenerate bestMoveGenerate;
+    private final BestMoveGenerator bestMoveGenerator;
 
     public RobotEngine() {
-        this.bestMoveGenerate = new BestMoveGenerate(
+        this.bestMoveGenerator = new BestMoveGenerator(
                 convertRobotLevelToSearchDepth(GomokuConf.defaultDifficult));
     }
 
@@ -34,7 +34,7 @@ public class RobotEngine {
                 if (state.boardPieces().isEmpty()) {
                     piece = Piece.of(Board.SIZE / 2, Board.SIZE / 2, Color.BLACK);
                 } else {
-                    piece = bestMoveGenerate.execute(state);
+                    piece = bestMoveGenerator.execute(state);
                 }
                 if (piece == null) {
                     throw new RobotException("Robot compute a null point.");
@@ -48,7 +48,7 @@ public class RobotEngine {
     }
 
     public void updateRobotLevel(Difficult robotLevel) {
-        this.bestMoveGenerate.setSearchDepth(
+        this.bestMoveGenerator.setSearchDepth(
                 convertRobotLevelToSearchDepth(robotLevel));
     }
 

@@ -100,7 +100,7 @@ public class BoardPanel extends JPanel {
         // 4. Draw a cursor tip
         if (cursorTip != null && BoardCheck.isOnBoard(cursorTip) && !state.isOver() && state.isSelfTurn()) {
             Coordinate coordinate = Coordinate.fromPoint(cursorTip, UNIT_DIMENSION, 0);
-            if (state == null || BoardCheck.isEmpty(state.boardMatrix(), cursorTip)) {
+            if (state == null || BoardCheck.isEmpty(state.copyBoard(), cursorTip)) {
                 g2d.setColor(java.awt.Color.GREEN);
             } else {
                 g2d.setColor(java.awt.Color.RED);

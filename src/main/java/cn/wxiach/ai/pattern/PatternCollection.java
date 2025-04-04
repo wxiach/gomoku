@@ -1,12 +1,55 @@
 package cn.wxiach.ai.pattern;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
-public interface PatternCollection<T> {
 
-    Pattern<T> empty();
+public class PatternCollection {
 
-    Pattern<T> win();
+    public static final String A5 = "A5";
+    public static final String A4 = "A4";
+    public static final String D4 = "D4";
+    public static final String A3 = "A3";
+    public static final String A2 = "A2";
+    public static final String A1 = "A1";
 
-    Collection<Pattern<T>> patterns();
+    /*
+     * Create an unmodifiable pattern list by using List.of()
+     * List.of() is ordered, so the order of the code is important
+     */
+    public static final Pattern Five = new Pattern("11111", "A5", 100000);
+
+    public static final Pattern aliveFour = new Pattern("011110", "A4", 10000);
+
+    public static final List<Pattern> deathFour = List.of(
+            new Pattern("11110", "D4", 1200),
+            new Pattern("01111", "D4", 1200),
+            new Pattern("11011", "D4", 1000),
+            new Pattern("10111", "D4", 1000),
+            new Pattern("11101", "D4", 1000)
+    );
+
+    public static final List<Pattern> aliveThree = List.of(
+            new Pattern("011100", "A3", 1200),
+            new Pattern("001110", "A3", 1200),
+            new Pattern("011010", "A3", 1000),
+            new Pattern("010110", "A3", 1000)
+    );
+
+    public static final List<Pattern> aliveTwo = List.of(
+            new Pattern("001100", "A2", 120),
+            new Pattern("001010", "A2", 100),
+            new Pattern("010100", "A2", 100)
+    );
+
+    public static final List<Pattern> aliveOne = List.of(
+            new Pattern("001000", "A1", 10),
+            new Pattern("000100", "A1", 10)
+    );
+
+    public static final List<Pattern> patterns = Stream.concat(
+            Stream.of(Five, aliveFour),
+            Stream.of(deathFour, aliveThree, aliveTwo, aliveOne).flatMap(List::stream)
+    ).toList();
 }
+
