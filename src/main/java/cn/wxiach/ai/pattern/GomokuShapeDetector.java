@@ -50,7 +50,7 @@ public class GomokuShapeDetector implements ShapeDetector {
         private String extractLineStringFromIndices(char[][] board, int[] indexLine) {
             char[] line = new char[indexLine.length];
             for (int i = 0; i < indexLine.length; i++) {
-                line[i] = board[indexLine[i] / board.length][indexLine[i] % board.length];
+                line[i] = board[indexLine[i] % board.length][indexLine[i] / board.length];
             }
             return new String(line);
         }

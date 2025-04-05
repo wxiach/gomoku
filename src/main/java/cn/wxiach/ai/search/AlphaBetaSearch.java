@@ -1,6 +1,7 @@
 package cn.wxiach.ai.search;
 
 import cn.wxiach.ai.evaluate.FeatureEvaluator;
+import cn.wxiach.ai.pattern.PatternCollection;
 import cn.wxiach.ai.support.TranspositionEntry;
 import cn.wxiach.ai.support.TranspositionTable;
 import cn.wxiach.ai.support.ZobristHash;
@@ -54,7 +55,10 @@ public class AlphaBetaSearch {
             return evaluation;
         }
 
-        if (depth == 0 || WinArbiter.checkOver(context.board())) {
+        if (depth == 0) {
+            if (WinArbiter.checkOver(context.board())) {
+                return PatternCollection.Five.score();
+            }
             return evaluator.evaluate(context.board(), color);
         }
 
@@ -67,7 +71,7 @@ public class AlphaBetaSearch {
 
             int score = -alphaBeta(depth - 1, -beta, -alpha, Color.reverse(color));
 
-            /**
+            /*
              * Firstly, I use a stack to manage the pieces on the board,
              * and since the recursive operations are serial,
              * there's no need to specify which piece to remove here.
@@ -83,7 +87,7 @@ public class AlphaBetaSearch {
             if (score > alpha) {
                 alpha = score;
                 if (depth == context.depth()) {
-                    result = new SearchResult(piece, context.board().copyBoard(), score);
+                    result = new SearchResult(piece, score);
                 }
             }
         }

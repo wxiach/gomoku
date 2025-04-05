@@ -20,10 +20,10 @@ public class IterativeDeepeningSearch {
 
     public void search(Function<Integer, SearchResult> searchFunction) {
         for (int depth = 2; depth <= maxSearchDepth; depth += 2) {
-            logger.debug("Iterative deep search start in {} depth.", depth);
+            logger.debug("Iterative deepening search start in {} depth.", depth);
             SearchResult searchResult = searchFunction.apply(depth);
-            if (searchResult.score() >= (PatternCollection.Five.score() - (PatternCollection.aliveFour.score() * 2))) {
-                logger.info("Search finish in {} depth,", depth);
+            if (searchResult.score() >= PatternCollection.Five.score()) {
+                logger.info("Iterative deepening Search finish in {} depth,", depth);
                 break;
             }
         }

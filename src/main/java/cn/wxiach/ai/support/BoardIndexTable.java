@@ -4,23 +4,12 @@ import cn.wxiach.model.Board;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 public class BoardIndexTable {
 
-    private final static int indexTableSize = Board.SIZE;
-    private static final int[][] indexTable = new int[indexTableSize][indexTableSize];
-
-    static {
-        int count = 0;
-        for (int x = 0; x < indexTableSize; x++) {
-            for (int y = 0; y < indexTableSize; y++) {
-                indexTable[x][y] = count++;
-            }
-        }
-    }
+    private final static int size = Board.SIZE;
 
     private final List<int[]> hIndex = new ArrayList<>();
     private final List<int[]> vIndex = new ArrayList<>();
@@ -38,60 +27,61 @@ public class BoardIndexTable {
     }
 
     public List<int[]> indexLine(int x, int y) {
-        List<int[]> lines = new ArrayList<>();
-        lines.add(hIndex.get(x));
-        lines.add(vIndex.get(y));
+        return Stream.of(
+                        hIndex.get(x),
+                        vIndex.get(y),
+                        lIndex.get(x + y),
+                        rIndex.get(x - y + size - 1)
+                )
+                .filter(line -> line.length >= 5)
+                .toList();
 
-        int arrIndex = x + y - 4;
-        if (arrIndex >= 0 && arrIndex <= 20) lines.add(lIndex.get(arrIndex));
-
-        arrIndex = x - y + (indexTableSize - 4 - 1);
-        if (arrIndex >= 0 && arrIndex <= 20) lines.add(rIndex.get(arrIndex));
-
-        return Collections.unmodifiableList(lines);
     }
 
     private void preStoreAllLines() {
         // horizontal
-        for (int x = 0; x < indexTableSize; x++) {
-            hIndex.add(indexTable[x]);
+        for (int y = 0; y < size; y++) {
+            int[] line = new int[size];
+            for (int x = 0; x < size; x++) {
+                line[x] = y * size + x;
+            }
+            hIndex.add(line);
         }
 
         // vertical
-        for (int y = 0; y < indexTableSize; y++) {
-            int[] line = new int[indexTableSize];
-            for (int x = 0; x < indexTableSize; x++) {
-                line[x] = indexTable[x][y];
+        for (int x = 0; x < size; x++) {
+            int[] line = new int[size];
+            for (int y = 0; y < size; y++) {
+                line[y] = y * size + x;
             }
             vIndex.add(line);
         }
 
         // left diagonal ( / direction, top left to bottom right)
-        for (int start = 0; start < indexTableSize * 2 - 1; start++) {
+        // The characteristic of the forward slash (/) is that x + y remains constant.
+        for (int start = 0; start <= (size - 1) * 2; start++) {
             List<Integer> numList = new ArrayList<>();
-            for (int x = 0; x < indexTableSize; x++) {
+            for (int x = 0; x < size; x++) {
                 int y = start - x;
-                if (y >= 0 && y < indexTableSize) {
-                    numList.add(indexTable[x][y]);
+                if (y >= 0 && y < size) {
+                    numList.add(y * size + x);
                 }
             }
-            if (numList.size() >= 5) {
-                lIndex.add(numList.stream().mapToInt(i -> i).toArray());
-            }
+            lIndex.add(numList.stream().mapToInt(i -> i).toArray());
         }
 
         // right diagonal ( \ direction, bottom left to top right)
-        for (int start = 0; start < indexTableSize * 2 - 1; start++) {
+        // The characteristic of the backslash (\) is that x - y remains constant.
+        for (int start = -(size - 1); start <= size - 1; start++) {
             List<Integer> numList = new ArrayList<>();
-            for (int x = 0; x < indexTableSize; x++) {
-                int y = start - (indexTableSize - 1 - x);
-                if (y >= 0 && y < indexTableSize) {
-                    numList.add(indexTable[x][y]);
+            for (int x = 0; x < size; x++) {
+                int y = x - start;
+                if (y >= 0 && y < size) {
+                    numList.add(y * size + x);
                 }
             }
-            if (numList.size() >= 5) {
-                rIndex.add(numList.stream().mapToInt(i -> i).toArray());
-            }
+            rIndex.add(numList.stream().mapToInt(i -> i).toArray());
         }
     }
 }
+

@@ -44,7 +44,7 @@ public class KillSearch {
 
             bestScore = Math.max(bestScore, score);
             if (bestScore == MAX_SCORE) {
-                if (depth == context.depth()) result = new SearchResult(piece, context.board(), bestScore);
+                if (depth == context.depth()) result = new SearchResult(piece, bestScore);
                 break;
             }
         }

@@ -40,6 +40,7 @@ public class BestMoveGenerator {
 
 //        searchResult = killSearch.execute(new SearchContext(state.copyBoard(), state.currentTurn(), 6));
 //        if (searchResult != null) {
+//            logger.info("AI will win.");
 //            return searchResult.piece();
 //        }
 
