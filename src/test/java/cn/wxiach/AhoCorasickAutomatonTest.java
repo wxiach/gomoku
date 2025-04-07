@@ -1,7 +1,6 @@
 package cn.wxiach;
 
-import cn.wxiach.ai.support.AhoCorasickAutomaton;
-import cn.wxiach.ai.support.CharSequenceConverter;
+import cn.wxiach.ai.pattern.AhoCorasickAutomaton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +15,7 @@ class AhoCorasickAutomatonTest {
 
     private AhoCorasickAutomaton<String> automaton;
 
-    private static class StringConverter implements CharSequenceConverter<String> {
+    private static class StringConverter implements AhoCorasickAutomaton.CharSequenceConverter<String> {
         @Override
         public CharSequence toCharSequence(String s) {
             return s;

@@ -1,6 +1,7 @@
 package cn.wxiach;
 
-import cn.wxiach.ai.support.BoardIndexTable;
+
+import cn.wxiach.ai.pattern.BoardIndexTable;
 import cn.wxiach.model.Board;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class BoardIndexTableTest {
         List<int[]> lines = table.indexLine();
 
         // Verify total lines count
-        int expectedLinesCount = BOARD_SIZE + BOARD_SIZE + (BOARD_SIZE * 2 - 1) * 2;
+        int expectedLinesCount = BOARD_SIZE + BOARD_SIZE + (BOARD_SIZE * 2 - 1 - 4 - 4) * 2;
         assertEquals(expectedLinesCount, lines.size());
 
         // Verify horizontal line length
@@ -96,3 +97,4 @@ class BoardIndexTableTest {
 
     }
 }
+

@@ -1,5 +1,6 @@
 package cn.wxiach.core;
 
+import cn.wxiach.ai.RobotEngine;
 import cn.wxiach.config.GomokuConf;
 import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
@@ -45,15 +46,15 @@ public class GameFlow {
     }
 
     private void subscribeToGameInteractionEvents() {
-        GomokuEventBus.getInstance().subscribe(PiecePlaceEvent.class, event -> {
+        GomokuEventBus.getInstance().subscribe(StonePlaceEvent.class, event -> {
             if (state.isOver()) return;
 
             // Prevent multiple quick clicks
-            if (event.getPiece().color() != state.currentTurn()) return;
+            if (event.getStone().color() != state.currentTurn()) return;
 
-            state.addPiece(event.getPiece());
+            state.placeStone(event.getStone());
 
-            // If the code runs here, it means the piece has been placed successfully.
+            // If the code runs here, it means the stone has been placed successfully.
 
             GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
 
@@ -67,14 +68,14 @@ public class GameFlow {
 
         GomokuEventBus.getInstance().subscribe(RevertChessEvent.class, event -> {
             if (state.isSelfTurn()) {
-                state.revert(2);
+                state.revertStone(2);
                 GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
             }
         });
     }
 
     private void subscribeToGameSettingsEvents() {
-        GomokuEventBus.getInstance().subscribe(PieceSelectEvent.class, event -> {
+        GomokuEventBus.getInstance().subscribe(StoneSelectEvent.class, event -> {
             state.setSelfColor(event.getColor());
         });
         GomokuEventBus.getInstance().subscribe(DifficultSelectEvent.class, event -> {
@@ -83,7 +84,7 @@ public class GameFlow {
     }
 
     public void updateGameSettings(Map<String, Object> config) {
-        if (config.get(GomokuConf.SELF_PIECE_COLOR) instanceof Color selfColor) {
+        if (config.get(GomokuConf.SELF_STONE_COLOR) instanceof Color selfColor) {
             state.setSelfColor(selfColor);
         }
         if (config.get(GomokuConf.DIFFICULT) instanceof Difficult difficult) {

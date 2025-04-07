@@ -1,8 +1,8 @@
 package cn.wxiach.ai.pattern;
 
 
-import cn.wxiach.ai.support.AhoCorasickAutomaton;
-import cn.wxiach.ai.support.BoardIndexTable;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Point;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -23,13 +23,13 @@ public class GomokuShapeDetector implements ShapeDetector {
     private final PatternDetector patternDetector = new PatternDetector();
 
     @Override
-    public Collection<Pattern> detect(char[][] board) {
+    public Collection<Pattern> detect(Board board) {
         return patternDetector.detect(matchLineDetector.detect(board));
     }
 
     @Override
-    public Collection<Pattern> detect(char[][] board, int x, int y) {
-        return patternDetector.detect(matchLineDetector.detect(board, x, y));
+    public Collection<Pattern> detect(Board board, Point point) {
+        return patternDetector.detect(matchLineDetector.detect(board, point));
     }
 
 
@@ -37,21 +37,19 @@ public class GomokuShapeDetector implements ShapeDetector {
 
         private final BoardIndexTable boardIndexTable = new BoardIndexTable();
 
-        public Collection<String> detect(char[][] board) {
+        public Collection<String> detect(Board board) {
             return boardIndexTable.indexLine().stream()
                     .map(indexLine -> extractLineStringFromIndices(board, indexLine)).toList();
         }
 
-        public Collection<String> detect(char[][] board, int x, int y) {
-            return boardIndexTable.indexLine(x, y).stream()
+        public Collection<String> detect(Board board, Point point) {
+            return boardIndexTable.indexLine(point.x(), point.y()).stream()
                     .map(indexLine -> extractLineStringFromIndices(board, indexLine)).toList();
         }
 
-        private String extractLineStringFromIndices(char[][] board, int[] indexLine) {
+        private String extractLineStringFromIndices(Board board, int[] indexLine) {
             char[] line = new char[indexLine.length];
-            for (int i = 0; i < indexLine.length; i++) {
-                line[i] = board[indexLine[i] % board.length][indexLine[i] / board.length];
-            }
+            for (int i = 0; i < indexLine.length; i++) line[i] = board.get(indexLine[i]);
             return new String(line);
         }
     }

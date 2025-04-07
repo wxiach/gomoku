@@ -19,32 +19,32 @@ public class PatternCollection {
      */
     public static final Pattern Five = new Pattern("11111", "A5", 100000);
 
-    public static final Pattern aliveFour = new Pattern("011110", "A4", 10000);
+    public static final Pattern aliveFour = new Pattern("011110", "A4", 6000);
 
     public static final List<Pattern> deathFour = List.of(
-            new Pattern("11110", "D4", 1200),
-            new Pattern("01111", "D4", 1200),
-            new Pattern("11011", "D4", 1000),
-            new Pattern("10111", "D4", 1000),
-            new Pattern("11101", "D4", 1000)
+            new Pattern("11110", "D4", 600),
+            new Pattern("01111", "D4", 600),
+            new Pattern("11011", "D4", 600),
+            new Pattern("10111", "D4", 600),
+            new Pattern("11101", "D4", 600)
     );
 
     public static final List<Pattern> aliveThree = List.of(
-            new Pattern("011100", "A3", 1200),
-            new Pattern("001110", "A3", 1200),
-            new Pattern("011010", "A3", 1000),
-            new Pattern("010110", "A3", 1000)
+            new Pattern("011100", "A3", 100),
+            new Pattern("001110", "A3", 100),
+            new Pattern("011010", "A3", 100),
+            new Pattern("010110", "A3", 100)
     );
 
     public static final List<Pattern> aliveTwo = List.of(
-            new Pattern("001100", "A2", 120),
-            new Pattern("001010", "A2", 100),
-            new Pattern("010100", "A2", 100)
+            new Pattern("001100", "A2", 10),
+            new Pattern("001010", "A2", 10),
+            new Pattern("010100", "A2", 10)
     );
 
     public static final List<Pattern> aliveOne = List.of(
-            new Pattern("001000", "A1", 10),
-            new Pattern("000100", "A1", 10)
+            new Pattern("001000", "A1", 1),
+            new Pattern("000100", "A1", 1)
     );
 
     public static final List<Pattern> patterns = Stream.concat(

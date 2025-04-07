@@ -2,11 +2,11 @@ package cn.wxiach.ui.support;
 
 import cn.wxiach.model.Point;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public record Coordinate(int x, int y) {
-    private static final Map<String, Coordinate> CACHE = new ConcurrentHashMap<>();
+    private static final Map<String, Coordinate> CACHE = new HashMap<>();
 
     public static Coordinate of(int x, int y) {
         String key = x + "," + y;

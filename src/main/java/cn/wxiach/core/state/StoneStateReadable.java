@@ -1,8 +1,8 @@
-package cn.wxiach.core.state.support;
+package cn.wxiach.core.state;
 
 import cn.wxiach.model.Color;
 
-public interface PieceStateReadable {
+public interface StoneStateReadable {
 
     Color selfColor();
 

@@ -1,7 +1,6 @@
 package cn.wxiach.core.state;
 
 import cn.wxiach.core.rule.WinArbiter;
-import cn.wxiach.core.state.support.GameStateReadable;
 import cn.wxiach.model.Color;
 
 public class GameState extends BoardState implements GameStateReadable {
@@ -25,9 +24,9 @@ public class GameState extends BoardState implements GameStateReadable {
 
     @Override
     public boolean isOver() {
-        if (!over && !boardPieces().isEmpty() && WinArbiter.checkOver(board)) {
+        if (!over && WinArbiter.checkOver(board())) {
+            winner = stoneSequence().getLast().color();
             over = true;
-            this.winner = board.lastPiece().color();
         }
         return over;
     }

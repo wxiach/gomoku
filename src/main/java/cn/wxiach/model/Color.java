@@ -11,7 +11,7 @@ public enum Color {
         this.value = value;
     }
 
-    public char getValue() {
+    public char value() {
         return value;
     }
 
@@ -21,7 +21,7 @@ public enum Color {
         return "empty";
     }
 
-    public static Color getColor(char value) {
+    public static Color of(char value) {
         return switch (value) {
             case '0' -> EMPTY;
             case '1' -> BLACK;
@@ -30,8 +30,11 @@ public enum Color {
         };
     }
 
-    // Used to switch between black and white
+    /**
+     * Used to switch stone's color between black and white.
+     */
     public static Color reverse(Color color) {
+        if (color == Color.EMPTY) return color;
         return color == Color.BLACK ? Color.WHITE : Color.BLACK;
     }
 }

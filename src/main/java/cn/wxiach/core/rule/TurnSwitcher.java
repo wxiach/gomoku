@@ -1,6 +1,6 @@
 package cn.wxiach.core.rule;
 
-public interface TurnSwitch {
+public interface TurnSwitcher {
 
     void switchTurn();
 }

@@ -1,4 +1,4 @@
-package cn.wxiach.ai.support;
+package cn.wxiach.ai.pattern;
 
 import cn.wxiach.model.Board;
 
@@ -23,13 +23,14 @@ public class BoardIndexTable {
     public List<int[]> indexLine() {
         return Stream.of(hIndex, vIndex, lIndex, rIndex)
                 .flatMap(Collection::stream)
+                .filter(line -> line.length >= 5)
                 .toList();
     }
 
     public List<int[]> indexLine(int x, int y) {
         return Stream.of(
-                        hIndex.get(x),
-                        vIndex.get(y),
+                        hIndex.get(y),
+                        vIndex.get(x),
                         lIndex.get(x + y),
                         rIndex.get(x - y + size - 1)
                 )

@@ -11,8 +11,8 @@ import cn.wxiach.ui.assets.FontAssets;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GomokuWindow extends JFrame {
 
@@ -44,10 +44,10 @@ public class GomokuWindow extends JFrame {
     }
 
     public void run() {
-        Map<String, Object> config = new ConcurrentHashMap<>();
+        Map<String, Object> config = new HashMap<>();
 
-        Color selfPieceColor = controlPanel.getPieceColorSelectButton().getCurrentValue();
-        config.put(GomokuConf.SELF_PIECE_COLOR, selfPieceColor);
+        Color selfStoneColor = controlPanel.getStoneColorSelectButton().getCurrentValue();
+        config.put(GomokuConf.SELF_STONE_COLOR, selfStoneColor);
 
         Difficult difficult = controlPanel.getDifficultRadio().getCurrentValue();
         config.put(GomokuConf.DIFFICULT, difficult);

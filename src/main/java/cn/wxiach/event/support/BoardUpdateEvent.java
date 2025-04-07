@@ -1,6 +1,6 @@
 package cn.wxiach.event.support;
 
-import cn.wxiach.core.state.support.GameStateReadable;
+import cn.wxiach.core.state.GameStateReadable;
 import cn.wxiach.event.GomokuEvent;
 
 public class BoardUpdateEvent extends GomokuEvent {

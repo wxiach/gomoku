@@ -1,4 +1,4 @@
-package cn.wxiach.ai.support;
+package cn.wxiach.ai.pattern;
 
 import java.util.*;
 
@@ -74,5 +74,11 @@ public class AhoCorasickAutomaton<T> {
         Map<Character, TrieNode<T>> children = new HashMap<>();
         TrieNode<T> fail;
         List<T> patterns = new ArrayList<>();
+    }
+
+
+    @FunctionalInterface
+    public interface CharSequenceConverter<T> {
+        CharSequence toCharSequence(T pattern);
     }
 }

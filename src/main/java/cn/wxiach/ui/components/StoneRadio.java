@@ -4,7 +4,7 @@ import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.event.support.PieceSelectEvent;
+import cn.wxiach.event.support.StoneSelectEvent;
 import cn.wxiach.model.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +14,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PieceRadio extends JPanel {
+public class StoneRadio extends JPanel {
 
-    private static final Logger logger = LoggerFactory.getLogger(PieceRadio.class);
+    private static final Logger logger = LoggerFactory.getLogger(StoneRadio.class);
 
     private final JLabel radioTitle;
     private final JRadioButton blackButton;
     private final JRadioButton whiteButton;
 
-    public PieceRadio() {
+    public StoneRadio() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -61,16 +61,16 @@ public class PieceRadio extends JPanel {
         blackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logger.debug("You select black piece.");
-                GomokuEventBus.getInstance().publish(new PieceSelectEvent(this, Color.BLACK));
+                logger.debug("You select black stone.");
+                GomokuEventBus.getInstance().publish(new StoneSelectEvent(this, Color.BLACK));
             }
         });
 
         whiteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logger.debug("You select white piece.");
-                GomokuEventBus.getInstance().publish(new PieceSelectEvent(this, Color.WHITE));
+                logger.debug("You select white stone.");
+                GomokuEventBus.getInstance().publish(new StoneSelectEvent(this, Color.WHITE));
             }
         });
     }

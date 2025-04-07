@@ -9,7 +9,10 @@ public class GomokuEventBus {
 
     private static GomokuEventBus instance;
 
-    private final ConcurrentHashMap<Class<? extends GomokuEvent>, CopyOnWriteArraySet<Consumer<? super GomokuEvent>>> subscribers = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<
+            Class<? extends GomokuEvent>,
+            CopyOnWriteArraySet<Consumer<? super GomokuEvent>>
+            > subscribers = new ConcurrentHashMap<>();
 
     public static synchronized GomokuEventBus getInstance() {
         if (instance == null) {

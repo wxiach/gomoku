@@ -1,12 +1,11 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.core.state.support.PieceStateReadable;
 import cn.wxiach.model.Color;
 
 /**
- * Manage all player's piece color
+ * Manage all player's stone color
  */
-public abstract class PieceState implements PieceStateReadable {
+public abstract class StoneState implements StoneStateReadable {
 
     private Color selfColor;
 

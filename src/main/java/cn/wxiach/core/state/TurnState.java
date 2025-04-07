@@ -1,12 +1,11 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.core.rule.TurnSwitch;
-import cn.wxiach.core.state.support.TurnStateReadable;
+import cn.wxiach.core.rule.TurnSwitcher;
 import cn.wxiach.model.Color;
 
-public class TurnState extends PieceState implements TurnSwitch, TurnStateReadable {
+public class TurnState extends StoneState implements TurnSwitcher, TurnStateReadable {
 
-    // The black piece move first by default.
+    // The black stone move first by default.
     private Color currentTurn = Color.BLACK;
 
     @Override

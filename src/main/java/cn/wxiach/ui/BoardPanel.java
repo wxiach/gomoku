@@ -1,16 +1,17 @@
 package cn.wxiach.ui;
 
-import cn.wxiach.core.rule.BoardCheck;
-import cn.wxiach.core.state.support.GameStateReadable;
+import cn.wxiach.core.rule.BoardChecker;
+import cn.wxiach.core.state.GameStateReadable;
+import cn.wxiach.core.utils.SetUtils;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.event.support.PiecePlaceEvent;
+import cn.wxiach.event.support.StonePlaceEvent;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
-import cn.wxiach.model.Piece;
 import cn.wxiach.model.Point;
+import cn.wxiach.model.Stone;
 import cn.wxiach.ui.assets.FontAssets;
 import cn.wxiach.ui.assets.ImageAssets;
 import cn.wxiach.ui.support.Coordinate;
@@ -30,7 +31,7 @@ public class BoardPanel extends JPanel {
      * OFFSET equals UNIT_SIZE which is both easy to calculate and nice to look at
      */
     public static final int OFFSET = UNIT_DIMENSION;
-    public static final int PIECE_DIMENSION = 30;
+    public static final int STONE_DIMENSION = 30;
 
     private static final int BOARD_DIMENSION = (Board.SIZE - 1) * UNIT_DIMENSION;
 
@@ -60,16 +61,16 @@ public class BoardPanel extends JPanel {
         g2d.setFont(FontAssets.LXGWWenKaiMonoScreen.deriveFont(Font.BOLD, 14f));
         g2d.setColor(java.awt.Color.BLACK);
 
-        char[] horizontalCoordinateTable = "ABCDEFGHJKLMNOP".toCharArray();
+        char[] verticalCoordinateTable = "ABCDEFGHJKLMNOP".toCharArray();
 
         for (int i = 0; i < Board.SIZE; i++) {
-            // Vertical coordinate
-            String verticalCoordinateValue = String.valueOf(Board.SIZE - i);
-            int textWidth = g2d.getFontMetrics().stringWidth(verticalCoordinateValue);
-            g2d.drawString(verticalCoordinateValue, UNIT_DIMENSION - textWidth - 16, UNIT_DIMENSION + i * UNIT_DIMENSION + 4);
             // Horizontal coordinate
-            String horizontalCoordinateValue = String.valueOf(horizontalCoordinateTable[i]);
-            g2d.drawString(horizontalCoordinateValue, UNIT_DIMENSION + i * UNIT_DIMENSION - 5, 24);
+            String horizontalCoordinateValue = String.valueOf(i + 1);
+            int textWidth = g2d.getFontMetrics().stringWidth(horizontalCoordinateValue);
+            g2d.drawString(horizontalCoordinateValue, UNIT_DIMENSION - textWidth - 16, UNIT_DIMENSION + i * UNIT_DIMENSION + 4);
+            // Vertical coordinate
+            String verticalCoordinateValue = String.valueOf(verticalCoordinateTable[i]);
+            g2d.drawString(verticalCoordinateValue, UNIT_DIMENSION + i * UNIT_DIMENSION - 5, 24);
         }
 
         // Steps 3 to 6 will have been completed on the board,
@@ -98,9 +99,9 @@ public class BoardPanel extends JPanel {
         });
 
         // 4. Draw a cursor tip
-        if (cursorTip != null && BoardCheck.isOnBoard(cursorTip) && !state.isOver() && state.isSelfTurn()) {
+        if (cursorTip != null && BoardChecker.isOnBoard(cursorTip) && !state.isOver() && state.isSelfTurn()) {
             Coordinate coordinate = Coordinate.fromPoint(cursorTip, UNIT_DIMENSION, 0);
-            if (state == null || BoardCheck.isEmpty(state.copyBoard(), cursorTip)) {
+            if (state == null || BoardChecker.isEmpty(state.board(), cursorTip)) {
                 g2d.setColor(java.awt.Color.GREEN);
             } else {
                 g2d.setColor(java.awt.Color.RED);
@@ -108,7 +109,7 @@ public class BoardPanel extends JPanel {
             g2d.setStroke(new BasicStroke(2));
 
             int size = 4;
-            int offset = PIECE_DIMENSION / 2 + 2;
+            int offset = STONE_DIMENSION / 2 + 2;
 
             g2d.translate(coordinate.x(), coordinate.y());
             for (int i = 0; i < 4; i++) {
@@ -121,35 +122,34 @@ public class BoardPanel extends JPanel {
 
         if (state == null) return;
 
-        // 5. Draw pieces
-        for (int i = 0; i < state.boardPieces().size(); i++) {
-            Piece piece = state.boardPieces().get(i);
-            Image image = piece.color() == Color.BLACK ? ImageAssets.getBlackPiece() : ImageAssets.getWhitePiece();
-            Coordinate coordinate = Coordinate.fromPoint(piece.point(), UNIT_DIMENSION, 0);
+        // 5. Draw stones
+        SetUtils.forEachWithIndex(state.stoneSequence(), (index, stone) -> {
+            Image image = stone.color() == Color.BLACK ? ImageAssets.getBlackStone() : ImageAssets.getWhiteStone();
+            Coordinate coordinate = Coordinate.fromPoint(stone.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());
-            g2d.drawImage(image, -PIECE_DIMENSION / 2, -PIECE_DIMENSION / 2, PIECE_DIMENSION, PIECE_DIMENSION, this);
+            g2d.drawImage(image, -STONE_DIMENSION / 2, -STONE_DIMENSION / 2, STONE_DIMENSION, STONE_DIMENSION, this);
 
-            // Add an ordinal number to each piece
-            if (piece.color() == Color.BLACK) {
+            // Add an ordinal number to each stone
+            if (stone.color() == Color.BLACK) {
                 g2d.setColor(java.awt.Color.WHITE);
             } else {
                 g2d.setColor(java.awt.Color.BLACK);
             }
-            String text = String.valueOf(i + 1);
+            String text = String.valueOf(index + 1);
             int textWidth = g2d.getFontMetrics().stringWidth(text);
             g2d.drawString(text, -textWidth / 2, 4);
             g2d.translate(-coordinate.x(), -coordinate.y());
-        }
+        });
 
-        // 6. Highlight last piece
-        if (!state.boardPieces().isEmpty()) {
-            Coordinate coordinate = Coordinate.fromPoint(state.lastPiece().point(), UNIT_DIMENSION, 0);
+        // 6. Highlight last stone
+        if (!state.stoneSequence().isEmpty()) {
+            Coordinate coordinate = Coordinate.fromPoint(state.stoneSequence().getLast().point(), UNIT_DIMENSION, 0);
 
             g2d.setColor(java.awt.Color.RED);
             g2d.setStroke(new BasicStroke(2));
 
             int size = 4;
-            int offset = PIECE_DIMENSION / 2 + 2;
+            int offset = STONE_DIMENSION / 2 + 2;
 
             g2d.translate(coordinate.x(), coordinate.y());
             for (int i = 0; i < 4; i++) {
@@ -229,7 +229,7 @@ public class BoardPanel extends JPanel {
 
                     Point point = Coordinate.of(e.getX(), e.getY()).toPoint(UNIT_DIMENSION, OFFSET);
                     Color color = state == null ? Color.BLACK : state.selfColor();
-                    GomokuEventBus.getInstance().publish(new PiecePlaceEvent(this, Piece.of(point, color)));
+                    GomokuEventBus.getInstance().publish(new StonePlaceEvent(this, Stone.of(point, color)));
                 }
             }
 
@@ -256,7 +256,7 @@ public class BoardPanel extends JPanel {
                     if (currentTime - time < 50) return;
                     time = currentTime;
                     cursorTip = Coordinate.of(e.getX(), e.getY()).toPoint(UNIT_DIMENSION, OFFSET);
-                    if (!BoardCheck.isOnBoard(cursorTip)) {
+                    if (!BoardChecker.isOnBoard(cursorTip)) {
                         cursorTip = null;
                     }
                     repaint();

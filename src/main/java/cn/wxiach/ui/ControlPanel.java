@@ -10,7 +10,7 @@ public class ControlPanel extends JPanel {
 
     private static final int PANEL_WIDTH = 200;
 
-    private final PieceRadio pieceRadio;
+    private final StoneRadio stoneRadio;
     private final DifficultRadio difficultRadio;
 
     public ControlPanel() {
@@ -24,25 +24,25 @@ public class ControlPanel extends JPanel {
         add(new StartGameButton());
         add(Box.createVerticalStrut(24));
 
-        add( new SurrenderButton());
+        add(new SurrenderButton());
         add(Box.createVerticalStrut(24));
 
-        add( new RevertButton());
+        add(new RevertButton());
         add(Box.createVerticalStrut(48));
 
         add(ComponentUtils.createHorizontalSeparator());
 
         add(Box.createVerticalStrut(24));
-        pieceRadio = new PieceRadio();
-        add(pieceRadio);
+        stoneRadio = new StoneRadio();
+        add(stoneRadio);
         add(Box.createVerticalStrut(24));
 
         difficultRadio = new DifficultRadio();
         add(difficultRadio);
     }
 
-    public PieceRadio getPieceColorSelectButton() {
-        return this.pieceRadio;
+    public StoneRadio getStoneColorSelectButton() {
+        return this.stoneRadio;
     }
 
     public DifficultRadio getDifficultRadio() {

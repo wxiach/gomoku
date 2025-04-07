@@ -1,6 +1,6 @@
 package cn.wxiach.event.support;
 
-import cn.wxiach.core.state.support.TurnStateReadable;
+import cn.wxiach.core.state.TurnStateReadable;
 import cn.wxiach.event.GomokuEvent;
 
 public class NewTurnEvent extends GomokuEvent {

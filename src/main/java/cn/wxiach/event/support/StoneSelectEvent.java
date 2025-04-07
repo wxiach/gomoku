@@ -3,10 +3,10 @@ package cn.wxiach.event.support;
 import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.model.Color;
 
-public class PieceSelectEvent extends GomokuEvent {
+public class StoneSelectEvent extends GomokuEvent {
     private final Color color;
 
-    public PieceSelectEvent(Object source, Color color) {
+    public StoneSelectEvent(Object source, Color color) {
         super(source);
         this.color = color;
     }
