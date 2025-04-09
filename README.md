@@ -5,12 +5,13 @@
 [![JDK](https://img.shields.io/badge/JDK-21-brightgreen.svg)](https://jdk.java.net/21/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
+[![GUI](https://img.shields.io/badge/GUI-Swing-orange.svg)]()
 
 A Java-based Gomoku (Five in a Row) game with AI opponent.
 
 > AI's current search depth is limited to 6 layers, improvements are ongoing.
 
-![Game Screenshot](screenshot/gomoku.png)
+<img src="screenshot/gomoku.png" width="480" alt="Game Screenshot">
 
 ## Features & Implementation
 
