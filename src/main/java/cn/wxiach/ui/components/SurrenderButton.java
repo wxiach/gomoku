@@ -1,5 +1,6 @@
 package cn.wxiach.ui.components;
 
+import cn.wxiach.core.model.Color;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
@@ -33,7 +34,7 @@ public class SurrenderButton extends JButton {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setEnabled(false);
-                GomokuEventBus.getInstance().publish(new GameOverEvent(this, cn.wxiach.model.Color.EMPTY));
+                GomokuEventBus.getInstance().publish(new GameOverEvent(this, Color.EMPTY));
             }
         });
     }

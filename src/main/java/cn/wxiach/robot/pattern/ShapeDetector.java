@@ -1,7 +1,7 @@
-package cn.wxiach.ai.pattern;
+package cn.wxiach.robot.pattern;
 
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Point;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Point;
 
 import java.util.Collection;
 

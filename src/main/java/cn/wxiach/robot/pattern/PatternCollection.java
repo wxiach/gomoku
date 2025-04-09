@@ -1,11 +1,9 @@
-package cn.wxiach.ai.pattern;
+package cn.wxiach.robot.pattern;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-
 public class PatternCollection {
-
     public static final String A5 = "A5";
     public static final String A4 = "A4";
     public static final String D4 = "D4";
@@ -21,12 +19,7 @@ public class PatternCollection {
     public static final int A2_VALUE = 120;
     public static final int A1_VALUE = 20;
 
-    /*
-     * Create an unmodifiable pattern list by using List.of()
-     * List.of() is ordered, so the order of the code is important
-     */
     public static final Pattern FIVE = new Pattern("11111", A5, A5_VALUE);
-
     public static final Pattern ALIVE_FOUR = new Pattern("011110", A4, A4_VALUE);
 
     public static final List<Pattern> DEATH_FOUR = List.of(

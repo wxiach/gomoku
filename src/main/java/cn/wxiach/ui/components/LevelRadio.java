@@ -1,11 +1,11 @@
 package cn.wxiach.ui.components;
 
-import cn.wxiach.config.GomokuConf;
+import cn.wxiach.core.config.GomokuConf;
+import cn.wxiach.core.model.Level;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.LevelSelectEvent;
-import cn.wxiach.model.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

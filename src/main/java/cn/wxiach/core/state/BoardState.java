@@ -1,9 +1,9 @@
 package cn.wxiach.core.state;
 
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Stone;
 import cn.wxiach.core.rule.BoardChecker;
 import cn.wxiach.core.rule.PositionOccupiedException;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Stone;
 
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;

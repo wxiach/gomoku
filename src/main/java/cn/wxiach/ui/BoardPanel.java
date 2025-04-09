@@ -1,5 +1,9 @@
 package cn.wxiach.ui;
 
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Point;
+import cn.wxiach.core.model.Stone;
 import cn.wxiach.core.rule.BoardChecker;
 import cn.wxiach.core.state.GameStateReadable;
 import cn.wxiach.core.utils.SetUtils;
@@ -8,10 +12,6 @@ import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.StonePlaceEvent;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Point;
-import cn.wxiach.model.Stone;
 import cn.wxiach.ui.assets.FontAssets;
 import cn.wxiach.ui.assets.ImageAssets;
 import cn.wxiach.ui.support.Coordinate;

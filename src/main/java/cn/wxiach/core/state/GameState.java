@@ -1,7 +1,7 @@
 package cn.wxiach.core.state;
 
+import cn.wxiach.core.model.Color;
 import cn.wxiach.core.rule.WinArbiter;
-import cn.wxiach.model.Color;
 
 public class GameState extends BoardState implements GameStateReadable {
 

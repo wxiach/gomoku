@@ -1,4 +1,4 @@
-package cn.wxiach.ai.pattern;
+package cn.wxiach.robot.pattern;
 
 import cn.wxiach.core.utils.CollectionUtils;
 

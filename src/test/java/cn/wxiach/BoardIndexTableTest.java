@@ -1,8 +1,8 @@
 package cn.wxiach;
 
 
-import cn.wxiach.ai.pattern.BoardIndexTable;
-import cn.wxiach.model.Board;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.robot.pattern.BoardIndexTable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

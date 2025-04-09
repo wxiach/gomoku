@@ -1,6 +1,6 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.model.Color;
+import cn.wxiach.core.model.Color;
 
 /**
  * Manage all player's stone color

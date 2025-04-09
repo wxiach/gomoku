@@ -1,7 +1,7 @@
 package cn.wxiach.core.utils;
 
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
 
 public class BoardUtils {
 

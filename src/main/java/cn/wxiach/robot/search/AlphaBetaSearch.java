@@ -1,16 +1,16 @@
-package cn.wxiach.ai.search;
+package cn.wxiach.robot.search;
 
-import cn.wxiach.ai.evaluate.GomokuEvaluator;
-import cn.wxiach.ai.pattern.GomokuShapeDetector;
-import cn.wxiach.ai.pattern.Pattern;
-import cn.wxiach.ai.pattern.PatternCollection;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Point;
+import cn.wxiach.core.model.Stone;
 import cn.wxiach.core.rule.BoardChecker;
 import cn.wxiach.core.rule.WinArbiter;
 import cn.wxiach.core.utils.BoardUtils;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Point;
-import cn.wxiach.model.Stone;
+import cn.wxiach.robot.evaluate.GomokuEvaluator;
+import cn.wxiach.robot.pattern.GomokuShapeDetector;
+import cn.wxiach.robot.pattern.Pattern;
+import cn.wxiach.robot.pattern.PatternCollection;
 
 import java.util.*;
 import java.util.function.Consumer;

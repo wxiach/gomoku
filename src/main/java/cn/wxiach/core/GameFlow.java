@@ -1,17 +1,16 @@
 package cn.wxiach.core;
 
-import cn.wxiach.ai.RobotEngine;
-import cn.wxiach.config.GomokuConf;
+import cn.wxiach.core.config.GomokuConf;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Level;
 import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Level;
+import cn.wxiach.robot.RobotEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-
 
 public class GameFlow {
 

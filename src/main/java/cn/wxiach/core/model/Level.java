@@ -1,4 +1,4 @@
-package cn.wxiach.model;
+package cn.wxiach.core.model;
 
 public enum Level {
     DIFFICULT(8), NORMAL(6), EASY(4);

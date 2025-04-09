@@ -1,8 +1,8 @@
 package cn.wxiach;
 
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
 import cn.wxiach.core.rule.WinArbiter;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

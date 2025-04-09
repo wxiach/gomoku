@@ -1,12 +1,12 @@
 package cn.wxiach.ui;
 
 
-import cn.wxiach.config.GomokuConf;
 import cn.wxiach.core.GameFlow;
+import cn.wxiach.core.config.GomokuConf;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Level;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Level;
 import cn.wxiach.ui.assets.FontAssets;
 
 import javax.swing.*;

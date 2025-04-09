@@ -1,8 +1,8 @@
-package cn.wxiach.ai.search;
+package cn.wxiach.robot.search;
 
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Stone;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Stone;
 
 import java.util.Random;
 

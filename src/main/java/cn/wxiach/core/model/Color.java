@@ -1,4 +1,4 @@
-package cn.wxiach.model;
+package cn.wxiach.core.model;
 
 public enum Color {
     EMPTY('0'),

@@ -1,6 +1,6 @@
-package cn.wxiach.ai.search;
+package cn.wxiach.robot.search;
 
-import cn.wxiach.model.Color;
+import cn.wxiach.core.model.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,10 +1,10 @@
 package cn.wxiach;
 
-import cn.wxiach.ai.search.BoardWithZobrist;
-import cn.wxiach.ai.search.ZobristHash;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Stone;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Stone;
+import cn.wxiach.robot.search.BoardWithZobrist;
+import cn.wxiach.robot.search.ZobristHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

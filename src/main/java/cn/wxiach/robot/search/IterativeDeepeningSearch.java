@@ -1,4 +1,4 @@
-package cn.wxiach.ai.search;
+package cn.wxiach.robot.search;
 
 
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package cn.wxiach.model;
+package cn.wxiach.core.model;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,7 +1,7 @@
 package cn.wxiach.core.state;
 
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Stone;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Stone;
 
 import java.util.LinkedHashSet;
 

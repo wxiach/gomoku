@@ -1,10 +1,10 @@
 package cn.wxiach.ui.components;
 
+import cn.wxiach.core.model.Color;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.NewTurnEvent;
-import cn.wxiach.model.Color;
 import cn.wxiach.ui.ComponentUtils;
 import cn.wxiach.ui.assets.FontAssets;
 

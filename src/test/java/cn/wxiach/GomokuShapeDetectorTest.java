@@ -1,11 +1,11 @@
 package cn.wxiach;
 
-import cn.wxiach.ai.pattern.GomokuShapeDetector;
-import cn.wxiach.ai.pattern.Pattern;
-import cn.wxiach.ai.pattern.PatternCollection;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Point;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Point;
+import cn.wxiach.robot.pattern.GomokuShapeDetector;
+import cn.wxiach.robot.pattern.Pattern;
+import cn.wxiach.robot.pattern.PatternCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,20 +13,15 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class GomokuShapeDetectorTest {
-
     private Board board;
     private GomokuShapeDetector detector;
 
     /**
      * Helper method to set up the board with predefined values
-     *
-     * @return
      */
     private Board setupBoard() {
         Board board = new Board();
-        // Set up the mock board data
         board.set(Board.index(7, 7), Color.BLACK.value());
         board.set(Board.index(7, 6), Color.WHITE.value());
         board.set(Board.index(6, 6), Color.BLACK.value());
@@ -70,6 +65,13 @@ public class GomokuShapeDetectorTest {
         assertFalse(patterns.isEmpty());
         assertEquals(3, patterns.size());
         assertTrue(patterns.stream().anyMatch(pattern -> pattern.name().equals(PatternCollection.D4)));
+    }
+
+    @Test
+    public void testEmptyBoard() {
+        Board emptyBoard = new Board();
+        Collection<Pattern> patterns = detector.detect(emptyBoard);
+        assertTrue(patterns.isEmpty());
     }
 }
 

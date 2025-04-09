@@ -1,14 +1,14 @@
-package cn.wxiach.ai.evaluate;
+package cn.wxiach.robot.evaluate;
 
-import cn.wxiach.ai.pattern.GomokuShapeDetector;
-import cn.wxiach.ai.pattern.Pattern;
-import cn.wxiach.ai.pattern.ShapeDetector;
-import cn.wxiach.model.Board;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.robot.pattern.GomokuShapeDetector;
+import cn.wxiach.robot.pattern.Pattern;
+import cn.wxiach.robot.pattern.ShapeDetector;
 
 
 public abstract class AbstractEvaluator implements Evaluator {
 
-    protected final ShapeDetector detector = new GomokuShapeDetector();
+    protected final ShapeDetector detector = GomokuShapeDetector.getInstance();
 
     /**
      * Evaluates the board's score without considering the stones color

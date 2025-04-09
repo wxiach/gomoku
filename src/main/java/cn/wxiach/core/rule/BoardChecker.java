@@ -1,8 +1,8 @@
 package cn.wxiach.core.rule;
 
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Point;
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,8 +1,8 @@
-package cn.wxiach.ai.evaluate;
+package cn.wxiach.robot.evaluate;
 
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
 import cn.wxiach.core.utils.BoardUtils;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
 
 
 public class GomokuEvaluator extends AbstractEvaluator {

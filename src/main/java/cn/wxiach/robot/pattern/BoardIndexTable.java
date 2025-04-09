@@ -1,6 +1,6 @@
-package cn.wxiach.ai.pattern;
+package cn.wxiach.robot.pattern;
 
-import cn.wxiach.model.Board;
+import cn.wxiach.core.model.Board;
 
 import java.util.ArrayList;
 import java.util.Collection;

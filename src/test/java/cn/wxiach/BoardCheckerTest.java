@@ -1,10 +1,10 @@
 package cn.wxiach;
 
+import cn.wxiach.core.model.Board;
+import cn.wxiach.core.model.Color;
+import cn.wxiach.core.model.Point;
+import cn.wxiach.core.model.Stone;
 import cn.wxiach.core.rule.BoardChecker;
-import cn.wxiach.model.Board;
-import cn.wxiach.model.Color;
-import cn.wxiach.model.Point;
-import cn.wxiach.model.Stone;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,8 +14,6 @@ public class BoardCheckerTest {
 
     @Test
     public void testIsOnBoard() {
-        Board board = new Board(); // Create a 15x15 board
-
         // Test points on the boundaries of the board
         assertTrue(BoardChecker.isOnBoard(Point.of(0, 0)));  // Top-left corner
         assertTrue(BoardChecker.isOnBoard(Point.of(Board.SIZE - 1, Board.SIZE - 1)));  // Bottom-right corner

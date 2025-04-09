@@ -1,11 +1,11 @@
 package cn.wxiach.ui.components;
 
-import cn.wxiach.config.GomokuConf;
+import cn.wxiach.core.config.GomokuConf;
+import cn.wxiach.core.model.Color;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.StoneSelectEvent;
-import cn.wxiach.model.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ public class StoneRadio extends JPanel {
         buttonGroup.add(whiteButton);
 
         // Set default choose button
-        if (GomokuConf.defaultSelColor == Color.BLACK) {
+        if (GomokuConf.DEFAULT_SEL_COLOR == Color.BLACK) {
             blackButton.setSelected(true);
         } else {
             whiteButton.setSelected(true);
