@@ -1,6 +1,6 @@
 # Gomoku Game with AI
 
-[中文](README_ZH.md) | English
+[中文](./README_ZH.md) | English
 
 [![JDK](https://img.shields.io/badge/JDK-21-brightgreen.svg)](https://jdk.java.net/21/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
