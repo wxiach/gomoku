@@ -2,10 +2,10 @@ package cn.wxiach.ui.components;
 
 import cn.wxiach.config.GomokuConf;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.DifficultSelectEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.model.Difficult;
+import cn.wxiach.event.support.LevelSelectEvent;
+import cn.wxiach.model.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,16 +14,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DifficultRadio extends JPanel {
+public class LevelRadio extends JPanel {
 
-    private static final Logger logger = LoggerFactory.getLogger(DifficultRadio.class);
+    private static final Logger logger = LoggerFactory.getLogger(LevelRadio.class);
 
     private final JLabel radioTitle;
     private final JRadioButton difficultButton;
     private final JRadioButton normalButton;
     private final JRadioButton easyButton;
 
-    public DifficultRadio() {
+    public LevelRadio() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -38,9 +38,9 @@ public class DifficultRadio extends JPanel {
         buttonGroup.add(easyButton);
 
         // Set default choose button
-        if (GomokuConf.defaultDifficult == Difficult.DIFFICULT) {
+        if (GomokuConf.DEFAULT_LEVEL == Level.DIFFICULT) {
             difficultButton.setSelected(true);
-        } else if (GomokuConf.defaultDifficult == Difficult.EASY) {
+        } else if (GomokuConf.DEFAULT_LEVEL == Level.EASY) {
             easyButton.setSelected(true);
         } else {
             normalButton.setSelected(true);
@@ -67,7 +67,7 @@ public class DifficultRadio extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 logger.debug("difficult is selected");
-                GomokuEventBus.getInstance().publish(new DifficultSelectEvent(this, Difficult.DIFFICULT));
+                GomokuEventBus.getInstance().publish(new LevelSelectEvent(this, Level.DIFFICULT));
             }
         });
 
@@ -75,7 +75,7 @@ public class DifficultRadio extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 logger.debug("normal is selected");
-                GomokuEventBus.getInstance().publish(new DifficultSelectEvent(this, Difficult.NORMAL));
+                GomokuEventBus.getInstance().publish(new LevelSelectEvent(this, Level.NORMAL));
             }
         });
 
@@ -83,7 +83,7 @@ public class DifficultRadio extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 logger.debug("easy is selected");
-                GomokuEventBus.getInstance().publish(new DifficultSelectEvent(this, Difficult.EASY));
+                GomokuEventBus.getInstance().publish(new LevelSelectEvent(this, Level.EASY));
             }
         });
     }
@@ -105,9 +105,9 @@ public class DifficultRadio extends JPanel {
         });
     }
 
-    public Difficult getCurrentValue() {
-        if (difficultButton.isSelected()) return Difficult.DIFFICULT;
-        if (normalButton.isSelected()) return Difficult.NORMAL;
-        return Difficult.EASY;
+    public Level getCurrentValue() {
+        if (difficultButton.isSelected()) return Level.DIFFICULT;
+        if (normalButton.isSelected()) return Level.NORMAL;
+        return Level.EASY;
     }
 }

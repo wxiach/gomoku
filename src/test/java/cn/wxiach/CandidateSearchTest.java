@@ -29,47 +29,29 @@ public class CandidateSearchTest {
         ZobristHash zobristHash = new ZobristHash();
         TranspositionTable transpositionTable = new TranspositionTable();
         AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(zobristHash, transpositionTable);
-        candidateSearch = alphaBetaSearch.new CandidateSearch();
-    }
-
-    @Test
-    public void testObtainCandidatesCount() {
-        Color color = Color.BLACK;
-
-        // Simulating some moves on the board.
-        board.set(Board.index(7, 7), Color.BLACK.value());
-        board.set(Board.index(7, 8), Color.WHITE.value());
-        board.set(Board.index(8, 7), Color.BLACK.value());
-
-        // Obtain candidate moves for BLACK
-        List<Stone> candidates = candidateSearch.obtainCandidates(board, color);
-
-        assertNotNull(candidates);
-        assertFalse(candidates.isEmpty());
-
-        int candidateCount = candidates.size();
-        assertEquals(10, candidateCount);
-
-        Stone bestCandidate = candidates.getFirst();
-        assertEquals(Color.BLACK, bestCandidate.color());
+        candidateSearch = new AlphaBetaSearch.CandidateSearch();
     }
 
 
+    /**
+     * Testing the priority of different patterns in the candidate list.
+     * <p>
+     * o o o o
+     * + + +
+     */
     @Test
-    public void testObtainCandidatesOrder() {
+    public void testObtainCandidatesOrder1() {
         Color color = Color.WHITE;
 
-        // Simulating some moves on the board.
+
         board.set(Board.index(7, 7), Color.BLACK.value());
-        board.set(Board.index(7, 6), Color.WHITE.value());
-        board.set(Board.index(6, 6), Color.BLACK.value());
-        board.set(Board.index(5, 5), Color.WHITE.value());
-        board.set(Board.index(6, 7), Color.BLACK.value());
-        board.set(Board.index(6, 5), Color.WHITE.value());
         board.set(Board.index(8, 7), Color.BLACK.value());
-        board.set(Board.index(5, 7), Color.WHITE.value());
+        board.set(Board.index(9, 7), Color.BLACK.value());
         board.set(Board.index(10, 7), Color.BLACK.value());
 
+        board.set(Board.index(7, 8), Color.WHITE.value());
+        board.set(Board.index(8, 8), Color.WHITE.value());
+        board.set(Board.index(9, 8), Color.WHITE.value());
 
         // Obtain candidate moves for BLACK
         List<Stone> candidates = candidateSearch.obtainCandidates(board, color);
@@ -78,7 +60,63 @@ public class CandidateSearchTest {
         assertFalse(candidates.isEmpty());
 
         Stone bestCandidate = candidates.getFirst();
-        assertEquals(Stone.of(9, 7, color), bestCandidate);
+        assertEquals(Stone.of(6, 7, color), bestCandidate);
+    }
+
+
+    /**
+     * o o o _ o
+     * + + +
+     */
+    @Test
+    public void testObtainCandidatesOrder2() {
+        Color color = Color.WHITE;
+
+        board.set(Board.index(7, 7), Color.BLACK.value());
+        board.set(Board.index(8, 7), Color.BLACK.value());
+        board.set(Board.index(9, 7), Color.BLACK.value());
+        board.set(Board.index(11, 7), Color.BLACK.value());
+
+        board.set(Board.index(7, 8), Color.WHITE.value());
+        board.set(Board.index(8, 8), Color.WHITE.value());
+        board.set(Board.index(9, 8), Color.WHITE.value());
+
+        // Obtain candidate moves for BLACK
+        List<Stone> candidates = candidateSearch.obtainCandidates(board, color);
+
+        assertNotNull(candidates);
+        assertFalse(candidates.isEmpty());
+
+        Stone bestCandidate = candidates.getFirst();
+        assertEquals(Stone.of(10, 7, color), bestCandidate);
+    }
+
+
+    /*
+     * o
+     * o o
+     * + +
+     */
+    @Test
+    public void testObtainCandidatesOrder3() {
+        Color color = Color.WHITE;
+
+
+        board.set(Board.index(7, 7), Color.BLACK.value());
+        board.set(Board.index(7, 8), Color.BLACK.value());
+        board.set(Board.index(8, 8), Color.BLACK.value());
+
+        board.set(Board.index(7, 9), Color.WHITE.value());
+        board.set(Board.index(8, 9), Color.WHITE.value());
+
+        // Obtain candidate moves for BLACK
+        List<Stone> candidates = candidateSearch.obtainCandidates(board, color);
+
+        assertNotNull(candidates);
+        assertFalse(candidates.isEmpty());
+
+        Stone bestCandidate = candidates.getFirst();
+        assertEquals(Stone.of(9, 9, color), bestCandidate);
     }
 
 

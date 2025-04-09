@@ -33,4 +33,12 @@ public class BoardUtils {
             if (i % 15 == 0) System.out.println();
         }
     }
+
+    public static int countStones(Board board) {
+        int cnt = 0;
+        for (int i = 0; i < board.length(); i++) {
+            if (board.get(i) != Color.EMPTY.value()) cnt++;
+        }
+        return cnt;
+    }
 }

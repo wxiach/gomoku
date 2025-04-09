@@ -1,5 +1,7 @@
 package cn.wxiach.ai.pattern;
 
+import cn.wxiach.core.utils.CollectionUtils;
+
 import java.util.*;
 
 public class AhoCorasickAutomaton<T> {
@@ -35,7 +37,7 @@ public class AhoCorasickAutomaton<T> {
             queue.add(child);
         }
 
-        while (!queue.isEmpty()) {
+        while (CollectionUtils.isNotEmpty(queue)) {
             TrieNode<T> current = queue.poll();
 
             for (Map.Entry<Character, TrieNode<T>> entry : current.children.entrySet()) {

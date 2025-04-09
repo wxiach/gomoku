@@ -7,11 +7,12 @@ import cn.wxiach.ai.search.TranspositionTable;
 import cn.wxiach.ai.search.ZobristHash;
 import cn.wxiach.core.RobotException;
 import cn.wxiach.core.state.GameStateReadable;
+import cn.wxiach.core.utils.MathUtils;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.StonePlaceEvent;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
-import cn.wxiach.model.Difficult;
+import cn.wxiach.model.Level;
 import cn.wxiach.model.Stone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public class RobotEngine {
     private final ZobristHash zobristHash = new ZobristHash();
     private final AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(zobristHash, transpositionTable);
 
-    private Difficult robotLevel;
+    private Level robotLevel;
 
     public void startCompute(GameStateReadable state) {
         executorService.submit(() -> {
@@ -45,8 +46,8 @@ public class RobotEngine {
                                     depth,
                                     (result) -> stone.set((Stone) result)
                             ),
-                            (score) -> score >= PatternCollection.Five.score(),
-                            convertRobotLevelToSearchDepth(robotLevel),
+                            (value) -> MathUtils.approximateEqual(value, PatternCollection.A5_VALUE, 1.2),
+                            robotLevel.value(),
                             2
                     );
                 }
@@ -61,15 +62,7 @@ public class RobotEngine {
         });
     }
 
-    public void updateRobotLevel(Difficult robotLevel) {
+    public void updateRobotLevel(Level robotLevel) {
         this.robotLevel = robotLevel;
-    }
-
-    private int convertRobotLevelToSearchDepth(Difficult robotLevel) {
-        return switch (robotLevel) {
-            case DIFFICULT -> 6;
-            case NORMAL -> 4;
-            case EASY -> 2;
-        };
     }
 }

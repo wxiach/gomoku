@@ -1,9 +1,12 @@
 package cn.wxiach.ai.search;
 
 import cn.wxiach.ai.evaluate.GomokuEvaluator;
+import cn.wxiach.ai.pattern.GomokuShapeDetector;
+import cn.wxiach.ai.pattern.Pattern;
 import cn.wxiach.ai.pattern.PatternCollection;
 import cn.wxiach.core.rule.BoardChecker;
 import cn.wxiach.core.rule.WinArbiter;
+import cn.wxiach.core.utils.BoardUtils;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
@@ -13,9 +16,9 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class AlphaBetaSearch {
+    private static final GomokuEvaluator evaluator = new GomokuEvaluator();
     private final TranspositionTable transpositionTable;
     private final ZobristHash zobristHash;
-    private final GomokuEvaluator evaluator = new GomokuEvaluator();
     private final CandidateSearch candidateSearch = new CandidateSearch();
 
     private BoardWithZobrist board;
@@ -36,9 +39,9 @@ public class AlphaBetaSearch {
          * - alpha is offset by +10,000 from Integer.MIN_VALUE.
          * - beta is offset by -10,000 from Integer.MAX_VALUE.
          */
-        int score = alphaBeta(depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
+        int value = alphaBeta(depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
         handler.accept(result);
-        return score;
+        return value;
     }
 
 
@@ -55,15 +58,8 @@ public class AlphaBetaSearch {
             return evaluation;
         }
 
-        if (depth == 0) {
-            int value;
-            if (WinArbiter.checkOver(this.board)) {
-                value = PatternCollection.Five.score();
-            } else {
-                value = evaluator.evaluate(board, color);
-            }
-            transpositionTable.store(board.hash(), value, TranspositionTable.Entry.EXACT, depth, color);
-            return value;
+        if (depth == 0 || WinArbiter.checkOver(this.board)) {
+            return evaluator.evaluate(board, color);
         }
 
         int evaluationType = TranspositionTable.Entry.ALPHA;
@@ -93,13 +89,30 @@ public class AlphaBetaSearch {
     }
 
 
-    public class CandidateSearch {
+    public static class CandidateSearch {
 
         public List<Stone> obtainCandidates(Board board, Color color) {
+            int boardStoneCount = BoardUtils.countStones(board);
             Set<Point> surroundBlankPoint = new HashSet<>();
             for (int i = 0; i < board.length(); i++) {
                 if (board.color(i) == Color.EMPTY) continue;
-                surroundBlankPoint.addAll(searchSurroundBlankPoint(board, (board.point(i)), 2));
+                surroundBlankPoint.addAll(
+                        searchSurroundBlankPoint(board, (board.point(i)), boardStoneCount <= 4 ? 1 : 2));
+            }
+
+            // Detect threat stone
+            Board opponentBoard = board;
+            Color opponentColor = Color.reverse(color);
+            if (color == Color.BLACK) {
+                opponentColor = Color.BLACK;
+                opponentBoard = BoardUtils.reverseStoneColorOnBoard(board.copy());
+            }
+            for (Point point : surroundBlankPoint) {
+                Stone stone = Stone.of(point, opponentColor);
+                opponentBoard.makeMove(stone);
+                Collection<Pattern> patterns = GomokuShapeDetector.getInstance().detect(opponentBoard, point);
+                opponentBoard.undoMove(stone);
+                if (patterns.contains(PatternCollection.FIVE)) return List.of(Stone.of(point, color));
             }
 
             Map<Stone, Integer> candidateScoreMap = new HashMap<>();
@@ -114,7 +127,9 @@ public class AlphaBetaSearch {
                     .comparing((Map.Entry<Stone, Integer> entry) -> -entry.getValue());
 
             return candidateScoreMap.entrySet().stream().sorted(comparator).map(Map.Entry::getKey).limit(10).toList();
+
         }
+
 
         private Set<Point> searchSurroundBlankPoint(Board board, Point point, int range) {
             Set<Point> blankPoints = new HashSet<>();
@@ -131,7 +146,6 @@ public class AlphaBetaSearch {
             }
             return blankPoints;
         }
-
     }
 
 }

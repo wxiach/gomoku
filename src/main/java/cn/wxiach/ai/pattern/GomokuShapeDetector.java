@@ -58,7 +58,7 @@ public class GomokuShapeDetector implements ShapeDetector {
     private static class PatternDetector {
 
         private final AhoCorasickAutomaton<Pattern> acAutomaton =
-                new AhoCorasickAutomaton<>(PatternCollection.patterns, Pattern::pattern);
+                new AhoCorasickAutomaton<>(PatternCollection.PATTERNS, Pattern::pattern);
 
 
         public Collection<Pattern> detect(Collection<String> matchLines) {

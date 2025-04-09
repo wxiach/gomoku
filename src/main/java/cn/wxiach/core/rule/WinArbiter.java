@@ -11,7 +11,7 @@ public class WinArbiter {
     public static boolean checkOver(Board board) {
         GomokuShapeDetector detector = GomokuShapeDetector.getInstance();
         Board opponentBoard = BoardUtils.reverseStoneColorOnBoard(board.copy());
-        return detector.detect(board).contains(PatternCollection.Five)
-                || detector.detect(opponentBoard).contains(PatternCollection.Five);
+        return detector.detect(board).contains(PatternCollection.FIVE)
+                || detector.detect(opponentBoard).contains(PatternCollection.FIVE);
     }
 }

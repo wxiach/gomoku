@@ -17,15 +17,14 @@ public class GomokuEvaluator extends AbstractEvaluator {
     public int evaluate(Board board, Color color) {
 
         Board opponentBoard = BoardUtils.reverseStoneColorOnBoard(board.copy());
-
         // My score minus my opponent's score is the final board's score
-        int score = evaluate(board) - evaluate(opponentBoard);
+        int value = evaluate(board) - evaluate(opponentBoard);
 
         /*
          * The evaluate(char[][] board) function does not recognize stone colors directly.
          * It only identifies '1' as my stone and '2' as the opponent's stone.
          * Therefore, if the current color is white, we need to invert the score.
          */
-        return color == Color.WHITE ? -score : score;
+        return color == Color.WHITE ? -value : value;
     }
 }

@@ -21,7 +21,7 @@ public abstract class AbstractEvaluator implements Evaluator {
      */
     @Override
     public int evaluate(Board board) {
-        return detector.detect(board).stream().mapToInt(Pattern::score).sum();
+        return detector.detect(board).stream().mapToInt(Pattern::value).sum();
     }
 
 }

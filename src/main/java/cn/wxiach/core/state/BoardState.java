@@ -47,5 +47,6 @@ public class BoardState extends TurnState implements BoardStateReadable {
     protected void reset() {
         super.reset();
         board.reset();
+        stoneSequence.clear();
     }
 }

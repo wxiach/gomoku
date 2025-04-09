@@ -11,7 +11,7 @@ public class ControlPanel extends JPanel {
     private static final int PANEL_WIDTH = 200;
 
     private final StoneRadio stoneRadio;
-    private final DifficultRadio difficultRadio;
+    private final LevelRadio levelRadio;
 
     public ControlPanel() {
         setPreferredSize(new Dimension(PANEL_WIDTH, 0));
@@ -37,16 +37,16 @@ public class ControlPanel extends JPanel {
         add(stoneRadio);
         add(Box.createVerticalStrut(24));
 
-        difficultRadio = new DifficultRadio();
-        add(difficultRadio);
+        levelRadio = new LevelRadio();
+        add(levelRadio);
     }
 
     public StoneRadio getStoneColorSelectButton() {
         return this.stoneRadio;
     }
 
-    public DifficultRadio getDifficultRadio() {
-        return this.difficultRadio;
+    public LevelRadio getLevelRadio() {
+        return this.levelRadio;
     }
 
 }

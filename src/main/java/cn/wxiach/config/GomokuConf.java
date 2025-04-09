@@ -1,7 +1,7 @@
 package cn.wxiach.config;
 
 import cn.wxiach.model.Color;
-import cn.wxiach.model.Difficult;
+import cn.wxiach.model.Level;
 
 public class GomokuConf {
 
@@ -10,7 +10,7 @@ public class GomokuConf {
     // ==================================================
     public static final Color defaultSelColor = Color.BLACK;
 
-    public static final Difficult defaultDifficult = Difficult.NORMAL;
+    public static final Level DEFAULT_LEVEL = Level.NORMAL;
 
     // ==================================================
     // Settings key name
@@ -18,6 +18,6 @@ public class GomokuConf {
 
     public static final String SELF_STONE_COLOR = "selfStoneColor";
 
-    public static final String DIFFICULT = "difficult";
+    public static final String LEVEL = "level";
 
 }

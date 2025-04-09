@@ -10,7 +10,6 @@ public class GameState extends BoardState implements GameStateReadable {
 
     public void run() {
         reset();
-        this.over = false;
     }
 
     public void end() {
@@ -34,5 +33,7 @@ public class GameState extends BoardState implements GameStateReadable {
     @Override
     protected void reset() {
         super.reset();
+        over = false;
+        winner = Color.EMPTY;
     }
 }

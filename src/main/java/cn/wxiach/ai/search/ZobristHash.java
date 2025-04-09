@@ -23,9 +23,8 @@ public class ZobristHash {
     public long compute(Board board) {
         long hash = 0;
         for (int i = 0; i < board.length(); i++) {
-            char colorValue = board.get(i);
-            if (colorValue == Color.EMPTY.value()) continue;
-            hash ^= table[i][colorValue == Color.BLACK.value() ? 0 : 1];
+            if (board.color(i) == Color.EMPTY) continue;
+            hash ^= table[i][board.color(i) == Color.BLACK ? 0 : 1];
         }
         return hash;
     }

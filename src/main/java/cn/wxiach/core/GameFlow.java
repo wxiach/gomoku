@@ -6,7 +6,7 @@ import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.model.Color;
-import cn.wxiach.model.Difficult;
+import cn.wxiach.model.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +66,7 @@ public class GameFlow {
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(RevertChessEvent.class, event -> {
+        GomokuEventBus.getInstance().subscribe(RevertStoneEvent.class, event -> {
             if (state.isSelfTurn()) {
                 state.revertStone(2);
                 GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
@@ -78,8 +78,8 @@ public class GameFlow {
         GomokuEventBus.getInstance().subscribe(StoneSelectEvent.class, event -> {
             state.setSelfColor(event.getColor());
         });
-        GomokuEventBus.getInstance().subscribe(DifficultSelectEvent.class, event -> {
-            robot.updateRobotLevel(event.getDifficult());
+        GomokuEventBus.getInstance().subscribe(LevelSelectEvent.class, event -> {
+            robot.updateRobotLevel(event.getLevel());
         });
     }
 
@@ -87,8 +87,8 @@ public class GameFlow {
         if (config.get(GomokuConf.SELF_STONE_COLOR) instanceof Color selfColor) {
             state.setSelfColor(selfColor);
         }
-        if (config.get(GomokuConf.DIFFICULT) instanceof Difficult difficult) {
-            robot.updateRobotLevel(difficult);
+        if (config.get(GomokuConf.LEVEL) instanceof Level level) {
+            robot.updateRobotLevel(level);
         }
     }
 }

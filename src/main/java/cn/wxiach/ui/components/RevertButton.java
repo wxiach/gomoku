@@ -4,7 +4,7 @@ import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.NewTurnEvent;
-import cn.wxiach.event.support.RevertChessEvent;
+import cn.wxiach.event.support.RevertStoneEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +26,7 @@ public class RevertButton extends JButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GomokuEventBus.getInstance().publish(new RevertChessEvent(this));
+                GomokuEventBus.getInstance().publish(new RevertStoneEvent(this));
             }
         });
     }

@@ -10,11 +10,12 @@ public class IterativeDeepeningSearch {
 
     private static final Logger logger = LoggerFactory.getLogger(IterativeDeepeningSearch.class);
 
-    public static void search(Function<Integer, Integer> searchFunction, Function<Integer, Boolean> exitCondition, int depth, int step) {
-        for (int curDepth = step; curDepth <= depth; curDepth += step) {
-            logger.debug("Iterative deepening search start in {} depth.", curDepth);
-            if (exitCondition.apply(searchFunction.apply(curDepth))) {
-                logger.info("Iterative deepening Search finish in {} depth,", curDepth);
+    public static void search(Function<Integer, Integer> searchFunction, Function<Integer, Boolean> exitCondition, int maxDepth, int step) {
+        for (int depth = step; depth <= maxDepth; depth += step) {
+            logger.debug("Iterative deepening search start in {} depth.", depth);
+            int value = searchFunction.apply(depth);
+            if (exitCondition.apply(value)) {
+                logger.info("Iterative deepening Search finish in {} depth, the value is {}", depth, value);
                 break;
             }
         }
