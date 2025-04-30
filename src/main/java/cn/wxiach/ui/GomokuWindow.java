@@ -8,6 +8,7 @@ import cn.wxiach.core.model.Level;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.ui.assets.FontAssets;
+import cn.wxiach.ui.assets.ImageAssets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,6 +28,7 @@ public class GomokuWindow extends JFrame {
         FontAssets.setGlobalFont(FontAssets.LXGWWenKaiMonoScreen);
 
         setTitle("五子棋 - 与 AI 对战");
+        setIconImage(ImageAssets.getLogoImage());
 
         setLayout(new BorderLayout());
         add(new BoardPanel(), BorderLayout.CENTER);

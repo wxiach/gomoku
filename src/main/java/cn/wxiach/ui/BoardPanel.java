@@ -7,6 +7,7 @@ import cn.wxiach.core.model.Stone;
 import cn.wxiach.core.rule.BoardChecker;
 import cn.wxiach.core.state.GameStateReadable;
 import cn.wxiach.core.utils.SetUtils;
+import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.GameOverEvent;
@@ -23,7 +24,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends JPanel implements EventBusAware {
 
     public static final int UNIT_DIMENSION = 40;
 
@@ -267,18 +268,16 @@ public class BoardPanel extends JPanel {
 
     private void subscribeToEvents() {
 
-        GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
+        subscribe(GameStartEvent.class, event -> {
             setEnabled(true);
             repaint();
         });
 
-        GomokuEventBus.getInstance().subscribe(BoardUpdateEvent.class, event -> {
+        subscribe(BoardUpdateEvent.class, event -> {
             this.state = event.getState();
             repaint();
         });
 
-        GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
-            repaint();
-        });
+        subscribe(GameOverEvent.class, event -> repaint());
     }
 }

@@ -1,6 +1,12 @@
 package cn.wxiach.ui;
 
-import cn.wxiach.ui.components.*;
+import cn.wxiach.ui.components.TimeBoardGroup;
+import cn.wxiach.ui.components.buttons.RevertButton;
+import cn.wxiach.ui.components.buttons.StartGameButton;
+import cn.wxiach.ui.components.buttons.SurrenderButton;
+import cn.wxiach.ui.components.radio.LevelRadioGroup;
+import cn.wxiach.ui.components.radio.StoneRadioGroup;
+import cn.wxiach.ui.support.Components;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,42 +16,28 @@ public class ControlPanel extends JPanel {
 
     private static final int PANEL_WIDTH = 200;
 
-    private final StoneRadio stoneRadio;
-    private final LevelRadio levelRadio;
+    private final StoneRadioGroup stoneRadio = new StoneRadioGroup();
+    private final LevelRadioGroup levelRadio = new LevelRadioGroup();
 
     public ControlPanel() {
         setPreferredSize(new Dimension(PANEL_WIDTH, 0));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(new EmptyBorder(24, 16, 24, 16));
 
-        add(new TimeBoardPanel());
-        add(Box.createVerticalStrut(24));
-
-        add(new StartGameButton());
-        add(Box.createVerticalStrut(24));
-
-        add(new SurrenderButton());
-        add(Box.createVerticalStrut(24));
-
-        add(new RevertButton());
-        add(Box.createVerticalStrut(48));
-
-        add(ComponentUtils.createHorizontalSeparator());
-
-        add(Box.createVerticalStrut(24));
-        stoneRadio = new StoneRadio();
-        add(stoneRadio);
-        add(Box.createVerticalStrut(24));
-
-        levelRadio = new LevelRadio();
-        add(levelRadio);
+        Components.createComponentWithMargin(this, new TimeBoardGroup(), 0, 24);
+        Components.createComponentWithMargin(this, new StartGameButton(), 0, 24);
+        Components.createComponentWithMargin(this, new SurrenderButton(), 0, 24);
+        Components.createComponentWithMargin(this, new RevertButton(), 0, 24);
+        Components.createComponentWithMargin(this, Components.createHorizontalSeparator(), 24, 24);
+        Components.createComponentWithMargin(this, stoneRadio, 0, 24);
+        Components.createComponentWithMargin(this, levelRadio, 0, 24);
     }
 
-    public StoneRadio getStoneColorSelectButton() {
+    public StoneRadioGroup getStoneColorSelectButton() {
         return this.stoneRadio;
     }
 
-    public LevelRadio getLevelRadio() {
+    public LevelRadioGroup getLevelRadio() {
         return this.levelRadio;
     }
 
