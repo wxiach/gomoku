@@ -15,79 +15,81 @@ import cn.wxiach.robot.pattern.PatternCollection;
 import java.util.*;
 import java.util.function.Consumer;
 
+/**
+ * Parallel Alpha-Beta search for Gomoku.
+ */
 public class AlphaBetaSearch {
+
     private static final GomokuEvaluator evaluator = new GomokuEvaluator();
+
     private final TranspositionTable transpositionTable;
     private final ZobristHash zobristHash;
     private final CandidateSearch candidateSearch = new CandidateSearch();
 
-    private BoardWithZobrist board;
-    private int depth;
-    private Stone result;
+    private record SearchResult(Stone move, int score) {
+    }
 
     public AlphaBetaSearch(ZobristHash zobristHash, TranspositionTable transpositionTable) {
         this.zobristHash = zobristHash;
         this.transpositionTable = transpositionTable;
     }
 
-    public int execute(Board board, Color color, int depth, Consumer<Object> handler) {
-        this.board = new BoardWithZobrist(board, zobristHash);
-        this.depth = depth;
-        /*
-         * Negamax search inverts alpha and beta during recursion.
-         * To prevent integer overflow:
-         * - alpha is offset by +10,000 from Integer.MIN_VALUE.
-         * - beta is offset by -10,000 from Integer.MAX_VALUE.
-         */
-        int value = alphaBeta(depth, Integer.MIN_VALUE + 10000, Integer.MAX_VALUE - 10000, color);
-        handler.accept(result);
-        return value;
+    /**
+     * Executes the search to find the best move using parallel streams.
+     */
+    public int execute(Board initialBoard, Color color, int depth, Consumer<Object> handler) {
+        BoardWithZobrist board = new BoardWithZobrist(initialBoard, zobristHash);
+        List<Stone> candidateMoves = candidateSearch.obtainCandidates(board, color);
+
+        int alpha = Integer.MIN_VALUE + 1000;
+        int beta = Integer.MAX_VALUE - 1000;
+
+        SearchResult result = candidateMoves.parallelStream()
+                .map(move -> {
+                    BoardWithZobrist boardCopy = new BoardWithZobrist(board.copy(), this.zobristHash);
+                    boardCopy.makeMove(move);
+                    int score = -search(boardCopy, depth - 1, -beta, -alpha, Color.reverse(color));
+                    return new SearchResult(move, score);
+                })
+                .max(Comparator.comparingInt(SearchResult::score))
+                .orElseGet(() -> new SearchResult(candidateMoves.getFirst(), Integer.MIN_VALUE));
+
+        handler.accept(result.move());
+        return result.score();
     }
 
-
-    /**
-     * @param depth
-     * @param alpha
-     * @param beta
-     * @param color
-     * @return
-     */
-    public int alphaBeta(int depth, int alpha, int beta, Color color) {
-        Integer evaluation = transpositionTable.find(board.hash(), depth, alpha, beta, color);
-        if (evaluation != null && depth != this.depth) {
+    private int search(BoardWithZobrist board, int depth, int alpha, int beta, Color color) {
+        long currentHash = board.hash();
+        Integer evaluation = transpositionTable.find(currentHash, depth, alpha, beta, color);
+        if (evaluation != null) {
             return evaluation;
         }
 
-        if (depth == 0 || WinArbiter.checkOver(this.board)) {
+        if (depth == 0 || WinArbiter.checkOver(board)) {
             return evaluator.evaluate(board, color);
         }
 
         int evaluationType = TranspositionTable.Entry.ALPHA;
 
-        for (Stone stone : candidateSearch.obtainCandidates(this.board, color)) {
-
-            this.board.makeMove(stone);
-            int value = -alphaBeta(depth - 1, -beta, -alpha, Color.reverse(color));
-            this.board.undoMove(stone);
+        for (Stone stone : candidateSearch.obtainCandidates(board, color)) {
+            board.makeMove(stone);
+            int value = -search(board, depth - 1, -beta, -alpha, Color.reverse(color));
+            board.undoMove(stone);
 
             if (value >= beta) {
-                transpositionTable.store(board.hash(), beta, TranspositionTable.Entry.BETA, depth, color);
+                transpositionTable.store(currentHash, beta, TranspositionTable.Entry.BETA, depth, color);
                 return beta;
             }
             if (value > alpha) {
                 alpha = value;
                 evaluationType = TranspositionTable.Entry.EXACT;
-                if (depth == this.depth) {
-                    result = stone;
-                }
             }
         }
 
-        transpositionTable.store(board.hash(), alpha, evaluationType, depth, color);
+        transpositionTable.store(currentHash, alpha, evaluationType, depth, color);
 
         return alpha;
     }
-
 
     public static class CandidateSearch {
 
@@ -126,7 +128,7 @@ public class AlphaBetaSearch {
             Comparator<Map.Entry<Stone, Integer>> comparator = Comparator
                     .comparing((Map.Entry<Stone, Integer> entry) -> -entry.getValue());
 
-            return candidateScoreMap.entrySet().stream().sorted(comparator).map(Map.Entry::getKey).limit(10).toList();
+            return candidateScoreMap.entrySet().stream().sorted(comparator).map(Map.Entry::getKey).limit(8).toList();
 
         }
 
@@ -147,5 +149,4 @@ public class AlphaBetaSearch {
             return blankPoints;
         }
     }
-
 }

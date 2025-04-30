@@ -25,9 +25,9 @@ public class LevelRadioGroup extends AbstractRadioGroup<Level> {
      */
     @Override
     protected void initializeButtons(ButtonGroup group) {
-        addButton(new JRadioButton("困难（职业）"), Level.DIFFICULT, group);
-        addButton(new JRadioButton("一般（业余）"), Level.NORMAL, group);
-        addButton(new JRadioButton("简单（初学者）"), Level.EASY, group);
+        addButton(new JRadioButton("困难（4层）"), Level.DIFFICULT, group);
+        addButton(new JRadioButton("一般（6层）"), Level.NORMAL, group);
+        addButton(new JRadioButton("简单（8层）"), Level.EASY, group);
     }
 
     /**

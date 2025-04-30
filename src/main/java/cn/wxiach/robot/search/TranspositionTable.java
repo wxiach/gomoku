@@ -1,25 +1,28 @@
 package cn.wxiach.robot.search;
 
 import cn.wxiach.core.model.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.wxiach.core.utils.Log;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Cache the evaluation of all board states in Gomoku.
  */
 public class TranspositionTable {
 
-    private final static Logger logger = LoggerFactory.getLogger(TranspositionTable.class);
-
-    private final HashMap<Long, TranspositionTable.Entry> table = new HashMap<>();
+    private final Map<Long, TranspositionTable.Entry> table = new ConcurrentHashMap<>();
 
     public void store(long zobristHash, int evaluation, int evaluationType, int depth, Color color) {
-        TranspositionTable.Entry transpositionEntry = table.get(zobristHash);
-        if (transpositionEntry == null || depth >= transpositionEntry.depth()) {
-            table.put(zobristHash, new TranspositionTable.Entry(evaluation, evaluationType, depth, color));
-        }
+        TranspositionTable.Entry newEntry = new Entry(evaluation, evaluationType, depth, color);
+
+        table.compute(zobristHash, (key, existingEntry) -> {
+            if (existingEntry == null || newEntry.depth() >= existingEntry.depth()) {
+                return newEntry;
+            } else {
+                return existingEntry;
+            }
+        });
     }
 
     public Integer find(long zobristHash, int depth, int alpha, int beta, Color color) {
@@ -31,7 +34,7 @@ public class TranspositionTable {
                 evaluation = -evaluation;
             }
 
-            logger.debug(String.format("Hit the cache in TranspositionTable. The score is: %s.", evaluation));
+            Log.debug(String.format("Hit the cache in TranspositionTable. The score is: %s.", evaluation));
 
             if (transpositionEntry.evaluationType() == TranspositionTable.Entry.EXACT) {
                 return evaluation;
