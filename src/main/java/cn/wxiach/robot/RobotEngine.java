@@ -1,19 +1,18 @@
 package cn.wxiach.robot;
 
-import cn.wxiach.core.RobotException;
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Level;
-import cn.wxiach.core.model.Stone;
-import cn.wxiach.core.state.GameStateReadable;
-import cn.wxiach.core.utils.MathUtils;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.StonePlaceEvent;
-import cn.wxiach.robot.pattern.PatternCollection;
+import cn.wxiach.gomoku.state.GameStateReadable;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Level;
+import cn.wxiach.model.Stone;
+import cn.wxiach.robot.features.PatternCollection;
 import cn.wxiach.robot.search.AlphaBetaSearch;
 import cn.wxiach.robot.search.IterativeDeepeningSearch;
-import cn.wxiach.robot.search.TranspositionTable;
-import cn.wxiach.robot.search.ZobristHash;
+import cn.wxiach.robot.support.TranspositionTable;
+import cn.wxiach.robot.support.ZobristHash;
+import cn.wxiach.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

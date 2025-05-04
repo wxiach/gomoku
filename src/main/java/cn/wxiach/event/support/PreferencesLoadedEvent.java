@@ -1,7 +1,7 @@
 package cn.wxiach.event.support;
 
-import cn.wxiach.core.model.Preferences;
 import cn.wxiach.event.GomokuEvent;
+import cn.wxiach.model.Preferences;
 
 /**
  * @author wxiach 2025/5/3

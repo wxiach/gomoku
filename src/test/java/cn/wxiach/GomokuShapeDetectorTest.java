@@ -1,11 +1,11 @@
 package cn.wxiach;
 
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Point;
-import cn.wxiach.robot.pattern.GomokuShapeDetector;
-import cn.wxiach.robot.pattern.Pattern;
-import cn.wxiach.robot.pattern.PatternCollection;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Point;
+import cn.wxiach.robot.features.GomokuShapeDetector;
+import cn.wxiach.robot.features.Pattern;
+import cn.wxiach.robot.features.PatternCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

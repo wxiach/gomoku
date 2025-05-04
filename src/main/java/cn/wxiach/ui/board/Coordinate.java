@@ -1,6 +1,6 @@
 package cn.wxiach.ui.board;
 
-import cn.wxiach.core.model.Point;
+import cn.wxiach.model.Point;
 
 import java.util.HashMap;
 import java.util.Map;

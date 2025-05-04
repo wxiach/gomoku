@@ -1,13 +1,13 @@
 package cn.wxiach;
 
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Point;
-import cn.wxiach.core.model.Stone;
-import cn.wxiach.core.rule.BoardChecker;
+import cn.wxiach.gomoku.rule.BoardChecker;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Point;
+import cn.wxiach.model.Stone;
 import cn.wxiach.robot.search.AlphaBetaSearch;
-import cn.wxiach.robot.search.TranspositionTable;
-import cn.wxiach.robot.search.ZobristHash;
+import cn.wxiach.robot.support.TranspositionTable;
+import cn.wxiach.robot.support.ZobristHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

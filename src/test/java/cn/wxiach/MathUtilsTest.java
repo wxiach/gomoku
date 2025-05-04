@@ -1,6 +1,6 @@
 package cn.wxiach;
 
-import cn.wxiach.core.utils.MathUtils;
+import cn.wxiach.utils.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

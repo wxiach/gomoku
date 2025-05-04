@@ -1,6 +1,6 @@
 package cn.wxiach;
 
-import cn.wxiach.robot.pattern.AhoCorasickAutomaton;
+import cn.wxiach.robot.support.AhoCorasickAutomaton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

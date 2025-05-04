@@ -1,14 +1,14 @@
 package cn.wxiach;
 
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Level;
-import cn.wxiach.core.model.Preferences;
-import cn.wxiach.core.utils.Log;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.PreferencesLoadedEvent;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Level;
+import cn.wxiach.model.Preferences;
 import cn.wxiach.ui.common.assets.FontAssets;
 import cn.wxiach.ui.common.assets.ImageAssets;
 import cn.wxiach.ui.window.GomokuWindow;
+import cn.wxiach.utils.Log;
 
 import javax.swing.*;
 

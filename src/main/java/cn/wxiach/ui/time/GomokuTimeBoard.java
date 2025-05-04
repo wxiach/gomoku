@@ -1,10 +1,10 @@
 package cn.wxiach.ui.time;
 
-import cn.wxiach.core.model.Color;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.NewTurnEvent;
+import cn.wxiach.model.Color;
 import cn.wxiach.ui.common.assets.FontAssets;
 import cn.wxiach.ui.common.layout.Layouts;
 

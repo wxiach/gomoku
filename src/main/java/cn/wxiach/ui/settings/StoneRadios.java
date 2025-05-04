@@ -1,9 +1,9 @@
 package cn.wxiach.ui.settings;
 
-import cn.wxiach.core.model.Color;
 import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.event.support.PreferencesLoadedEvent;
 import cn.wxiach.event.support.StoneSelectEvent;
+import cn.wxiach.model.Color;
 import cn.wxiach.ui.common.components.AbstractRadioGroup;
 
 /**

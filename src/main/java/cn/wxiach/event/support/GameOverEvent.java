@@ -1,7 +1,7 @@
 package cn.wxiach.event.support;
 
-import cn.wxiach.core.model.Color;
 import cn.wxiach.event.GomokuEvent;
+import cn.wxiach.model.Color;
 
 public class GameOverEvent extends GomokuEvent {
     private final Color winner;

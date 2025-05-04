@@ -1,16 +1,19 @@
 package cn.wxiach.robot.search;
 
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Point;
-import cn.wxiach.core.model.Stone;
-import cn.wxiach.core.rule.BoardChecker;
-import cn.wxiach.core.rule.WinArbiter;
-import cn.wxiach.core.utils.BoardUtils;
-import cn.wxiach.robot.evaluate.GomokuEvaluator;
-import cn.wxiach.robot.pattern.GomokuShapeDetector;
-import cn.wxiach.robot.pattern.Pattern;
-import cn.wxiach.robot.pattern.PatternCollection;
+import cn.wxiach.gomoku.rule.BoardChecker;
+import cn.wxiach.gomoku.rule.WinArbiter;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Point;
+import cn.wxiach.model.Stone;
+import cn.wxiach.robot.evaluation.GomokuEvaluator;
+import cn.wxiach.robot.features.GomokuShapeDetector;
+import cn.wxiach.robot.features.Pattern;
+import cn.wxiach.robot.features.PatternCollection;
+import cn.wxiach.robot.support.BoardWithZobrist;
+import cn.wxiach.robot.support.TranspositionTable;
+import cn.wxiach.robot.support.ZobristHash;
+import cn.wxiach.utils.BoardUtils;
 
 import java.util.*;
 import java.util.function.Consumer;

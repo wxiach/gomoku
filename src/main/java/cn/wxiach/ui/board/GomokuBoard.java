@@ -1,20 +1,20 @@
 package cn.wxiach.ui.board;
 
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Point;
-import cn.wxiach.core.model.Stone;
-import cn.wxiach.core.rule.BoardChecker;
-import cn.wxiach.core.state.GameStateReadable;
-import cn.wxiach.core.utils.SetUtils;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.StonePlaceEvent;
+import cn.wxiach.gomoku.rule.BoardChecker;
+import cn.wxiach.gomoku.state.GameStateReadable;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Point;
+import cn.wxiach.model.Stone;
 import cn.wxiach.ui.common.assets.FontAssets;
 import cn.wxiach.ui.common.assets.ImageAssets;
+import cn.wxiach.utils.SetUtils;
 
 import javax.swing.*;
 import java.awt.*;

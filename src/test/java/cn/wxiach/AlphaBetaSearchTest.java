@@ -1,12 +1,12 @@
 package cn.wxiach;
 
 
-import cn.wxiach.core.model.Board;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Stone;
+import cn.wxiach.model.Board;
+import cn.wxiach.model.Color;
+import cn.wxiach.model.Stone;
 import cn.wxiach.robot.search.AlphaBetaSearch;
-import cn.wxiach.robot.search.TranspositionTable;
-import cn.wxiach.robot.search.ZobristHash;
+import cn.wxiach.robot.support.TranspositionTable;
+import cn.wxiach.robot.support.ZobristHash;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicReference;

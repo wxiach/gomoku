@@ -1,10 +1,10 @@
 package cn.wxiach.ui.common.components;
 
-import cn.wxiach.core.utils.Log;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
+import cn.wxiach.utils.Log;
 
 import javax.swing.*;
 import java.awt.*;
