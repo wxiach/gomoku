@@ -1,4 +1,4 @@
-package cn.wxiach.ui.assets;
+package cn.wxiach.ui.common.assets;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -1,25 +1,16 @@
 package cn.wxiach.core;
 
-import cn.wxiach.core.config.GomokuConf;
-import cn.wxiach.core.model.Color;
-import cn.wxiach.core.model.Level;
 import cn.wxiach.core.state.GameState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.support.*;
 import cn.wxiach.robot.RobotEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
-public class GameFlow {
-
-    private static final Logger logger = LoggerFactory.getLogger(GameFlow.class);
+public class GomokuFlow {
 
     private final GameState state = new GameState();
     private final RobotEngine robot = new RobotEngine();
 
-    public GameFlow() {
+    public GomokuFlow() {
         subscribeToGameStateEvents();
         subscribeToGameSettingsEvents();
         subscribeToGameInteractionEvents();
@@ -80,14 +71,5 @@ public class GameFlow {
         GomokuEventBus.getInstance().subscribe(LevelSelectEvent.class, event -> {
             robot.updateRobotLevel(event.getLevel());
         });
-    }
-
-    public void updateGameSettings(Map<String, Object> config) {
-        if (config.get(GomokuConf.SELF_STONE_COLOR) instanceof Color selfColor) {
-            state.setSelfColor(selfColor);
-        }
-        if (config.get(GomokuConf.LEVEL) instanceof Level level) {
-            robot.updateRobotLevel(level);
-        }
     }
 }

@@ -1,4 +1,4 @@
-package cn.wxiach.ui;
+package cn.wxiach.ui.board;
 
 import cn.wxiach.core.model.Board;
 import cn.wxiach.core.model.Color;
@@ -13,9 +13,8 @@ import cn.wxiach.event.support.BoardUpdateEvent;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.StonePlaceEvent;
-import cn.wxiach.ui.assets.FontAssets;
-import cn.wxiach.ui.assets.ImageAssets;
-import cn.wxiach.ui.support.Coordinate;
+import cn.wxiach.ui.common.assets.FontAssets;
+import cn.wxiach.ui.common.assets.ImageAssets;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,23 +23,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.List;
 
-public class BoardPanel extends JPanel implements EventBusAware {
+public class GomokuBoard extends JPanel implements EventBusAware {
 
     public static final int UNIT_DIMENSION = 40;
-
-    /**
-     * OFFSET equals UNIT_SIZE which is both easy to calculate and nice to look at
-     */
-    public static final int OFFSET = UNIT_DIMENSION;
     public static final int STONE_DIMENSION = 30;
-
     private static final int BOARD_DIMENSION = (Board.SIZE - 1) * UNIT_DIMENSION;
+    // OFFSET equals UNIT_SIZE which is both easy to calculate and nice to look at
+    public static final int OFFSET = UNIT_DIMENSION;
 
     private GameStateReadable state;
 
     private Point cursorTip;
 
-    public BoardPanel() {
+    public GomokuBoard() {
         setPreferredSize(new Dimension(BOARD_DIMENSION + (2 * OFFSET), BOARD_DIMENSION + (2 * OFFSET)));
         setEnabled(false);
         addMouseListeners();
@@ -79,7 +74,7 @@ public class BoardPanel extends JPanel implements EventBusAware {
         g2d.translate(OFFSET, OFFSET);
 
         // 3. Draw board lines with a margin around the edges.
-        g2d.setStroke(new BasicStroke(1.6f));
+        g2d.setStroke(new BasicStroke(1.1f));
         for (int i = 0; i < Board.SIZE; i++) {
             // Vertical lines
             g2d.drawLine(i * UNIT_DIMENSION, 0, i * UNIT_DIMENSION, BOARD_DIMENSION);
@@ -165,8 +160,8 @@ public class BoardPanel extends JPanel implements EventBusAware {
 
         // 7. Draw game result
         if (state != null && state.isOver()) {
-            String text = "游戏结束";
-            g2d.setColor(java.awt.Color.ORANGE);
+            String text = "你认输了";
+            g2d.setColor(java.awt.Color.RED);
             if (state.winner() == Color.WHITE) {
                 text = "白棋获胜";
                 g2d.setColor(java.awt.Color.white);
@@ -189,29 +184,8 @@ public class BoardPanel extends JPanel implements EventBusAware {
      * @param g2d
      */
     private void enableGraphicsOptimizations(Graphics2D g2d) {
-        // Enable anti-aliasing to smooth edges of shapes
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Enable text anti-aliasing for smoother text rendering
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
-        // Improve overall rendering quality
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-
-        // Improve color rendering quality
-        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-
-        // Enable dithering to create smoother color transitions
-        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-
-        // Use bilinear interpolation for smoother image scaling
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
-        // Improve alpha interpolation quality for better transparency rendering
-        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-
-        // Ensure stroke edges are rendered more accurately
-        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
     }
 
 

@@ -10,9 +10,7 @@ import java.util.Optional;
  */
 public class Log {
 
-    /**
-     * This is used to obtain stack trace information, which retains class references
-     */
+    // This is used to obtain stack trace information, which retains class references
     private static final StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
     private static Logger getLogger() {
@@ -25,11 +23,19 @@ public class Log {
         return LoggerFactory.getLogger(caller.orElse(Log.class));
     }
 
-    public static void debug(String message) {
-        getLogger().debug(message);
-    }
-
     public static void debug(String format, Object... args) {
         getLogger().debug(format, args);
+    }
+
+    public static void info(String format, Object... args) {
+        getLogger().info(format, args);
+    }
+
+    public static void warn(String format, Object... args) {
+        getLogger().warn(format, args);
+    }
+
+    public static void error(String format, Object... args) {
+        getLogger().error(format, args);
     }
 }

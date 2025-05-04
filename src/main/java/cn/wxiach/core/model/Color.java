@@ -1,24 +1,24 @@
 package cn.wxiach.core.model;
 
 public enum Color {
-    EMPTY('0'),
-    BLACK('1'),
-    WHITE('2');
+    EMPTY('0', ""),
+    BLACK('1', "黑棋（先手）"),
+    WHITE('2', "白棋（后手）");
 
     private final char value;
+    private final String text;
 
-    Color(char value) {
+    Color(char value, String text) {
         this.value = value;
+        this.text = text;
     }
 
     public char value() {
         return value;
     }
 
-    public String toString() {
-        if (value == BLACK.value) return "black";
-        else if (value == WHITE.value) return "white";
-        return "empty";
+    public String text() {
+        return text;
     }
 
     public static Color of(char value) {

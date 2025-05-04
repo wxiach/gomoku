@@ -1,47 +1,34 @@
-package cn.wxiach.ui.components;
+package cn.wxiach.ui.time;
 
 import cn.wxiach.core.model.Color;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
 import cn.wxiach.event.support.NewTurnEvent;
-import cn.wxiach.ui.assets.FontAssets;
-import cn.wxiach.ui.support.Components;
+import cn.wxiach.ui.common.assets.FontAssets;
+import cn.wxiach.ui.common.layout.Layouts;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class TimeBoardGroup extends JPanel implements EventBusAware {
+public class GomokuTimeBoard extends JPanel implements EventBusAware {
 
-    private static final int PANEL_WIDTH = 300;
-    private static final int PANEL_HEIGHT = 80;
-    private static final float TIMER_FONT_SIZE = 28f;
+    private static final float TIMER_FONT_SIZE = 34f;
     private static final int TIMER_DELAY = 1000; // milliseconds
 
-    private TimeBoard blackTimeBoard;
-    private TimeBoard whiteTimeBoard;
+    private final TimeBoard blackTimeBoard = new TimeBoard("黑棋");
+    private final TimeBoard whiteTimeBoard = new TimeBoard("白棋");
 
-    public TimeBoardGroup() {
+    public GomokuTimeBoard() {
         setupLayout();
-        initializeComponents();
         subscribeToEvents();
     }
 
     private void setupLayout() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setAlignmentX(Component.LEFT_ALIGNMENT);
-        setMaximumSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
-    }
-
-    private void initializeComponents() {
-        blackTimeBoard = createTimeBoard("黑棋用时:");
-        whiteTimeBoard = createTimeBoard("白棋用时:");
-    }
-
-    private TimeBoard createTimeBoard(String title) {
-        TimeBoard timeBoard = new TimeBoard(title);
-        add(timeBoard);
-        return timeBoard;
+        setLayout(new BorderLayout());
+        add(Layouts.container(BoxLayout.Y_AXIS, 0, blackTimeBoard, whiteTimeBoard));
     }
 
     private void subscribeToEvents() {
@@ -81,12 +68,18 @@ public class TimeBoardGroup extends JPanel implements EventBusAware {
                 updateLabel();
             });
 
-            JLabel titleLabel = new JLabel(titleText);
-            JPanel contentPanel = Components.createHorizontalContainer(titleLabel, this.label);
+            Border lineBorder = BorderFactory.createLineBorder(java.awt.Color.GRAY, 2);
+            TitledBorder titledBorder = BorderFactory.createTitledBorder(lineBorder, titleText);
+            titledBorder.setTitleFont(FontAssets.LXGWWenKaiMonoScreen);
 
-            setLayout(new BorderLayout());
-            add(contentPanel, BorderLayout.CENTER);
-            setOpaque(false);
+            Border withPadding = BorderFactory.createCompoundBorder(
+                    titledBorder,
+                    BorderFactory.createEmptyBorder(0, 12, 0, 12)
+            );
+
+            this.label.setBorder(withPadding);
+
+            add(label);
         }
 
         void start() {
@@ -98,7 +91,7 @@ public class TimeBoardGroup extends JPanel implements EventBusAware {
         }
 
         void reset() {
-            stop();
+            timer.stop();
             timeSeconds = 0;
             updateLabel();
         }

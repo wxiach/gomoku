@@ -1,8 +1,8 @@
-package cn.wxiach.ui.components.buttons;
+package cn.wxiach.ui.action;
 
 import cn.wxiach.event.support.GameOverEvent;
 import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.ui.components.AbstractGameButton;
+import cn.wxiach.ui.common.components.AbstractGameButton;
 
 
 public class StartGameButton extends AbstractGameButton {

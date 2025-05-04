@@ -1,4 +1,4 @@
-package cn.wxiach.ui.components;
+package cn.wxiach.ui.common.components;
 
 import cn.wxiach.event.EventBusAware;
 
@@ -27,7 +27,9 @@ public abstract class AbstractGameButton extends JButton implements EventBusAwar
 
     private void setupLayout(String buttonText, boolean enabled) {
         setText(buttonText);
-        setMaximumSize(new Dimension(Integer.MAX_VALUE, getPreferredSize().height));
+        setPreferredSize(new Dimension(getPreferredSize().width, (int) (getPreferredSize().height * 1.4)));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, getPreferredSize().height * 2));
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         setEnabled(enabled);
     }
 
