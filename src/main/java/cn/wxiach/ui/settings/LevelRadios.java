@@ -1,8 +1,8 @@
 package cn.wxiach.ui.settings;
 
 import cn.wxiach.event.GomokuEvent;
-import cn.wxiach.event.support.LevelSelectEvent;
-import cn.wxiach.event.support.PreferencesLoadedEvent;
+import cn.wxiach.event.types.LevelSelectEvent;
+import cn.wxiach.event.types.PreferencesLoadedEvent;
 import cn.wxiach.model.Level;
 import cn.wxiach.ui.common.components.AbstractRadioGroup;
 

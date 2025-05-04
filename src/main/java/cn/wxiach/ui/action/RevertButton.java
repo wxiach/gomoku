@@ -1,9 +1,9 @@
 package cn.wxiach.ui.action;
 
-import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.event.support.NewTurnEvent;
-import cn.wxiach.event.support.RevertStoneEvent;
+import cn.wxiach.event.types.GameOverEvent;
+import cn.wxiach.event.types.GameStartEvent;
+import cn.wxiach.event.types.NewTurnEvent;
+import cn.wxiach.event.types.RevertStoneEvent;
 import cn.wxiach.ui.common.components.AbstractGameButton;
 
 

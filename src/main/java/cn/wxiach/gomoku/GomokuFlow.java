@@ -1,11 +1,12 @@
 package cn.wxiach.gomoku;
 
-import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.*;
+import cn.wxiach.event.EventBusAware;
+import cn.wxiach.event.SubscriberPriority;
+import cn.wxiach.event.types.*;
 import cn.wxiach.gomoku.state.GameState;
 import cn.wxiach.robot.RobotEngine;
 
-public class GomokuFlow {
+public class GomokuFlow implements EventBusAware {
 
     private final GameState state = new GameState();
     private final RobotEngine robot = new RobotEngine();
@@ -17,26 +18,24 @@ public class GomokuFlow {
     }
 
     private void subscribeToGameStateEvents() {
-        GomokuEventBus.getInstance().subscribe(GameStartEvent.class, event -> {
+        subscribe(GameStartEvent.class, event -> {
             state.run();
             // The game state has been recharged, so the UI has also been updated
-            GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
-            GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state));
+            publish(new BoardUpdateEvent(this, state));
+            publish(new NewTurnEvent(this, state));
         });
 
-        GomokuEventBus.getInstance().subscribe(NewTurnEvent.class, event -> {
+        subscribe(NewTurnEvent.class, event -> {
             if (state.isOpponentTurn()) {
                 robot.startCompute(state);
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(GameOverEvent.class, event -> {
-            state.end();
-        });
+        subscribe(GameOverEvent.class, event -> state.end());
     }
 
     private void subscribeToGameInteractionEvents() {
-        GomokuEventBus.getInstance().subscribe(StonePlaceEvent.class, event -> {
+        subscribe(StonePlaceEvent.class, event -> {
             if (state.isOver()) return;
 
             // Prevent multiple quick clicks
@@ -46,30 +45,31 @@ public class GomokuFlow {
 
             // If the code runs here, it means the stone has been placed successfully.
 
-            GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
+            publish(new BoardUpdateEvent(this, state));
 
             if (state.isOver()) {
-                GomokuEventBus.getInstance().publish(new GameOverEvent(this, state.winner()));
+                publish(new GameOverEvent(this, state.winner()));
             } else {
                 state.switchTurn();
-                GomokuEventBus.getInstance().publish(new NewTurnEvent(this, state));
+                publish(new NewTurnEvent(this, state));
             }
         });
 
-        GomokuEventBus.getInstance().subscribe(RevertStoneEvent.class, event -> {
+        subscribe(RevertStoneEvent.class, event -> {
             if (state.isSelfTurn()) {
                 state.revertStone(2);
-                GomokuEventBus.getInstance().publish(new BoardUpdateEvent(this, state));
+                publish(new BoardUpdateEvent(this, state));
             }
         });
     }
 
     private void subscribeToGameSettingsEvents() {
-        GomokuEventBus.getInstance().subscribe(StoneSelectEvent.class, event -> {
-            state.setSelfColor(event.getColor());
-        });
-        GomokuEventBus.getInstance().subscribe(LevelSelectEvent.class, event -> {
-            robot.updateRobotLevel(event.getLevel());
-        });
+        subscribe(StoneSelectEvent.class, event -> state.setSelfColor(event.getColor()));
+        subscribe(LevelSelectEvent.class, event -> robot.updateRobotLevel(event.getLevel()));
+    }
+
+    @Override
+    public SubscriberPriority defaultSubscriberPriority() {
+        return SubscriberPriority.LOGIC;
     }
 }

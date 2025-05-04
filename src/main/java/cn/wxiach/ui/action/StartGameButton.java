@@ -1,7 +1,7 @@
 package cn.wxiach.ui.action;
 
-import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.event.support.GameStartEvent;
+import cn.wxiach.event.types.GameOverEvent;
+import cn.wxiach.event.types.GameStartEvent;
 import cn.wxiach.ui.common.components.AbstractGameButton;
 
 

@@ -2,8 +2,9 @@ package cn.wxiach.ui.common.components;
 
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEvent;
-import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.event.support.GameStartEvent;
+import cn.wxiach.event.SubscriberPriority;
+import cn.wxiach.event.types.GameOverEvent;
+import cn.wxiach.event.types.GameStartEvent;
 import cn.wxiach.utils.Log;
 
 import javax.swing.*;
@@ -167,4 +168,8 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
         Log.warn("Value {} not found in radio group '{}'. Cannot set selection.", valueToSelect, radioGroupTitle.getText());
     }
 
+    @Override
+    public SubscriberPriority defaultSubscriberPriority() {
+        return SubscriberPriority.UI;
+    }
 }

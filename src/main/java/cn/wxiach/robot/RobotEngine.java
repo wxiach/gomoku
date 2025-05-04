@@ -1,7 +1,7 @@
 package cn.wxiach.robot;
 
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.StonePlaceEvent;
+import cn.wxiach.event.types.StonePlaceEvent;
 import cn.wxiach.gomoku.state.GameStateReadable;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;

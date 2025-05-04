@@ -1,7 +1,7 @@
 package cn.wxiach;
 
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.PreferencesLoadedEvent;
+import cn.wxiach.event.types.PreferencesLoadedEvent;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Level;
 import cn.wxiach.model.Preferences;

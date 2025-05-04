@@ -1,6 +1,7 @@
 package cn.wxiach.ui.common.components;
 
 import cn.wxiach.event.EventBusAware;
+import cn.wxiach.event.SubscriberPriority;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,6 @@ import java.awt.*;
  * - Button state management
  */
 public abstract class AbstractGameButton extends JButton implements EventBusAware {
-
 
     public AbstractGameButton(String buttonText) {
         this(buttonText, true);
@@ -50,4 +50,8 @@ public abstract class AbstractGameButton extends JButton implements EventBusAwar
      */
     protected abstract void subscribeToEvents();
 
-} 
+    @Override
+    public SubscriberPriority defaultSubscriberPriority() {
+        return SubscriberPriority.UI;
+    }
+}

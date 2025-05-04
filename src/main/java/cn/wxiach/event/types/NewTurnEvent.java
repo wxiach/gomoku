@@ -1,4 +1,4 @@
-package cn.wxiach.event.support;
+package cn.wxiach.event.types;
 
 import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.gomoku.state.TurnStateReadable;

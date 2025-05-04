@@ -1,29 +1,45 @@
 package cn.wxiach.event;
 
+import cn.wxiach.utils.Log;
+
 import javax.swing.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
 public class GomokuEventBus {
 
-    private static GomokuEventBus instance;
+    private GomokuEventBus() {
+    }
+
+    private static class Holder {
+        private static final GomokuEventBus INSTANCE = new GomokuEventBus();
+    }
+
+    public static GomokuEventBus getInstance() {
+        return Holder.INSTANCE;
+    }
 
     private final ConcurrentHashMap<
             Class<? extends GomokuEvent>,
-            CopyOnWriteArraySet<Consumer<? super GomokuEvent>>
+            ConcurrentSkipListMap<Integer, CopyOnWriteArraySet<Consumer<? super GomokuEvent>>>
             > subscribers = new ConcurrentHashMap<>();
 
-    public static synchronized GomokuEventBus getInstance() {
-        if (instance == null) {
-            instance = new GomokuEventBus();
-        }
-        return instance;
+    @SuppressWarnings("unchecked")
+    public <E extends GomokuEvent> void subscribe(
+            Class<E> eventType,
+            Consumer<? super E> subscriber,
+            SubscriberPriority priority
+    ) {
+        addSubscriber(eventType, (Consumer<? super GomokuEvent>) subscriber, priority.getValue());
     }
 
-    public <E extends GomokuEvent> void subscribe(Class<E> eventType, Consumer<? super E> subscriber) {
-        subscribers.computeIfAbsent(eventType, k -> new CopyOnWriteArraySet<>())
-                .add(createTypeSafeConsumer(eventType, subscriber));
+    private void addSubscriber(Class<? extends GomokuEvent> type, Consumer<? super GomokuEvent> consumer, int priority) {
+        subscribers
+                .computeIfAbsent(type, k -> new ConcurrentSkipListMap<>())
+                .computeIfAbsent(priority, k -> new CopyOnWriteArraySet<>())
+                .add(consumer);
     }
 
     public void publish(GomokuEvent event) {
@@ -35,25 +51,20 @@ public class GomokuEventBus {
     }
 
     private void dispatch(GomokuEvent event) {
-        Class<? extends GomokuEvent> eventType = event.getClass();
-        CopyOnWriteArraySet<Consumer<? super GomokuEvent>> handlers = subscribers.get(eventType);
-        if (handlers != null) {
-            handlers.forEach(handler -> handler.accept(event));
+        var priorityMap = subscribers.get(event.getClass());
+        if (priorityMap == null) return;
+
+        for (var handlers : priorityMap.descendingMap().values()) {
+            for (var handler : handlers) {
+                try {
+                    handler.accept(event);
+                } catch (Exception e) {
+                    Log.error("Exception during event dispatch for {} to handler {}",
+                            event.getClass().getName(),
+                            handler.getClass().getName());
+                }
+            }
         }
     }
-
-    private <E extends GomokuEvent> Consumer<GomokuEvent> createTypeSafeConsumer(
-            Class<E> eventType, Consumer<? super E> subscriber) {
-
-        Class<?> parameterType = subscriber.getClass().getDeclaredMethods()[0].getParameterTypes()[0];
-        return event -> {
-            if (parameterType.isAssignableFrom(eventType)) {
-                subscriber.accept(eventType.cast(event));
-            } else {
-                throw new IllegalArgumentException(
-                        String.format("Subscriber for %s cannot handle %s.", eventType.getName(), parameterType.getName())
-                );
-            }
-        };
-    }
 }
+

@@ -2,10 +2,11 @@ package cn.wxiach.ui.board;
 
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEventBus;
-import cn.wxiach.event.support.BoardUpdateEvent;
-import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.event.support.StonePlaceEvent;
+import cn.wxiach.event.SubscriberPriority;
+import cn.wxiach.event.types.BoardUpdateEvent;
+import cn.wxiach.event.types.GameOverEvent;
+import cn.wxiach.event.types.GameStartEvent;
+import cn.wxiach.event.types.StonePlaceEvent;
 import cn.wxiach.gomoku.rule.BoardChecker;
 import cn.wxiach.gomoku.state.GameStateReadable;
 import cn.wxiach.model.Board;
@@ -253,5 +254,10 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         });
 
         subscribe(GameOverEvent.class, event -> repaint());
+    }
+
+    @Override
+    public SubscriberPriority defaultSubscriberPriority() {
+        return SubscriberPriority.UI;
     }
 }

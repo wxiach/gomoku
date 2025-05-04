@@ -1,9 +1,10 @@
 package cn.wxiach.ui.time;
 
 import cn.wxiach.event.EventBusAware;
-import cn.wxiach.event.support.GameOverEvent;
-import cn.wxiach.event.support.GameStartEvent;
-import cn.wxiach.event.support.NewTurnEvent;
+import cn.wxiach.event.SubscriberPriority;
+import cn.wxiach.event.types.GameOverEvent;
+import cn.wxiach.event.types.GameStartEvent;
+import cn.wxiach.event.types.NewTurnEvent;
 import cn.wxiach.model.Color;
 import cn.wxiach.ui.common.assets.FontAssets;
 import cn.wxiach.ui.common.layout.Layouts;
@@ -52,6 +53,11 @@ public class GomokuTimeBoard extends JPanel implements EventBusAware {
             blackTimeBoard.stop();
             whiteTimeBoard.stop();
         });
+    }
+
+    @Override
+    public SubscriberPriority defaultSubscriberPriority() {
+        return SubscriberPriority.UI;
     }
 
     private static class TimeBoard extends JPanel {
