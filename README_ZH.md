@@ -7,17 +7,11 @@
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![GUI](https://img.shields.io/badge/GUI-Swing-orange.svg)]()
 
-<p align="center">
-  <img src="src/main/resources/images/logo.png" width="360" alt="游戏图标">
-</p>
-
 基于 Java 开发的五子棋对弈系统，支持 AI 对战。
 
 > AI 当前搜索深度限制为 6 层，正在持续优化中。
 
-<p align="center">
-   <img src="screenshot/gomoku.png" width="480" alt="游戏截图">
-</p>
+<img src="screenshot/gomoku.png" width="480" alt="游戏截图">
 
 ## 功能特性
 

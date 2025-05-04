@@ -7,17 +7,11 @@
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![GUI](https://img.shields.io/badge/GUI-Swing-orange.svg)]()
 
-<p align="center">
-  <img src="src/main/resources/images/logo.png" width="360" alt="Game Logo">
-</p>
-
 A Java-based Gomoku (Five in a Row) game with AI opponent.
 
 > AI's current search depth is limited to 6 layers, improvements are ongoing.
 
-<p align="center">
-  <img src="screenshot/gomoku.png" width="480" alt="Game Screenshot">
-</p>
+<img src="screenshot/gomoku.png" width="480" alt="Game Screenshot">
 
 ## Features & Implementation
 
