@@ -41,20 +41,26 @@ A Java-based Gomoku (Five in a Row) game with AI opponent.
 
 ```
 src/main/java/cn/wxiach/
-├── core/           # Game core logic
-│   ├── model/     # Basic data models
-│   ├── rule/      # Game rules
-│   ├── state/     # Game state management
-│   └── utils/     # Utilities
-├── robot/         # AI implementation
-│   ├── search/    # Search algorithms
-│   ├── pattern/   # Pattern recognition
-│   └── evaluate/  # Position evaluation
-├── ui/            # User interface
-│   ├── components/# UI components
-│   ├── assets/    # Resources
-│   └── support/   # UI support
-└── event/         # Event system
+├── gomoku/         # Core Gomoku game logic
+│   ├── rule/       # Game rules and validation
+│   └── store/      # Game state management (formerly state/)
+├── model/          # Basic data models
+├── event/          # Event bus system
+├── features/       # Board feature extraction
+│   └── pattern/    # Pattern definitions and collections
+├── robot/          # AI robot implementation
+│   ├── search/     # Search algorithms
+│   ├── evaluation/ # Position evaluation logic
+│   └── support/    # AI support classes
+├── ui/             # User interface
+│   ├── board/      # Board panel related
+│   ├── action/     # User action handling
+│   ├── time/       # Timer related
+│   ├── settings/   # Settings related
+│   ├── window/     # Window management
+│   └── common/     # Common UI components/logic
+├── utils/          # General utility classes
+└── Gomoku.java     # Main application entry point
 ```
 
 ## Requirements

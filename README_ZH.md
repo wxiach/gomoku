@@ -41,20 +41,26 @@
 
 ```
 src/main/java/cn/wxiach/
-├── core/           # 游戏核心逻辑
-│   ├── model/     # 基础数据模型
-│   ├── rule/      # 游戏规则
-│   ├── state/     # 游戏状态管理
-│   └── utils/     # 工具类
-├── robot/         # AI 实现
-│   ├── search/    # 搜索算法
-│   ├── pattern/   # 棋型识别
-│   └── evaluate/  # 局面评估
-├── ui/            # 用户界面
-│   ├── components/# UI 组件
-│   ├── assets/    # 资源文件
-│   └── support/   # UI 支持
-└── event/         # 事件系统
+├── gomoku/         # 核心五子棋游戏逻辑
+│   ├── rule/       # 游戏规则和校验
+│   └── store/      # 游戏状态管理 (原 state/)
+├── model/          # 基础数据模型
+├── event/          # 事件总线系统
+├── features/       # 棋盘特征提取
+│   └── pattern/    # 模式定义与集合
+├── robot/          # AI 机器人实现
+│   ├── search/     # 搜索算法
+│   ├── evaluation/ # 局面评估逻辑
+│   └── support/    # AI 辅助类
+├── ui/             # 用户界面
+│   ├── board/      # 棋盘面板相关
+│   ├── action/     # 用户动作处理
+│   ├── time/       # 计时器相关
+│   ├── settings/   # 设置相关
+│   ├── window/     # 窗口管理
+│   └── common/     # UI 通用组件/逻辑
+├── utils/          # 通用工具类
+└── Gomoku.java     # 主程序入口
 ```
 
 ## 环境要求
