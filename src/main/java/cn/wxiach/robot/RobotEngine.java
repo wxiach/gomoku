@@ -2,7 +2,6 @@ package cn.wxiach.robot;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.types.StonePlaceEvent;
-import cn.wxiach.features.pattern.PatternCollection;
 import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
@@ -13,9 +12,6 @@ import cn.wxiach.robot.search.IterativeDeepeningSearch;
 import cn.wxiach.robot.support.TranspositionTable;
 import cn.wxiach.robot.support.ZobristHash;
 import cn.wxiach.utils.Log;
-import cn.wxiach.utils.MathUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -23,19 +19,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class RobotEngine {
 
-    private static final Logger logger = LoggerFactory.getLogger(RobotEngine.class);
-
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final TranspositionTable transpositionTable = new TranspositionTable();
-    private final ZobristHash zobristHash = new ZobristHash();
-    private final AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(zobristHash, transpositionTable);
+    private final AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(new ZobristHash(), new TranspositionTable());
 
-    private Level robotLevel;
+    private Level level;
 
     public void startCompute(GomokuStore store) {
         executorService.submit(() -> {
             try {
                 AtomicReference<Stone> stone = new AtomicReference<>();
+
                 if (store.getBoardState().stoneSequence().isEmpty()) {
                     stone.set(Stone.of(Board.SIZE / 2, Board.SIZE / 2, Color.BLACK));
                 } else {
@@ -46,11 +39,10 @@ public class RobotEngine {
                                     depth,
                                     (result) -> stone.set((Stone) result)
                             ),
-                            (value) -> MathUtils.approximateEqual(value, PatternCollection.A5_VALUE, 1.2),
-                            robotLevel.value(),
-                            2
+                            level.value()
                     );
                 }
+
                 if (stone.get() == null) {
                     throw new RobotException("Robot compute a null point.");
                 } else {
@@ -63,6 +55,6 @@ public class RobotEngine {
     }
 
     public void updateRobotLevel(Level robotLevel) {
-        this.robotLevel = robotLevel;
+        this.level = robotLevel;
     }
 }

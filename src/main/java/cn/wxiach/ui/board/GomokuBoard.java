@@ -15,7 +15,7 @@ import cn.wxiach.model.Point;
 import cn.wxiach.model.Stone;
 import cn.wxiach.ui.common.assets.FontAssets;
 import cn.wxiach.ui.common.assets.ImageAssets;
-import cn.wxiach.utils.SetUtils;
+import cn.wxiach.utils.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -120,7 +120,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         if (store == null) return;
 
         // 5. Draw stones
-        SetUtils.forEachWithIndex(store.getBoardState().stoneSequence(), (index, stone) -> {
+        CollectionUtils.forEachWithIndex(store.getBoardState().stoneSequence(), (index, stone) -> {
             Image image = stone.color() == Color.BLACK ? ImageAssets.getBlackStone() : ImageAssets.getWhiteStone();
             Coordinate coordinate = Coordinate.fromPoint(stone.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());

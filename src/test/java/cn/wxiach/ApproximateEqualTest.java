@@ -1,40 +1,41 @@
 package cn.wxiach;
 
-import cn.wxiach.utils.MathUtils;
 import org.junit.jupiter.api.Test;
 
+import static cn.wxiach.robot.search.IterativeDeepeningSearch.approximateEqual;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MathUtilsTest {
+
+public class ApproximateEqualTest {
 
     @Test
     public void testApproximateEqual_withExactMatch() {
-        assertTrue(MathUtils.approximateEqual(10.0, 10.0, 1.1));
+        assertTrue(approximateEqual(10.0, 10.0, 1.1));
     }
 
     @Test
     public void testApproximateEqual_withSmallDifference() {
-        assertTrue(MathUtils.approximateEqual(10.5, 10.0, 1.1));
+        assertTrue(approximateEqual(10.5, 10.0, 1.1));
     }
 
     @Test
     public void testApproximateEqual_withLargeDifference() {
-        assertFalse(MathUtils.approximateEqual(12.0, 10.0, 1.1));
+        assertFalse(approximateEqual(12.0, 10.0, 1.1));
     }
 
     @Test
     public void testApproximateEqual_withZeroThreshold() {
-        assertFalse(MathUtils.approximateEqual(10.0, 10.0, 0.0));
+        assertFalse(approximateEqual(10.0, 10.0, 0.0));
     }
 
     @Test
     public void testApproximateEqual_withNegativeValue() {
-        assertTrue(MathUtils.approximateEqual(-10.0, -10.0, 1.1));
+        assertTrue(approximateEqual(-10.0, -10.0, 1.1));
     }
 
     @Test
     public void testApproximateEqual_withZeroB() {
-        assertTrue(MathUtils.approximateEqual(0.005, 0.0, 2));
+        assertTrue(approximateEqual(0.005, 0.0, 2));
     }
 }

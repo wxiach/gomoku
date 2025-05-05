@@ -6,8 +6,6 @@ import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 import cn.wxiach.model.Stone;
 import cn.wxiach.robot.search.AlphaBetaSearch;
-import cn.wxiach.robot.support.TranspositionTable;
-import cn.wxiach.robot.support.ZobristHash;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,9 +24,6 @@ public class CandidateSearchTest {
     @BeforeEach
     public void setUp() {
         board = new Board();
-        ZobristHash zobristHash = new ZobristHash();
-        TranspositionTable transpositionTable = new TranspositionTable();
-        AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch(zobristHash, transpositionTable);
         candidateSearch = new AlphaBetaSearch.CandidateSearch();
     }
 
@@ -42,7 +37,6 @@ public class CandidateSearchTest {
     @Test
     public void testObtainCandidatesOrder1() {
         Color color = Color.WHITE;
-
 
         board.set(Board.index(7, 7), Color.BLACK.value());
         board.set(Board.index(8, 7), Color.BLACK.value());
@@ -100,7 +94,6 @@ public class CandidateSearchTest {
     @Test
     public void testObtainCandidatesOrder3() {
         Color color = Color.WHITE;
-
 
         board.set(Board.index(7, 7), Color.BLACK.value());
         board.set(Board.index(7, 8), Color.BLACK.value());

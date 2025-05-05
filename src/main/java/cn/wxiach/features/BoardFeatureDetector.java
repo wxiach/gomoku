@@ -9,6 +9,10 @@ import cn.wxiach.model.Point;
 
 import java.util.Collection;
 
+/**
+ * This class is agnostic to stone color.
+ * To detect patterns of a specific color (e.g., white), reverse the board's stone colors beforehand.
+ */
 public class BoardFeatureDetector implements ShapeDetector {
 
     private static BoardFeatureDetector instance;

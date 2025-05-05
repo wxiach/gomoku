@@ -1,8 +1,5 @@
 package cn.wxiach.robot.search;
 
-import cn.wxiach.features.BoardFeatureDetector;
-import cn.wxiach.features.pattern.Pattern;
-import cn.wxiach.features.pattern.PatternCollection;
 import cn.wxiach.gomoku.rule.BoardCheck;
 import cn.wxiach.gomoku.rule.WinConditionCheck;
 import cn.wxiach.model.Board;
@@ -105,21 +102,6 @@ public class AlphaBetaSearch {
                         searchSurroundBlankPoint(board, (board.point(i)), boardStoneCount <= 4 ? 1 : 2));
             }
 
-            // Detect threat stone
-            Board opponentBoard = board;
-            Color opponentColor = Color.reverse(color);
-            if (color == Color.BLACK) {
-                opponentColor = Color.BLACK;
-                opponentBoard = BoardUtils.reverseStoneColorOnBoard(board.copy());
-            }
-            for (Point point : surroundBlankPoint) {
-                Stone stone = Stone.of(point, opponentColor);
-                opponentBoard.makeMove(stone);
-                Collection<Pattern> patterns = BoardFeatureDetector.getInstance().detect(opponentBoard, point);
-                opponentBoard.undoMove(stone);
-                if (patterns.contains(PatternCollection.FIVE)) return List.of(Stone.of(point, color));
-            }
-
             Map<Stone, Integer> candidateScoreMap = new HashMap<>();
             surroundBlankPoint.forEach(point -> {
                 Stone stone = Stone.of(point, color);
@@ -131,8 +113,8 @@ public class AlphaBetaSearch {
             Comparator<Map.Entry<Stone, Integer>> comparator = Comparator
                     .comparing((Map.Entry<Stone, Integer> entry) -> -entry.getValue());
 
-            return candidateScoreMap.entrySet().stream().sorted(comparator).map(Map.Entry::getKey).limit(8).toList();
-
+            return candidateScoreMap.entrySet().stream()
+                    .sorted(comparator).map(Map.Entry::getKey).limit(8).toList();
         }
 
 
@@ -146,7 +128,9 @@ public class AlphaBetaSearch {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     Point candidatePoint = Point.of(x, y);
-                    if (BoardCheck.isEmpty(board, candidatePoint)) blankPoints.add(candidatePoint);
+                    if (BoardCheck.isEmpty(board, candidatePoint)) {
+                        blankPoints.add(candidatePoint);
+                    }
                 }
             }
             return blankPoints;
