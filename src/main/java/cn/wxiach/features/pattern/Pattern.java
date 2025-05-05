@@ -1,4 +1,4 @@
-package cn.wxiach.robot.features;
+package cn.wxiach.features.pattern;
 
 public record Pattern(String pattern, String name, int value) implements Comparable<Pattern> {
     @Override

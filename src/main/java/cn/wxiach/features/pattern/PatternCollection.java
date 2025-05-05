@@ -1,4 +1,4 @@
-package cn.wxiach.robot.features;
+package cn.wxiach.features.pattern;
 
 import java.util.List;
 import java.util.stream.Stream;

@@ -1,11 +1,11 @@
 package cn.wxiach;
 
+import cn.wxiach.features.BoardFeatureDetector;
+import cn.wxiach.features.pattern.Pattern;
+import cn.wxiach.features.pattern.PatternCollection;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
-import cn.wxiach.robot.features.GomokuShapeDetector;
-import cn.wxiach.robot.features.Pattern;
-import cn.wxiach.robot.features.PatternCollection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +13,9 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GomokuShapeDetectorTest {
+public class BoardFeatureDetectorTest {
     private Board board;
-    private GomokuShapeDetector detector;
+    private BoardFeatureDetector detector;
 
     /**
      * Helper method to set up the board with predefined values
@@ -40,7 +40,7 @@ public class GomokuShapeDetectorTest {
     public void setUp() {
         // Initialize the board and detector before each test
         board = setupBoard();
-        detector = GomokuShapeDetector.getInstance();
+        detector = BoardFeatureDetector.getInstance();
     }
 
     @Test

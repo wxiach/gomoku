@@ -1,5 +1,6 @@
-package cn.wxiach.robot.features;
+package cn.wxiach.features;
 
+import cn.wxiach.features.pattern.Pattern;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Point;
 

@@ -1,5 +1,8 @@
 package cn.wxiach.robot.search;
 
+import cn.wxiach.features.BoardFeatureDetector;
+import cn.wxiach.features.pattern.Pattern;
+import cn.wxiach.features.pattern.PatternCollection;
 import cn.wxiach.gomoku.rule.BoardCheck;
 import cn.wxiach.gomoku.rule.WinConditionCheck;
 import cn.wxiach.model.Board;
@@ -7,9 +10,6 @@ import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 import cn.wxiach.model.Stone;
 import cn.wxiach.robot.evaluation.GomokuEvaluator;
-import cn.wxiach.robot.features.GomokuShapeDetector;
-import cn.wxiach.robot.features.Pattern;
-import cn.wxiach.robot.features.PatternCollection;
 import cn.wxiach.robot.support.BoardWithZobrist;
 import cn.wxiach.robot.support.TranspositionTable;
 import cn.wxiach.robot.support.ZobristHash;
@@ -115,7 +115,7 @@ public class AlphaBetaSearch {
             for (Point point : surroundBlankPoint) {
                 Stone stone = Stone.of(point, opponentColor);
                 opponentBoard.makeMove(stone);
-                Collection<Pattern> patterns = GomokuShapeDetector.getInstance().detect(opponentBoard, point);
+                Collection<Pattern> patterns = BoardFeatureDetector.getInstance().detect(opponentBoard, point);
                 opponentBoard.undoMove(stone);
                 if (patterns.contains(PatternCollection.FIVE)) return List.of(Stone.of(point, color));
             }

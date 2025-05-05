@@ -1,4 +1,4 @@
-package cn.wxiach.robot.support;
+package cn.wxiach.features.pattern;
 
 import cn.wxiach.model.Board;
 

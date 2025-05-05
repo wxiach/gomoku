@@ -2,12 +2,12 @@ package cn.wxiach.robot;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.types.StonePlaceEvent;
+import cn.wxiach.features.pattern.PatternCollection;
 import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Level;
 import cn.wxiach.model.Stone;
-import cn.wxiach.robot.features.PatternCollection;
 import cn.wxiach.robot.search.AlphaBetaSearch;
 import cn.wxiach.robot.search.IterativeDeepeningSearch;
 import cn.wxiach.robot.support.TranspositionTable;
