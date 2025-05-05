@@ -3,12 +3,13 @@ package cn.wxiach.gomoku;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.SubscriberPriority;
 import cn.wxiach.event.types.*;
-import cn.wxiach.gomoku.state.GameState;
+import cn.wxiach.gomoku.rule.WinConditionCheck;
+import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.robot.RobotEngine;
 
 public class GomokuFlow implements EventBusAware {
 
-    private final GameState state = new GameState();
+    private final GomokuStore store = new GomokuStore();
     private final RobotEngine robot = new RobotEngine();
 
     public GomokuFlow() {
@@ -19,52 +20,53 @@ public class GomokuFlow implements EventBusAware {
 
     private void subscribeToGameStateEvents() {
         subscribe(GameStartEvent.class, event -> {
-            state.run();
+            store.reset();
             // The game state has been recharged, so the UI has also been updated
-            publish(new BoardUpdateEvent(this, state));
-            publish(new NewTurnEvent(this, state));
+            publish(new BoardUpdateEvent(this, store));
+            publish(new NewTurnEvent(this, store.getTurnState()));
         });
 
         subscribe(NewTurnEvent.class, event -> {
-            if (state.isOpponentTurn()) {
-                robot.startCompute(state);
+            if (store.getTurnState().isRobotTurn()) {
+                robot.startCompute(store);
             }
         });
 
-        subscribe(GameOverEvent.class, event -> state.end());
+        subscribe(GameOverEvent.class, event -> store.getGameState().setOver());
     }
 
     private void subscribeToGameInteractionEvents() {
         subscribe(StonePlaceEvent.class, event -> {
-            if (state.isOver()) return;
+            if (store.getGameState().isOver()) return;
 
             // Prevent multiple quick clicks
-            if (event.getStone().color() != state.currentTurn()) return;
+            if (event.getStone().color() != store.getTurnState().currentTurn()) return;
 
-            state.placeStone(event.getStone());
+            store.getBoardState().placeStone(event.getStone());
 
             // If the code runs here, it means the stone has been placed successfully.
 
-            publish(new BoardUpdateEvent(this, state));
+            publish(new BoardUpdateEvent(this, store));
 
-            if (state.isOver()) {
-                publish(new GameOverEvent(this, state.winner()));
+            if (WinConditionCheck.checkOver(store.getBoardState().board())) {
+                store.getGameState().setWinner(store.getTurnState().currentTurn());
+                publish(new GameOverEvent(this, store.getGameState().getWinner()));
             } else {
-                state.switchTurn();
-                publish(new NewTurnEvent(this, state));
+                store.getTurnState().switchTurn();
+                publish(new NewTurnEvent(this, store.getTurnState()));
             }
         });
 
         subscribe(RevertStoneEvent.class, event -> {
-            if (state.isSelfTurn()) {
-                state.revertStone(2);
-                publish(new BoardUpdateEvent(this, state));
+            if (store.getTurnState().isHumanTurn()) {
+                store.getBoardState().revertStone(2);
+                publish(new BoardUpdateEvent(this, store));
             }
         });
     }
 
     private void subscribeToGameSettingsEvents() {
-        subscribe(StoneSelectEvent.class, event -> state.setSelfColor(event.getColor()));
+        subscribe(StoneSelectEvent.class, event -> store.getTurnState().setHumanStoneColor(event.getColor()));
         subscribe(LevelSelectEvent.class, event -> robot.updateRobotLevel(event.getLevel()));
     }
 

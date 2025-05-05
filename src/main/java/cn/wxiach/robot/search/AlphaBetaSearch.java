@@ -1,7 +1,7 @@
 package cn.wxiach.robot.search;
 
-import cn.wxiach.gomoku.rule.BoardChecker;
-import cn.wxiach.gomoku.rule.WinArbiter;
+import cn.wxiach.gomoku.rule.BoardCheck;
+import cn.wxiach.gomoku.rule.WinConditionCheck;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
@@ -68,7 +68,7 @@ public class AlphaBetaSearch {
             return evaluation;
         }
 
-        if (depth == 0 || WinArbiter.checkOver(board)) {
+        if (depth == 0 || WinConditionCheck.checkOver(board)) {
             return evaluator.evaluate(board, color);
         }
 
@@ -146,7 +146,7 @@ public class AlphaBetaSearch {
             for (int x = minX; x <= maxX; x++) {
                 for (int y = minY; y <= maxY; y++) {
                     Point candidatePoint = Point.of(x, y);
-                    if (BoardChecker.isEmpty(board, candidatePoint)) blankPoints.add(candidatePoint);
+                    if (BoardCheck.isEmpty(board, candidatePoint)) blankPoints.add(candidatePoint);
                 }
             }
             return blankPoints;

@@ -1,6 +1,6 @@
-package cn.wxiach.gomoku.state;
+package cn.wxiach.gomoku.store.state;
 
-import cn.wxiach.gomoku.rule.BoardChecker;
+import cn.wxiach.gomoku.rule.BoardCheck;
 import cn.wxiach.gomoku.rule.PositionOccupiedException;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Stone;
@@ -8,7 +8,7 @@ import cn.wxiach.model.Stone;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 
-public class BoardState extends TurnState implements BoardStateReadable {
+public class BoardState {
 
     private final Board board = new Board();
 
@@ -18,13 +18,12 @@ public class BoardState extends TurnState implements BoardStateReadable {
         return this.board;
     }
 
-    @Override
     public LinkedHashSet<Stone> stoneSequence() {
         return this.stoneSequence;
     }
 
     public void placeStone(Stone stone) {
-        if (BoardChecker.isOccupied(board, stone.point())) {
+        if (BoardCheck.isOccupied(board, stone.point())) {
             throw new PositionOccupiedException(String.format("(%s, %s) has a stone", stone.x(), stone.y()));
         }
         stoneSequence.addLast(stone);
@@ -43,9 +42,7 @@ public class BoardState extends TurnState implements BoardStateReadable {
         }
     }
 
-    @Override
-    protected void reset() {
-        super.reset();
+    public void reset() {
         board.reset();
         stoneSequence.clear();
     }

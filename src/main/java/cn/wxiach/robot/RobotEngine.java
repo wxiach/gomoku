@@ -2,7 +2,7 @@ package cn.wxiach.robot;
 
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.types.StonePlaceEvent;
-import cn.wxiach.gomoku.state.GameStateReadable;
+import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Level;
@@ -12,6 +12,7 @@ import cn.wxiach.robot.search.AlphaBetaSearch;
 import cn.wxiach.robot.search.IterativeDeepeningSearch;
 import cn.wxiach.robot.support.TranspositionTable;
 import cn.wxiach.robot.support.ZobristHash;
+import cn.wxiach.utils.Log;
 import cn.wxiach.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,17 +32,17 @@ public class RobotEngine {
 
     private Level robotLevel;
 
-    public void startCompute(GameStateReadable state) {
+    public void startCompute(GomokuStore store) {
         executorService.submit(() -> {
             try {
                 AtomicReference<Stone> stone = new AtomicReference<>();
-                if (state.stoneSequence().isEmpty()) {
+                if (store.getBoardState().stoneSequence().isEmpty()) {
                     stone.set(Stone.of(Board.SIZE / 2, Board.SIZE / 2, Color.BLACK));
                 } else {
                     IterativeDeepeningSearch.search(
                             (depth) -> alphaBetaSearch.execute(
-                                    state.board().copy(),
-                                    state.currentTurn(),
+                                    store.getBoardState().board().copy(),
+                                    store.getTurnState().currentTurn(),
                                     depth,
                                     (result) -> stone.set((Stone) result)
                             ),
@@ -56,7 +57,7 @@ public class RobotEngine {
                     GomokuEventBus.getInstance().publish(new StonePlaceEvent(this, stone.get()));
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.error("Robot compute error: ", e);
             }
         });
     }

@@ -1,6 +1,6 @@
 package cn.wxiach;
 
-import cn.wxiach.gomoku.rule.BoardChecker;
+import cn.wxiach.gomoku.rule.BoardCheck;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
@@ -138,7 +138,7 @@ public class CandidateSearchTest {
         assertEquals(24, blankPointCount);
 
         blankPoints.forEach(point -> {
-            assertTrue(BoardChecker.isEmpty(board, point));
+            assertTrue(BoardCheck.isEmpty(board, point));
         });
     }
 

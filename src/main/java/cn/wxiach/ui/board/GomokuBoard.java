@@ -7,8 +7,8 @@ import cn.wxiach.event.types.BoardUpdateEvent;
 import cn.wxiach.event.types.GameOverEvent;
 import cn.wxiach.event.types.GameStartEvent;
 import cn.wxiach.event.types.StonePlaceEvent;
-import cn.wxiach.gomoku.rule.BoardChecker;
-import cn.wxiach.gomoku.state.GameStateReadable;
+import cn.wxiach.gomoku.rule.BoardCheck;
+import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
@@ -32,7 +32,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
     // OFFSET equals UNIT_SIZE which is both easy to calculate and nice to look at
     public static final int OFFSET = UNIT_DIMENSION;
 
-    private GameStateReadable state;
+    private GomokuStore store;
 
     private Point cursorTip;
 
@@ -96,9 +96,9 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         });
 
         // 4. Draw a cursor tip
-        if (cursorTip != null && BoardChecker.isOnBoard(cursorTip) && !state.isOver() && state.isSelfTurn()) {
+        if (cursorTip != null && BoardCheck.isOnBoard(cursorTip) && !store.getGameState().isOver() && store.getTurnState().isHumanTurn()) {
             Coordinate coordinate = Coordinate.fromPoint(cursorTip, UNIT_DIMENSION, 0);
-            if (state == null || BoardChecker.isEmpty(state.board(), cursorTip)) {
+            if (store == null || BoardCheck.isEmpty(store.getBoardState().board(), cursorTip)) {
                 g2d.setColor(java.awt.Color.GREEN);
             } else {
                 g2d.setColor(java.awt.Color.RED);
@@ -117,10 +117,10 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             g2d.translate(-coordinate.x(), -coordinate.y());
         }
 
-        if (state == null) return;
+        if (store == null) return;
 
         // 5. Draw stones
-        SetUtils.forEachWithIndex(state.stoneSequence(), (index, stone) -> {
+        SetUtils.forEachWithIndex(store.getBoardState().stoneSequence(), (index, stone) -> {
             Image image = stone.color() == Color.BLACK ? ImageAssets.getBlackStone() : ImageAssets.getWhiteStone();
             Coordinate coordinate = Coordinate.fromPoint(stone.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());
@@ -139,8 +139,8 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         });
 
         // 6. Highlight last stone
-        if (!state.stoneSequence().isEmpty()) {
-            Coordinate coordinate = Coordinate.fromPoint(state.stoneSequence().getLast().point(), UNIT_DIMENSION, 0);
+        if (!store.getBoardState().stoneSequence().isEmpty()) {
+            Coordinate coordinate = Coordinate.fromPoint(store.getBoardState().stoneSequence().getLast().point(), UNIT_DIMENSION, 0);
 
             g2d.setColor(java.awt.Color.RED);
             g2d.setStroke(new BasicStroke(2));
@@ -160,13 +160,13 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         g2d.translate(-OFFSET, -OFFSET);
 
         // 7. Draw game result
-        if (state != null && state.isOver()) {
+        if (store != null && store.getGameState().isOver()) {
             String text = "你认输了";
             g2d.setColor(java.awt.Color.RED);
-            if (state.winner() == Color.WHITE) {
+            if (store.getGameState().getWinner() == Color.WHITE) {
                 text = "白棋获胜";
                 g2d.setColor(java.awt.Color.white);
-            } else if (state.winner() == Color.BLACK) {
+            } else if (store.getGameState().getWinner() == Color.BLACK) {
                 text = "黑棋获胜";
                 g2d.setColor(java.awt.Color.BLACK);
             }
@@ -204,7 +204,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
                     time = currentTime;
 
                     Point point = Coordinate.of(e.getX(), e.getY()).toPoint(UNIT_DIMENSION, OFFSET);
-                    Color color = state == null ? Color.BLACK : state.selfColor();
+                    Color color = store == null ? Color.BLACK : store.getTurnState().getHumanStoneColor();
                     GomokuEventBus.getInstance().publish(new StonePlaceEvent(this, Stone.of(point, color)));
                 }
             }
@@ -232,7 +232,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
                     if (currentTime - time < 50) return;
                     time = currentTime;
                     cursorTip = Coordinate.of(e.getX(), e.getY()).toPoint(UNIT_DIMENSION, OFFSET);
-                    if (!BoardChecker.isOnBoard(cursorTip)) {
+                    if (!BoardCheck.isOnBoard(cursorTip)) {
                         cursorTip = null;
                     }
                     repaint();
@@ -249,7 +249,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
         });
 
         subscribe(BoardUpdateEvent.class, event -> {
-            this.state = event.getState();
+            this.store = event.getStore();
             repaint();
         });
 

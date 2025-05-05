@@ -1,6 +1,6 @@
 package cn.wxiach;
 
-import cn.wxiach.gomoku.rule.WinArbiter;
+import cn.wxiach.gomoku.rule.WinConditionCheck;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WinArbiterTest {
+public class WinConditionCheckTest {
 
     private Board board;
 
@@ -31,7 +31,7 @@ public class WinArbiterTest {
         board.set(Board.index(7, 8), Color.WHITE.value());
 
         // Assert that no five in a row exists
-        assertFalse(WinArbiter.checkOver(board));
+        assertFalse(WinConditionCheck.checkOver(board));
     }
 
     // Test case where there is a winner (five in a row)
@@ -47,7 +47,7 @@ public class WinArbiterTest {
         }
 
         // Assert that five in a row is detected
-        assertTrue(WinArbiter.checkOver(board));
+        assertTrue(WinConditionCheck.checkOver(board));
     }
 
     // Test case where white wins with five in a row
@@ -63,7 +63,7 @@ public class WinArbiterTest {
         }
 
         // Assert that white wins with five in a row
-        assertTrue(WinArbiter.checkOver(board));
+        assertTrue(WinConditionCheck.checkOver(board));
     }
 
     // Test case with five in a row and additional stones on the board
@@ -83,7 +83,7 @@ public class WinArbiterTest {
         board.set(Board.index(8, 8), Color.BLACK.value());
 
         // Assert that five in a row is detected despite the additional stones
-        assertTrue(WinArbiter.checkOver(board));
+        assertTrue(WinConditionCheck.checkOver(board));
     }
 
     // Test case with multiple stones but no five in a row
@@ -98,7 +98,7 @@ public class WinArbiterTest {
         board.set(Board.index(8, 7), Color.BLACK.value());
 
         // Assert that no five in a row exists
-        assertFalse(WinArbiter.checkOver(board));
+        assertFalse(WinConditionCheck.checkOver(board));
     }
 
     // Test case with an empty board and no moves made
@@ -106,13 +106,13 @@ public class WinArbiterTest {
     public void testCheckOverWithInvalidBoard() {
         // Check if an empty board results in false
         board.reset();
-        assertFalse(WinArbiter.checkOver(board));
+        assertFalse(WinConditionCheck.checkOver(board));
 
         // Check if a board with no moves also results in false
         for (int i = 0; i < board.length(); i++) {
             board.set(i, Color.EMPTY.value());
         }
-        assertFalse(WinArbiter.checkOver(board));
+        assertFalse(WinConditionCheck.checkOver(board));
     }
 
     // Test case with edge positions (e.g., a five in a row on the edge)
@@ -128,7 +128,7 @@ public class WinArbiterTest {
         }
 
         // Assert that five in a row on the edge is detected
-        assertTrue(WinArbiter.checkOver(board));
+        assertTrue(WinConditionCheck.checkOver(board));
     }
 
 }

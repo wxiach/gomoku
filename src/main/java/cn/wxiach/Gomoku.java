@@ -14,7 +14,6 @@ import javax.swing.*;
 
 public class Gomoku {
 
-    @SuppressWarnings("unused")
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {

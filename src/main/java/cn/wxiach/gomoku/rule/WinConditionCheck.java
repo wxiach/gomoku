@@ -6,7 +6,7 @@ import cn.wxiach.robot.features.GomokuShapeDetector;
 import cn.wxiach.robot.features.PatternCollection;
 import cn.wxiach.utils.BoardUtils;
 
-public class WinArbiter {
+public class WinConditionCheck {
     public static boolean checkOver(Board board) {
         GomokuShapeDetector detector = GomokuShapeDetector.getInstance();
         Board opponentBoard = BoardUtils.reverseStoneColorOnBoard(board.copy());

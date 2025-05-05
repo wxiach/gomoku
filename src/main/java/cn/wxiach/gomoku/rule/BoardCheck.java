@@ -6,9 +6,9 @@ import cn.wxiach.model.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BoardChecker {
+public class BoardCheck {
 
-    private final static Logger logger = LoggerFactory.getLogger(BoardChecker.class);
+    private final static Logger logger = LoggerFactory.getLogger(BoardCheck.class);
 
     public static boolean isOnBoard(Point point) {
         if (point.x() >= 0 && point.x() < Board.SIZE && point.y() >= 0 && point.y() < Board.SIZE) {

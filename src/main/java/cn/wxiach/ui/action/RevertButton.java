@@ -22,6 +22,6 @@ public class RevertButton extends AbstractGameButton {
     protected void subscribeToEvents() {
         subscribe(GameStartEvent.class, event -> setEnabled(true));
         subscribe(GameOverEvent.class, event -> setEnabled(false));
-        subscribe(NewTurnEvent.class, event -> setEnabled(event.getTurn().isSelfTurn()));
+        subscribe(NewTurnEvent.class, event -> setEnabled(event.getTurn().isHumanTurn()));
     }
 }
