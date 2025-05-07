@@ -34,7 +34,7 @@ public class TranspositionTable {
                 evaluation = -evaluation;
             }
 
-            Log.debug(String.format("Hit the cache in TranspositionTable. The score is: %s.", evaluation));
+            Log.debug("Hit the cache in TranspositionTable. The score is: {}", evaluation);
 
             if (transpositionEntry.evaluationType() == TranspositionTable.Entry.EXACT) {
                 return evaluation;

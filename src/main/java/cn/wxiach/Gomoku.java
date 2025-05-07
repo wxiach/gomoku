@@ -51,7 +51,7 @@ public class Gomoku {
             window.setVisible(true);
 
             // Load the default Gomoku preferences
-            Preferences preferences = new Preferences(Level.MEDIUM, Color.BLACK);
+            Preferences preferences = new Preferences(Level.EASY, Color.BLACK);
             GomokuEventBus.getInstance().publish(new PreferencesLoadedEvent(Gomoku.class, preferences));
         });
     }

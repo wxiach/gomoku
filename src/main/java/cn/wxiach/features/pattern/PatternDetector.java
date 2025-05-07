@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public class PatternDetector {
     private final AhoCorasickAutomaton<Pattern> acAutomaton =
-            new AhoCorasickAutomaton<>(PatternCollection.PATTERNS, Pattern::pattern);
+            new AhoCorasickAutomaton<>(Patterns.PATTERNS, Pattern::pattern);
 
     public Collection<Pattern> detect(Collection<String> matchLines) {
         return matchLines.stream().map(this::detectSingleLine)

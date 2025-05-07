@@ -2,7 +2,7 @@ package cn.wxiach;
 
 import cn.wxiach.features.BoardFeatureDetector;
 import cn.wxiach.features.pattern.Pattern;
-import cn.wxiach.features.pattern.PatternCollection;
+import cn.wxiach.features.pattern.Patterns;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
@@ -53,7 +53,7 @@ public class BoardFeatureDetectorTest {
         assertFalse(patterns.isEmpty());
         assertEquals(7, patterns.size());
 
-        assertTrue(patterns.stream().anyMatch(pattern -> pattern.name().equals(PatternCollection.D4)));
+        assertTrue(patterns.stream().anyMatch(pattern -> pattern.name().equals(Patterns.D4)));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class BoardFeatureDetectorTest {
         assertNotNull(patterns);
         assertFalse(patterns.isEmpty());
         assertEquals(3, patterns.size());
-        assertTrue(patterns.stream().anyMatch(pattern -> pattern.name().equals(PatternCollection.D4)));
+        assertTrue(patterns.stream().anyMatch(pattern -> pattern.name().equals(Patterns.D4)));
     }
 
     @Test

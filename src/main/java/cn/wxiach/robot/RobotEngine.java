@@ -9,6 +9,7 @@ import cn.wxiach.model.Level;
 import cn.wxiach.model.Stone;
 import cn.wxiach.robot.search.AlphaBetaSearch;
 import cn.wxiach.robot.search.IterativeDeepeningSearch;
+import cn.wxiach.robot.search.ThreatSearch;
 import cn.wxiach.robot.support.TranspositionTable;
 import cn.wxiach.robot.support.ZobristHash;
 import cn.wxiach.utils.Log;
@@ -36,7 +37,7 @@ public class RobotEngine {
                             (depth) -> alphaBetaSearch.execute(
                                     store.getBoardState().board().copy(),
                                     store.getTurnState().currentTurn(),
-                                    depth,
+                                    depth + ThreatSearch.THREAT_SEARCH_DEPTH,
                                     (result) -> stone.set((Stone) result)
                             ),
                             level.value()
