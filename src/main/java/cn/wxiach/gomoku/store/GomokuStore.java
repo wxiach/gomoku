@@ -2,31 +2,38 @@ package cn.wxiach.gomoku.store;
 
 import cn.wxiach.gomoku.store.state.BoardState;
 import cn.wxiach.gomoku.store.state.GameState;
+import cn.wxiach.gomoku.store.state.LevelState;
 import cn.wxiach.gomoku.store.state.TurnState;
 
 public class GomokuStore {
 
-    private final TurnState turnState = new TurnState();
+		private final TurnState turnState = new TurnState();
 
-    private final BoardState boardState = new BoardState();
+		private final BoardState boardState = new BoardState();
 
-    private final GameState gameState = new GameState();
+		private final GameState gameState = new GameState();
 
-    public TurnState getTurnState() {
-        return turnState;
-    }
+		private final LevelState levelState = new LevelState();
 
-    public BoardState getBoardState() {
-        return boardState;
-    }
+		public TurnState getTurnState() {
+				return turnState;
+		}
 
-    public GameState getGameState() {
-        return gameState;
-    }
+		public BoardState getBoardState() {
+				return boardState;
+		}
 
-    public void reset() {
-        turnState.reset();
-        boardState.reset();
-        gameState.reset();
-    }
+		public GameState getGameState() {
+				return gameState;
+		}
+
+		public LevelState getLevelState() {
+				return levelState;
+		}
+
+		public void reset() {
+				turnState.reset();
+				boardState.reset();
+				gameState.reset();
+		}
 }

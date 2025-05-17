@@ -9,69 +9,69 @@ import cn.wxiach.robot.RobotEngine;
 
 public class GomokuFlow implements EventBusAware {
 
-    private final GomokuStore store = new GomokuStore();
-    private final RobotEngine robot = new RobotEngine();
+		private final GomokuStore store = new GomokuStore();
+		private final RobotEngine robot = new RobotEngine();
 
-    public GomokuFlow() {
-        subscribeToGameStateEvents();
-        subscribeToGameSettingsEvents();
-        subscribeToGameInteractionEvents();
-    }
+		public GomokuFlow() {
+				subscribeToGameStateEvents();
+				subscribeToGameSettingsEvents();
+				subscribeToGameInteractionEvents();
+		}
 
-    private void subscribeToGameStateEvents() {
-        subscribe(GameStartEvent.class, event -> {
-            store.reset();
-            // The game state has been recharged, so the UI has also been updated
-            publish(new BoardUpdateEvent(this, store));
-            publish(new NewTurnEvent(this, store.getTurnState()));
-        });
+		private void subscribeToGameStateEvents() {
+				subscribe(GameStartEvent.class, event -> {
+						store.reset();
+						// The game state has been recharged, so the UI has also been updated
+						publish(new BoardUpdateEvent(this, store));
+						publish(new NewTurnEvent(this, store.getTurnState()));
+				});
 
-        subscribe(NewTurnEvent.class, event -> {
-            if (store.getTurnState().isRobotTurn()) {
-                robot.startCompute(store);
-            }
-        });
+				subscribe(NewTurnEvent.class, event -> {
+						if (store.getTurnState().isRobotTurn()) {
+								robot.compute(store);
+						}
+				});
 
-        subscribe(GameOverEvent.class, event -> store.getGameState().setOver());
-    }
+				subscribe(GameOverEvent.class, event -> store.getGameState().setOver());
+		}
 
-    private void subscribeToGameInteractionEvents() {
-        subscribe(StonePlaceEvent.class, event -> {
-            if (store.getGameState().isOver()) return;
+		private void subscribeToGameInteractionEvents() {
+				subscribe(StonePlaceEvent.class, event -> {
+						if (store.getGameState().isOver()) return;
 
-            // Prevent multiple quick clicks
-            if (event.getStone().color() != store.getTurnState().currentTurn()) return;
+						// Prevent multiple quick clicks
+						if (event.getStone().color() != store.getTurnState().currentTurn()) return;
 
-            store.getBoardState().placeStone(event.getStone());
+						store.getBoardState().placeStone(event.getStone());
 
-            // If the code runs here, it means the stone has been placed successfully.
+						// If the code runs here, it means the stone has been placed successfully.
 
-            publish(new BoardUpdateEvent(this, store));
+						publish(new BoardUpdateEvent(this, store));
 
-            if (WinConditionCheck.checkOver(store.getBoardState().board())) {
-                store.getGameState().setWinner(store.getTurnState().currentTurn());
-                publish(new GameOverEvent(this, store.getGameState().getWinner()));
-            } else {
-                store.getTurnState().switchTurn();
-                publish(new NewTurnEvent(this, store.getTurnState()));
-            }
-        });
+						if (WinConditionCheck.checkWin(store.getBoardState().board(), event.getStone())) {
+								store.getGameState().setWinner(store.getTurnState().currentTurn());
+								publish(new GameOverEvent(this, store.getGameState().getWinner()));
+						} else {
+								store.getTurnState().switchTurn();
+								publish(new NewTurnEvent(this, store.getTurnState()));
+						}
+				});
 
-        subscribe(RevertStoneEvent.class, event -> {
-            if (store.getTurnState().isHumanTurn()) {
-                store.getBoardState().revertStone(2);
-                publish(new BoardUpdateEvent(this, store));
-            }
-        });
-    }
+				subscribe(RevertStoneEvent.class, event -> {
+						if (store.getTurnState().isHumanTurn()) {
+								store.getBoardState().revertStone(2);
+								publish(new BoardUpdateEvent(this, store));
+						}
+				});
+		}
 
-    private void subscribeToGameSettingsEvents() {
-        subscribe(StoneSelectEvent.class, event -> store.getTurnState().setHumanStoneColor(event.getColor()));
-        subscribe(LevelSelectEvent.class, event -> robot.updateRobotLevel(event.getLevel()));
-    }
+		private void subscribeToGameSettingsEvents() {
+				subscribe(StoneSelectEvent.class, event -> store.getTurnState().setHumanStoneColor(event.getColor()));
+				subscribe(LevelSelectEvent.class, event -> store.getLevelState().setLevel(event.getLevel()));
+		}
 
-    @Override
-    public SubscriberPriority defaultSubscriberPriority() {
-        return SubscriberPriority.LOGIC;
-    }
+		@Override
+		public SubscriberPriority defaultSubscriberPriority() {
+				return SubscriberPriority.LOGIC;
+		}
 }

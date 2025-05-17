@@ -3,136 +3,122 @@ package cn.wxiach.model;
 import java.util.Arrays;
 
 /**
- * Represents a 15x15 Gomoku game board.
+ * 表示一个 15x15 的五子棋游戏棋盘。
  * <p>
- * The board uses a one-dimensional char array to store the game state for optimal performance.
- * Each position can be empty or occupied by a black/white stone.
- * The coordinate system uses the top-left corner as the origin (0,0).
+ * 棋盘使用一维字符数组来存储游戏状态以获得最佳性能。
+ * 每个位置可以为空或被黑色/白色棋子占据。
+ * 坐标系以左上角为原点 (0,0)。
  */
 public class Board {
 
-    public static final int SIZE = 15;
-    private final char[] board;
+		public static final int SIZE = 15;
+		private final char[] board;
 
-    /**
-     * Creates an empty game board with all positions initialized to Color.EMPTY.
-     */
-    public Board() {
-        this.board = new char[SIZE * SIZE];
-        Arrays.fill(board, Color.EMPTY.value());
-    }
+		/**
+		 * 创建一个空的游戏棋盘，所有位置初始化为 Color.EMPTY。
+		 */
+		public Board() {
+				this.board = new char[SIZE * SIZE];
+				Arrays.fill(board, Color.EMPTY.value());
+		}
 
-    /**
-     * Creates a board with a predefined state.
-     *
-     * @param board the initial board state as a char array of length SIZE*SIZE
-     * @throws IllegalArgumentException if the board array has incorrect size
-     */
-    public Board(char[] board) {
-        if (board.length != SIZE * SIZE) {
-            throw new IllegalArgumentException("Invalid board size");
-        }
-        this.board = board;
-    }
+		/**
+		 * 拷贝构造函数
+		 *
+		 * @param other 要拷贝的棋盘对象
+		 */
+		public Board(Board other) {
+				// 同一个类的不同实例可以访问彼此的私有成员
+				this.board = Arrays.copyOf(other.board, other.board.length);
+		}
 
-    // Basic getters and board manipulation methods
-    public char[] vector() {
-        return board;
-    }
+		/**
+		 * 获取指定索引位置的棋盘内容。
+		 *
+		 * @param index 一维数组索引
+		 * @return 该位置的棋盘状态，表示为字符（空、黑棋或白棋）
+		 */
+		public char get(int index) {
+				return board[index];
+		}
 
-    public int length() {
-        return board.length;
-    }
+		/**
+		 * 获取棋盘的总长度（即棋盘格子总数）。
+		 *
+		 * @return 棋盘的总格子数，等于 SIZE * SIZE
+		 */
+		public int length() {
+				return board.length;
+		}
 
-    public char get(int index) {
-        return board[index];
-    }
+		/**
+		 * 创建当前棋盘状态的深拷贝。
+		 * 使用System.arraycopy以获得最佳性能。
+		 */
+		public Board copy() {
+				return new Board(this);
+		}
 
-    public void set(int index, char value) {
-        board[index] = value;
-    }
 
-    /**
-     * Places a stone on the board. This is the primary method for making moves.
-     */
-    public void makeMove(Stone stone) {
-        board[index(stone.point())] = stone.color().value();
-    }
+		/**
+		 * 在棋盘上放置一颗棋子。这是下棋的主要方法。
+		 */
+		public void makeMove(Stone stone) {
+				board[index(stone.point())] = stone.color().value();
+		}
 
-    /**
-     * Removes a stone from the board, restoring the position to empty state.
-     * Used for move undo operations.
-     */
-    public void undoMove(Stone stone) {
-        board[index(stone.point())] = Color.EMPTY.value();
-    }
+		/**
+		 * 从棋盘上移除一颗棋子，将该位置恢复为空状态。
+		 * 用于撤销移动操作。
+		 */
+		public void undoMove(Stone stone) {
+				board[index(stone.point())] = Color.EMPTY.value();
+		}
 
-    // Color and stone access methods
-    public Color color(int index) {
-        return Color.of(get(index));
-    }
+		/**
+		 * 获取指定索引位置的棋子信息。
+		 *
+		 * @param index 一维数组索引
+		 * @return 对应位置的棋子对象，包含坐标和颜色信息
+		 */
+		public Stone stone(int index) {
+				return Stone.of(point(index), Color.of(this.board[index]));
+		}
 
-    public Color color(Point point) {
-        return color(index(point));
-    }
+		/**
+		 * 获取指定坐标位置的棋子信息。
+		 *
+		 * @param point 二维棋盘坐标
+		 * @return 对应位置的棋子对象，包含坐标和颜色信息
+		 */
+		public Stone stone(Point point) {
+				return Stone.of(point, Color.of(this.board[index(point)]));
+		}
 
-    public Stone stone(int index) {
-        return Stone.of(point(index), color(index));
-    }
+		/**
+		 * 将一维数组索引转换为二维棋盘坐标。
+		 * <p>
+		 * 转换遵循公式：x = index % SIZE, y = index / SIZE
+		 *
+		 * @param index 一维数组索引
+		 * @return 对应的二维棋盘坐标
+		 */
+		public static Point point(int index) {
+				return Point.of(index % SIZE, index / SIZE);
+		}
 
-    public Stone stone(Point point) {
-        return stone(index(point));
-    }
-
-    public Point point(int index) {
-        return Point.of(x(index), y(index));
-    }
-
-    public void reset() {
-        Arrays.fill(board, Color.EMPTY.value());
-    }
-
-    /**
-     * Converts 2D board coordinates to 1D array index.
-     * <p>
-     * The conversion follows the formula: index = y * SIZE + x
-     * This mapping ensures efficient storage and access of board positions.
-     *
-     * @param x column index (0 to SIZE-1)
-     * @param y row index (0 to SIZE-1)
-     * @return the corresponding index in the internal array
-     */
-    public static int index(int x, int y) {
-        return y * SIZE + x;
-    }
-
-    public static int index(Point point) {
-        return index(point.x(), point.y());
-    }
-
-    /**
-     * Extracts the x-coordinate (column) from an array index.
-     */
-    public static int x(int index) {
-        return index % SIZE;
-    }
-
-    /**
-     * Extracts the y-coordinate (row) from an array index.
-     */
-    public static int y(int index) {
-        return index / SIZE;
-    }
-
-    /**
-     * Creates a deep copy of the current board state.
-     * Uses System.arraycopy for optimal performance.
-     */
-    public Board copy() {
-        char[] newBoard = new char[board.length];
-        System.arraycopy(board, 0, newBoard, 0, board.length);
-        return new Board(newBoard);
-    }
+		/**
+		 * 将二维棋盘坐标转换为一维数组索引。
+		 * <p>
+		 * 转换遵循公式：index = y * SIZE + x
+		 * 这种映射方式确保了棋盘位置的高效存储和访问。
+		 *
+		 * @param point 二维棋盘坐标
+		 * @return 对应于内部数组的索引
+		 */
+		public static int index(Point point) {
+				return point.y() * SIZE + point.x();
+		}
 }
 
 

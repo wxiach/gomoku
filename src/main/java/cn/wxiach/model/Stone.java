@@ -10,17 +10,5 @@ public record Stone(Point point, Color color) {
         String key = point.x() + "," + point.y() + "," + color.value();
         return CACHE.computeIfAbsent(key, k -> new Stone(point, color));
     }
-
-    public static Stone of(int x, int y, Color color) {
-        return of(Point.of(x, y), color);
-    }
-
-    public int x() {
-        return point.x();
-    }
-
-    public int y() {
-        return point.y();
-    }
 }
 
