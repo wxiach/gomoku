@@ -10,18 +10,19 @@ import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 import cn.wxiach.model.Stone;
 import cn.wxiach.pattern.Patterns;
-import cn.wxiach.robot.search.AlphaBetaSearch;
+import cn.wxiach.robot.search.CandidateSearch;
 import cn.wxiach.robot.support.EnhancedBoard;
 import cn.wxiach.utils.Log;
 import cn.wxiach.utils.MathUtils;
 
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RobotEngine {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private final AlphaBetaSearch alphaBetaSearch = new AlphaBetaSearch();
+    private final CandidateSearch candidateSearch = new CandidateSearch();
 
     public void compute(GomokuStore store) {
         executorService.submit(() -> {
@@ -53,14 +54,20 @@ public class RobotEngine {
             // 创建Board的包装类EnhancedBoard, 主要是为了可以实现对棋盘的增量式评分
             EnhancedBoard enhancedBoard = new EnhancedBoard(boardState.board());
 
-            AlphaBetaSearch.Result result = alphaBetaSearch.execute(enhancedBoard, turnState.currentTurn(), depth);
+            Optional<CandidateSearch.Result> result = candidateSearch.execute(enhancedBoard, turnState.currentTurn(), depth);
 
-            if (MathUtils.approximateEqual(result.value(), Patterns.A5.value(), 1.15)) {
-                Log.info("Iterative deepening Search finish in {} depth, the value is {}", depth, result.value());
-                return result.stone();
+            if (result.isPresent()) {
+                // 记录当前计算出的最佳落子点
+                stone = result.get().stone();
+
+                // 如果当前计算出的最佳落子点的评估值等于A5，则表示当前局面是必赢局面
+                int resultValue = result.get().value();
+                if (MathUtils.approximateEqual(resultValue, Patterns.A5.value(), 1.15)) {
+                    Log.info("Iterative deepening Search finish in {} depth, the value is {}", depth, resultValue);
+                    // 如果当前局面是必赢局面，则直接返回当前计算出的最佳落子点
+                    return stone;
+                }
             }
-
-            stone = result.stone();
         }
 
         return stone;
