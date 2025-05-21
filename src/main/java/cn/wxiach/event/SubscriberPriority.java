@@ -1,17 +1,14 @@
 package cn.wxiach.event;
 
 /**
- * Defines the priority levels for event subscribers.
- * Higher integer values correspond to higher priority (executed first).
+ * 为事件订阅者定义优先级。
+ * 更高的整数值对应更高的优先级（首先执行）。
  */
 public enum SubscriberPriority {
-    /** For core game state updates, rule checks, and critical logic. */
     LOGIC(100),
 
-    /** For UI updates, triggering subsequent actions (like AI compute). */
     UI(50), // Default priority
 
-    /** For auxiliary effects like sound playback, logging. */
     EFFECT(0);
 
     private final int value;

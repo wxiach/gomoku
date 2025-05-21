@@ -28,10 +28,9 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
     public static final int UNIT_DIMENSION = 40;
     public static final int STONE_DIMENSION = 30;
-    private static final int BOARD_DIMENSION = (Board.SIZE - 1) * UNIT_DIMENSION;
-    // OFFSET equals UNIT_SIZE which is both easy to calculate and nice to look at
+    // OFFSET 等于 UNIT_SIZE 既好计算又好看
     public static final int OFFSET = UNIT_DIMENSION;
-
+    private static final int BOARD_DIMENSION = (Board.SIZE - 1) * UNIT_DIMENSION;
     private GomokuStore store;
 
     private Point cursorTip;
@@ -45,45 +44,45 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // Calling the super method ensures that other components are painted correctly.
+        // 调用父类方法确保其他组件正确绘制。
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        // 1. Turn on all optimizations at once
+        // 1. 一次性开启所有优化
         enableGraphicsOptimizations(g2d);
 
         g2d.drawImage(ImageAssets.getBoardImage(), 0, 0, getWidth(), getHeight(), this);
 
-        // 2. Draw board coordinate
+        // 2. 绘制棋盘坐标
         g2d.setFont(FontAssets.LXGWWenKaiMonoScreen.deriveFont(Font.BOLD, 14f));
         g2d.setColor(java.awt.Color.BLACK);
 
         char[] verticalCoordinateTable = "ABCDEFGHJKLMNOP".toCharArray();
 
         for (int i = 0; i < Board.SIZE; i++) {
-            // Horizontal coordinate
+            // 水平坐标
             String horizontalCoordinateValue = String.valueOf(i + 1);
             int textWidth = g2d.getFontMetrics().stringWidth(horizontalCoordinateValue);
             g2d.drawString(horizontalCoordinateValue, UNIT_DIMENSION - textWidth - 16, UNIT_DIMENSION + i * UNIT_DIMENSION + 4);
-            // Vertical coordinate
+            // 垂直坐标
             String verticalCoordinateValue = String.valueOf(verticalCoordinateTable[i]);
             g2d.drawString(verticalCoordinateValue, UNIT_DIMENSION + i * UNIT_DIMENSION - 5, 24);
         }
 
-        // Steps 3 to 6 will have been completed on the board,
-        // so move the draw origin to the top-left boundary of the board.
+        // 步骤3到6将在棋盘上完成，
+        // 因此将绘制原点移动到棋盘的左上边界。
         g2d.translate(OFFSET, OFFSET);
 
-        // 3. Draw board lines with a margin around the edges.
+        // 3. 绘制棋盘线，边缘留有边距。
         g2d.setStroke(new BasicStroke(1.1f));
         for (int i = 0; i < Board.SIZE; i++) {
-            // Vertical lines
+            // 垂直线
             g2d.drawLine(i * UNIT_DIMENSION, 0, i * UNIT_DIMENSION, BOARD_DIMENSION);
-            // Horizontal lines
+            // 水平线
             g2d.drawLine(0, i * UNIT_DIMENSION, BOARD_DIMENSION, i * UNIT_DIMENSION);
         }
 
-        // 3. Draw Tengen and four corners star points
+        // 3. 绘制天元和四角星位
         int tengenAndStarsSize = 4;
         List<Point> tengenAndStars = List.of(
                 Point.of(7, 7),
@@ -95,7 +94,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             g2d.translate(-coordinate.x(), -coordinate.y());
         });
 
-        // 4. Draw a cursor tip
+        // 4. 绘制光标提示
         if (cursorTip != null && BoardCheck.isOnBoard(cursorTip) && !store.getGameState().isOver() && store.getTurnState().isHumanTurn()) {
             Coordinate coordinate = Coordinate.fromPoint(cursorTip, UNIT_DIMENSION, 0);
             if (store == null || BoardCheck.isEmpty(store.getBoardState().board(), cursorTip)) {
@@ -119,14 +118,14 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
         if (store == null) return;
 
-        // 5. Draw stones
+        // 5. 绘制棋子
         CollectionUtils.forEachWithIndex(store.getBoardState().stoneSequence(), (index, stone) -> {
             Image image = stone.color() == Color.BLACK ? ImageAssets.getBlackStone() : ImageAssets.getWhiteStone();
             Coordinate coordinate = Coordinate.fromPoint(stone.point(), UNIT_DIMENSION, 0);
             g2d.translate(coordinate.x(), coordinate.y());
             g2d.drawImage(image, -STONE_DIMENSION / 2, -STONE_DIMENSION / 2, STONE_DIMENSION, STONE_DIMENSION, this);
 
-            // Add an ordinal number to each stone
+            // 为每个棋子添加序号
             if (stone.color() == Color.BLACK) {
                 g2d.setColor(java.awt.Color.WHITE);
             } else {
@@ -138,7 +137,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             g2d.translate(-coordinate.x(), -coordinate.y());
         });
 
-        // 6. Highlight last stone
+        // 6. 高亮最后一个棋子
         if (!store.getBoardState().stoneSequence().isEmpty()) {
             Coordinate coordinate = Coordinate.fromPoint(store.getBoardState().stoneSequence().getLast().point(), UNIT_DIMENSION, 0);
 
@@ -159,7 +158,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
         g2d.translate(-OFFSET, -OFFSET);
 
-        // 7. Draw game result
+        // 7. 绘制游戏结果
         if (store != null && store.getGameState().isOver()) {
             String text = "你认输了";
             g2d.setColor(java.awt.Color.RED);
@@ -172,7 +171,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             }
 
             g2d.setFont(FontAssets.LXGWWenKaiMonoScreen.deriveFont(Font.BOLD, 64));
-            // Calculate the text width so that it is centered
+            // 计算文本宽度以使其居中
             int textWidth = g2d.getFontMetrics().stringWidth(text);
             g2d.drawString(text, (getWidth() - textWidth) / 2, getHeight() / 3);
         }
@@ -180,7 +179,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
 
     /**
-     * Turn on all optimizations at once
+     * 一次性开启所有优化
      *
      * @param g2d
      */
@@ -197,7 +196,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                // Prevent JPanel from responding to mouse click events
+                // 防止 JPanel 响应鼠标点击事件
                 if (isEnabled()) {
                     long currentTime = System.currentTimeMillis();
                     if (currentTime - time < 500) return;

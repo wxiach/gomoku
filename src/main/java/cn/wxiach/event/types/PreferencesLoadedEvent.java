@@ -10,12 +10,6 @@ public class PreferencesLoadedEvent extends GomokuEvent {
 
     private final Preferences preferences;
 
-    /**
-     * Constructs a prototypical Event.
-     *
-     * @param source the object on which the Event initially occurred
-     * @throws IllegalArgumentException if source is null
-     */
     public PreferencesLoadedEvent(Object source, Preferences preferences) {
         super(source);
         this.preferences = preferences;

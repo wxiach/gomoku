@@ -4,6 +4,7 @@ import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.model.Stone;
 
 public class StonePlaceEvent extends GomokuEvent {
+
     private final Stone stone;
 
     public StonePlaceEvent(Object source, Stone stone) {

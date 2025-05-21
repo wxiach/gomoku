@@ -10,13 +10,12 @@ public class CollectionUtils {
         return !collection.isEmpty();
     }
 
-
     /**
-     * Iterate through a LinkedHashSet and apply a consumer to each element with its index.
+     * 遍历 LinkedHashSet，并为每个元素及其索引应用一个 consumer。
      *
-     * @param set
-     * @param consumer
-     * @param <T>
+     * @param set      要遍历的集合
+     * @param consumer 处理索引和元素的操作
+     * @param <T>      元素类型
      */
     public static <T> void forEachWithIndex(LinkedHashSet<T> set, BiConsumer<Integer, T> consumer) {
         int index = 0;

@@ -13,14 +13,6 @@ public enum Color {
         this.text = text;
     }
 
-    public char value() {
-        return value;
-    }
-
-    public String text() {
-        return text;
-    }
-
     public static Color of(char value) {
         return switch (value) {
             case '0' -> EMPTY;
@@ -31,11 +23,19 @@ public enum Color {
     }
 
     /**
-     * Used to switch stone's color between black and white.
+     * 用于在黑白棋之间切换棋子的颜色。
      */
     public static Color reverse(Color color) {
         if (color == Color.EMPTY) return color;
         return color == Color.BLACK ? Color.WHITE : Color.BLACK;
+    }
+
+    public char value() {
+        return value;
+    }
+
+    public String text() {
+        return text;
     }
 }
 

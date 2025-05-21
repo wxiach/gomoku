@@ -30,7 +30,7 @@ public class RobotEngine {
                 Stone stone = doCompute(store.getBoardState(), store.getTurnState(), store.getLevelState());
                 GomokuEventBus.getInstance().publish(new StonePlaceEvent(this, stone));
             } catch (Exception e) {
-                Log.error("Robot compute error: ", e);
+                throw new RobotException("Robot compute error", e);
             }
         });
     }

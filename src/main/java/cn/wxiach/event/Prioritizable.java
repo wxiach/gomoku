@@ -1,16 +1,15 @@
 package cn.wxiach.event;
 
 /**
- * Interface indicating that a class can provide a default priority
- * for its event handling logic.
+ * 为事件处理逻辑提供默认的优先级
  */
 @FunctionalInterface
 public interface Prioritizable {
 
     /**
-     * Gets the default priority level for this subscriber.
+     * 获取该订阅者的优先级
      *
-     * @return The default SubscriberPriority.
+     * @return 订阅者的优先级
      */
     SubscriberPriority defaultSubscriberPriority();
 } 

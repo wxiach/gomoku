@@ -7,8 +7,9 @@ package cn.wxiach.pattern;
  * @param value 估值
  */
 public record Pattern(PatternName name, String black, String white, int value) implements Comparable<Pattern> {
-		@Override
-		public int compareTo(Pattern o) {
-				return Integer.compare(this.value, o.value);
-		}
+
+    @Override
+    public int compareTo(Pattern o) {
+        return Integer.compare(this.value, o.value);
+    }
 }

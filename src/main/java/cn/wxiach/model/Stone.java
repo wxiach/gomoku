@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public record Stone(Point point, Color color) {
+
     private static final Map<String, Stone> CACHE = new ConcurrentHashMap<>();
 
     public static Stone of(Point point, Color color) {

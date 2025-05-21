@@ -1,91 +1,89 @@
-# Gomoku Game with AI
-
-[中文](./README_ZH.md) | English
+# Gomoku - 五子棋对弈系统
 
 [![JDK](https://img.shields.io/badge/JDK-21-brightgreen.svg)](https://jdk.java.net/21/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![GUI](https://img.shields.io/badge/GUI-Swing-orange.svg)]()
 
-A Java-based Gomoku (Five in a Row) game with AI opponent.
+基于 Java 开发的五子棋对弈系统，支持 AI 对战。
 
-> AI's current search depth is limited to 6 layers, improvements are ongoing.
+> AI 当前搜索深度限制为 6 层，正在持续优化中。
 
-<img src="screenshot/gomoku.png" width="480" alt="Game Screenshot">
+<img src="screenshot/gomoku.png" width="480" alt="游戏截图">
 
-## Features & Implementation
+## 功能特性
 
-### Core Features
+### 核心功能
 
-- AI vs Human gameplay with three difficulty levels (Beginner-4, Amateur-6, Professional-8 depths)
-- Game utilities: undo moves, timer, stone color selection
-- Clean and intuitive interface
+- AI 对战支持三个难度等级（初级-4层、进阶-6层、专业-8层）
+- 游戏工具：悔棋、计时器、棋子颜色选择
+- 清爽直观的界面
 
-### Technical Features
+### 技术特性
 
-1. **AI Decision System**
-    - Iterative deepening Alpha-Beta pruning search
-    - Position evaluation with pattern recognition and threat analysis
-    - Fast pattern matching using Aho-Corasick automaton
+1. **AI 决策系统**
+    - 迭代加深的 Alpha-Beta 剪枝搜索
+    - 基于棋型识别和威胁分析的局面评估
+    - 使用 AC 自动机进行快速棋型匹配
 
-2. **Performance Optimizations**
-    - Heuristic move ordering for search efficiency
-    - Position caching with Zobrist hashing
-    - Efficient board representation (1D array, 15x15)
-    - Object pooling for memory optimization
+2. **性能优化**
+    - 启发式走法排序提升搜索效率
+    - 使用 Zobrist 哈希进行局面缓存
+    - 高效的棋盘表示（一维数组，15x15）
+    - 对象池优化内存使用
 
-3. **Architecture**
-    - Event-driven design using EventBus for UI-Logic decoupling
+3. **架构设计**
+    - 基于 EventBus 的事件驱动设计，实现 UI-逻辑解耦
 
-## Project Structure
+## 项目结构
 
 ```
 src/main/java/cn/wxiach/
-├── gomoku/         # Core Gomoku game logic
-│   ├── rule/       # Game rules and validation
-│   └── store/      # Game state management (formerly state/)
-├── model/          # Basic data models
-├── event/          # Event bus system
-├── features/       # Board feature extraction
-│   └── pattern/    # Pattern definitions and collections
-├── robot/          # AI robot implementation
-│   ├── search/     # Search algorithms
-│   ├── evaluation/ # Position evaluation logic
-│   └── support/    # AI support classes
-├── ui/             # User interface
-│   ├── board/      # Board panel related
-│   ├── action/     # User action handling
-│   ├── time/       # Timer related
-│   ├── settings/   # Settings related
-│   ├── window/     # Window management
-│   └── common/     # Common UI components/logic
-├── utils/          # General utility classes
-└── Gomoku.java     # Main application entry point
+├── gomoku/         # 核心五子棋游戏逻辑
+│   ├── rule/       # 游戏规则和校验
+│   └── store/      # 游戏状态管理 (原 state/)
+├── model/          # 基础数据模型
+├── event/          # 事件总线系统
+├── features/       # 棋盘特征提取
+│   └── pattern/    # 模式定义与集合
+├── robot/          # AI 机器人实现
+│   ├── search/     # 搜索算法
+│   ├── evaluation/ # 局面评估逻辑
+│   └── support/    # AI 辅助类
+├── ui/             # 用户界面
+│   ├── board/      # 棋盘面板相关
+│   ├── action/     # 用户动作处理
+│   ├── time/       # 计时器相关
+│   ├── settings/   # 设置相关
+│   ├── window/     # 窗口管理
+│   └── common/     # UI 通用组件/逻辑
+├── utils/          # 通用工具类
+└── Gomoku.java     # 主程序入口
 ```
 
-## Requirements
+## 环境要求
 
-- JDK 21 or higher
-- Gradle 8.5 or higher
+- JDK 21 或更高版本
+- Gradle 8.5 或更高版本
 
-## Roadmap
+## 开发计划
 
-- [ ] **Move Ordering Enhancement**: Implement history and killer heuristics to improve pruning efficiency
-- [ ] **VCT Module**: Add Victory by Continuous Threats algorithm for critical positions
-- [ ] **Opening Book**: Introduce standard opening moves database
+- [ ] **走法排序优化**: 实现历史启发和杀手启发以提升剪枝效率
+- [ ] **VCT 模块**: 添加连续威胁胜利算法用于关键局面
+- [ ] **开局库**: 引入标准开局数据库
 
-## Contributing
+## 参与贡献
 
-Issues and Pull Requests are welcome.
+欢迎提交 Issue 和 Pull Request。
 
-## License
+## 开源协议
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+本项目基于 MIT 协议开源 - 详见 [LICENSE](LICENSE) 文件。
 
-## References
+## 参考文献
 
-### Papers
+### 论文
 
-1. Yu Cheng, Xiaofeng Lei. Research and Improvement of Alpha-Beta Search Algorithm in Gomoku[J]. Information Technology,
-   2008(1):148-150.
-2. Hongan Dong. Research and Implementation of Computer Gomoku Game System[D]. Xidian University, 2010.
+1. 程昱, 雷小峰. 五子棋Alpha-Beta搜索算法的研究与改进[J]. 信息技术, 2008(1):148-150.
+2. 董洪安. 计算机五子棋博弈系统的研究与实现[D]. 西安电子科技大学, 2010.
+

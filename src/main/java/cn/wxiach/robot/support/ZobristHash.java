@@ -21,36 +21,36 @@ import java.util.Random;
  * @author wxiach 2025/5/10
  */
 public enum ZobristHash {
-		INSTANCE;
+    INSTANCE;
 
-		private final long[][] table = new long[Board.SIZE * Board.SIZE][2];
+    private final long[][] table = new long[Board.SIZE * Board.SIZE][2];
 
-		ZobristHash() {
-				Random random = new Random();
-				for (int i = 0; i < table.length; i++) {
-						table[i][0] = random.nextLong();
-						table[i][1] = random.nextLong();
-				}
-		}
+    ZobristHash() {
+        Random random = new Random();
+        for (int i = 0; i < table.length; i++) {
+            table[i][0] = random.nextLong();
+            table[i][1] = random.nextLong();
+        }
+    }
 
-		public static long compute(Board board) {
-				return INSTANCE.computeHash(board);
-		}
+    public static long compute(Board board) {
+        return INSTANCE.computeHash(board);
+    }
 
-		public static long update(long hash, Stone stone) {
-				return INSTANCE.updateHash(hash, stone);
-		}
+    public static long update(long hash, Stone stone) {
+        return INSTANCE.updateHash(hash, stone);
+    }
 
-		private long computeHash(Board board) {
-				long hash = 0;
-				for (int i = 0; i < board.length(); i++) {
-						if (board.get(i) == Color.EMPTY.value()) continue;
-						hash ^= table[i][board.get(i) == Color.BLACK.value() ? 0 : 1];
-				}
-				return hash;
-		}
+    private long computeHash(Board board) {
+        long hash = 0;
+        for (int i = 0; i < board.length(); i++) {
+            if (board.get(i) == Color.EMPTY.value()) continue;
+            hash ^= table[i][board.get(i) == Color.BLACK.value() ? 0 : 1];
+        }
+        return hash;
+    }
 
-		private long updateHash(long hash, Stone stone) {
-				return hash ^ table[Board.index(stone.point())][stone.color() == Color.BLACK ? 0 : 1];
-		}
+    private long updateHash(long hash, Stone stone) {
+        return hash ^ table[Board.index(stone.point())][stone.color() == Color.BLACK ? 0 : 1];
+    }
 }

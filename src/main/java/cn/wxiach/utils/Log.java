@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public class Log {
 
-    // This is used to obtain stack trace information, which retains class references
+    // 用于获取堆栈跟踪信息，保留类引用
     private static final StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
 
     private static Logger getLogger() {

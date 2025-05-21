@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public record Coordinate(int x, int y) {
+
     private static final Map<String, Coordinate> CACHE = new HashMap<>();
 
     public static Coordinate of(int x, int y) {

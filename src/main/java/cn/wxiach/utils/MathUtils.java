@@ -6,12 +6,12 @@ package cn.wxiach.utils;
 public class MathUtils {
 
     /**
-     * Determines if two double values are approximately equal within a given threshold.
+     * 判断两个 double 值在给定阈值范围内是否近似相等。
      *
-     * @param a         The first double value.
-     * @param b         The second double value.
-     * @param threshold The threshold for approximation. Must be greater than 0.
-     * @return True if the values are approximately equal, false otherwise.
+     * @param a         第一个 double 值。
+     * @param b         第二个 double 值。
+     * @param threshold 近似判断的阈值。必须大于 0。
+     * @return 如果两个值近似相等则返回 true，否则返回 false。
      */
     public static boolean approximateEqual(double a, double b, double threshold) {
         if (b == 0) {

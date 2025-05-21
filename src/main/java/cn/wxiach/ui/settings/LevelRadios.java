@@ -7,8 +7,8 @@ import cn.wxiach.model.Level;
 import cn.wxiach.ui.common.components.AbstractRadioGroup;
 
 /**
- * Radio button group for selecting the game difficulty level.
- * Initializes with a default value and updates based on PreferencesLoadedEvent.
+ * 难度选择单选按钮组。
+ * 初始化时有默认值，并会根据PreferencesLoadedEvent进行更新。
  */
 public class LevelRadios extends AbstractRadioGroup<Level> {
 
@@ -18,15 +18,15 @@ public class LevelRadios extends AbstractRadioGroup<Level> {
 
     @Override
     protected void subscribeToCustomEvents() {
-        // Subscribe to PreferencesLoadedEvent to set the initial selection
+        // 订阅PreferencesLoadedEvent以设置初始选择
         subscribe(PreferencesLoadedEvent.class, event -> setSelectedValue(event.getPreferences().level()));
     }
 
     /**
-     * Creates a LevelSelectEvent when the difficulty level selection changes.
+     * 当难度选择变化时创建LevelSelectEvent。
      *
-     * @param selectedValue The newly selected Level.
-     * @return A new LevelSelectEvent.
+     * @param selectedValue 新选择的难度等级。
+     * @return 新的LevelSelectEvent。
      */
     @Override
     protected GomokuEvent createSelectEvent(Level selectedValue) {

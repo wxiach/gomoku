@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Abstract base class for a group of JRadioButtons backed by an Enum type
- * where the Enum provides its own display text via a text() method.
- * Handles automatic button creation, selection state, and event publishing.
+ * 基于枚举类型的JRadioButton分组抽象基类，
+ * 要求枚举类型实现text()方法用于显示文本。
+ * 自动处理按钮创建、选中状态和事件发布。
  *
- * @param <T> The Enum type (must have a text() method).
+ * @param <T> 枚举类型（必须有text()方法）。
  */
 public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel implements EventBusAware {
 
@@ -27,10 +27,10 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
     private final Map<AbstractButton, T> buttonValueMap = new HashMap<>();
 
     /**
-     * Constructs the radio group and initializes it with the specified enum choices.
+     * 构造单选按钮组并用指定的枚举选项初始化。
      *
-     * @param title   The title text for the group.
-     * @param choices The Enum constants to create buttons for.
+     * @param title   分组标题文本。
+     * @param choices 要创建按钮的枚举常量。
      */
     @SafeVarargs
     public AbstractRadioGroup(String title, T... choices) {
@@ -58,11 +58,11 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
     }
 
     /**
-     * Creates JRadioButtons for the specified enum choices.
-     * Requires each choice's enum type to have a public String text() method.
+     * 为指定的枚举选项创建JRadioButton。
+     * 要求每个选项的枚举类型有public String text()方法。
      *
-     * @param choices The specific Enum constants to create buttons for.
-     * @throws RuntimeException if the required text() method is missing or fails.
+     * @param choices 要创建按钮的具体枚举常量。
+     * @throws RuntimeException 如果缺少text()方法或调用失败。
      */
     @SafeVarargs
     private void initializeButtons(T... choices) {
@@ -98,16 +98,16 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
 
 
     /**
-     * Creates the specific GomokuEvent to publish when selection changes.
-     * Subclasses determine the exact event type.
+     * 创建选中变化时要发布的具体GomokuEvent。
+     * 由子类决定具体事件类型。
      *
-     * @param selectedValue The newly selected enum value.
-     * @return The GomokuEvent for the selection change.
+     * @param selectedValue 新选中的枚举值。
+     * @return 选中变化对应的GomokuEvent。
      */
     protected abstract GomokuEvent createSelectEvent(T selectedValue);
 
     /**
-     * Adds an ActionListener to each button to publish selection events via the EventBus.
+     * 为每个按钮添加ActionListener，通过事件总线发布选中事件。
      */
     private void setupListeners() {
         ActionListener listener = e -> {
@@ -124,6 +124,9 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
     }
 
 
+    /**
+     * 订阅相关事件，控制按钮组的启用/禁用。
+     */
     private void subscribeToEvents() {
         subscribe(GameStartEvent.class, event -> setRadioButtonsEnabled(false));
         subscribe(GameOverEvent.class, event -> setRadioButtonsEnabled(true));
@@ -131,13 +134,13 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
     }
 
     protected void subscribeToCustomEvents() {
-        // Subclasses can override this method to subscribe to additional events
+        // 子类可重写此方法以订阅额外事件
     }
 
     /**
-     * Enables or disables all radio buttons and the title label in the group.
+     * 启用或禁用分组内所有单选按钮和标题标签。
      *
-     * @param enabled true to enable, false to disable.
+     * @param enabled true启用，false禁用。
      */
     protected void setRadioButtonsEnabled(boolean enabled) {
         radioGroupTitle.setEnabled(enabled);
@@ -147,10 +150,10 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
     }
 
     /**
-     * Programmatically selects the radio button corresponding to the given value.
-     * Does nothing if the value is null or no button corresponds to the value.
+     * 以编程方式选中对应值的单选按钮。
+     * 如果值为null或未找到对应按钮则无操作。
      *
-     * @param valueToSelect The Enum value to select.
+     * @param valueToSelect 要选中的枚举值。
      */
     public void setSelectedValue(T valueToSelect) {
         if (valueToSelect == null) {

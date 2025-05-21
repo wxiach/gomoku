@@ -4,10 +4,10 @@ import cn.wxiach.model.Color;
 
 public class TurnState {
 
-    // The stone color of the human player
+    // 玩家的棋子颜色
     private Color humanStoneColor;
 
-    // Set the default turn to black
+    // 默认是黑棋先行
     private Color currentTurn = Color.BLACK;
 
     public void switchTurn() {

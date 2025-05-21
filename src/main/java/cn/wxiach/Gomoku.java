@@ -18,39 +18,39 @@ public class Gomoku {
 
         SwingUtilities.invokeLater(() -> {
 
-            // Set as the system's native Look and Feel
+            // 设置为系统原生外观
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 Log.error("Failed to set system look and feel", e);
             }
 
-            // Set the default font for the application
+            // 设置应用程序默认字体
             FontAssets.setGlobalFont(FontAssets.LXGWWenKaiMonoScreen);
 
-            // Create a new Gomoku window
+            // 创建新的五子棋窗口
             GomokuWindow window = new GomokuWindow();
 
-            // Set the window properties
+            // 设置窗口属性
             window.setTitle("五子棋 - 与 AI 对战");
             window.setIconImage(ImageAssets.getLogoImage());
 
-            // Set the default close operation for the window
+            // 设置窗口默认关闭操作
             window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-            // Set the size of the window
+            // 设置窗口大小
             window.pack();
 
-            // Set the window to be non-resizable
+            // 设置窗口不可调整大小
             window.setResizable(false);
 
-            // Center the window on the screen
+            // 窗口居中显示
             window.setLocationRelativeTo(null);
 
-            // Set the window to be visible
+            // 设置窗口可见
             window.setVisible(true);
 
-            // Load the default Gomoku preferences
+            // 加载默认五子棋偏好设置
             Preferences preferences = new Preferences(Level.EASY, Color.BLACK);
             GomokuEventBus.getInstance().publish(new PreferencesLoadedEvent(Gomoku.class, preferences));
         });

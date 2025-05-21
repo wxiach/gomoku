@@ -7,8 +7,8 @@ import cn.wxiach.model.Color;
 import cn.wxiach.ui.common.components.AbstractRadioGroup;
 
 /**
- * Radio button group for selecting the player's stone color (Black or White).
- * Initializes with a default value and updates based on ConfigurationLoadedEvent.
+ * 棋子颜色选择单选按钮组（黑棋或白棋）。
+ * 初始化时有默认值，并会根据ConfigurationLoadedEvent进行更新。
  */
 public class StoneRadios extends AbstractRadioGroup<Color> {
 
@@ -18,15 +18,15 @@ public class StoneRadios extends AbstractRadioGroup<Color> {
 
     @Override
     protected void subscribeToCustomEvents() {
-        // Subscribe to PreferencesLoadedEvent to set the initial selection
+        // 订阅PreferencesLoadedEvent以设置初始选择
         subscribe(PreferencesLoadedEvent.class, event -> setSelectedValue(event.getPreferences().color()));
     }
 
     /**
-     * Creates a StoneSelectEvent when the color selection changes.
+     * 当颜色选择变化时创建StoneSelectEvent。
      *
-     * @param selectedValue The newly selected Color.
-     * @return A new StoneSelectEvent.
+     * @param selectedValue 新选择的棋子颜色。
+     * @return 新的StoneSelectEvent。
      */
     @Override
     protected GomokuEvent createSelectEvent(Color selectedValue) {

@@ -17,7 +17,7 @@ import java.awt.*;
 public class GomokuTimeBoard extends JPanel implements EventBusAware {
 
     private static final float TIMER_FONT_SIZE = 34f;
-    private static final int TIMER_DELAY = 1000; // milliseconds
+    private static final int TIMER_DELAY = 1000; // 毫秒
 
     private final TimeBoard blackTimeBoard = new TimeBoard("黑棋");
     private final TimeBoard whiteTimeBoard = new TimeBoard("白棋");
@@ -88,6 +88,10 @@ public class GomokuTimeBoard extends JPanel implements EventBusAware {
             add(label);
         }
 
+        private static String formatTime(int seconds) {
+            return String.format("%02d:%02d", seconds / 60, seconds % 60);
+        }
+
         void start() {
             timer.start();
         }
@@ -104,10 +108,6 @@ public class GomokuTimeBoard extends JPanel implements EventBusAware {
 
         void updateLabel() {
             label.setText(formatTime(timeSeconds));
-        }
-
-        private static String formatTime(int seconds) {
-            return String.format("%02d:%02d", seconds / 60, seconds % 60);
         }
     }
 }

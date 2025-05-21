@@ -4,6 +4,7 @@ import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.model.Color;
 
 public class GameOverEvent extends GomokuEvent {
+
     private final Color winner;
 
     public GameOverEvent(Object source, Color winner) {

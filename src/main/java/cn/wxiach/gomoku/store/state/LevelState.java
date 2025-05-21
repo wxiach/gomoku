@@ -6,13 +6,14 @@ import cn.wxiach.model.Level;
  * @author wxiach 2025/5/14
  */
 public class LevelState {
-		private Level level;
 
-		public Level getLevel() {
-				return level;
-		}
+    private Level level;
 
-		public void setLevel(Level level) {
-				this.level = level;
-		}
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
 }

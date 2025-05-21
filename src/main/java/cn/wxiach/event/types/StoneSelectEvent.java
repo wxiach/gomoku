@@ -4,6 +4,7 @@ import cn.wxiach.event.GomokuEvent;
 import cn.wxiach.model.Color;
 
 public class StoneSelectEvent extends GomokuEvent {
+
     private final Color color;
 
     public StoneSelectEvent(Object source, Color color) {
