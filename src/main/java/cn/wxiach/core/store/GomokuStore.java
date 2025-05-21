@@ -1,9 +1,9 @@
-package cn.wxiach.gomoku.store;
+package cn.wxiach.core.store;
 
-import cn.wxiach.gomoku.store.state.BoardState;
-import cn.wxiach.gomoku.store.state.GameState;
-import cn.wxiach.gomoku.store.state.LevelState;
-import cn.wxiach.gomoku.store.state.TurnState;
+import cn.wxiach.core.store.state.BoardState;
+import cn.wxiach.core.store.state.GameState;
+import cn.wxiach.core.store.state.LevelState;
+import cn.wxiach.core.store.state.TurnState;
 
 public class GomokuStore {
 

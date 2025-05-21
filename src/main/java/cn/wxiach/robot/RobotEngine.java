@@ -1,11 +1,11 @@
 package cn.wxiach.robot;
 
+import cn.wxiach.core.store.GomokuStore;
+import cn.wxiach.core.store.state.BoardState;
+import cn.wxiach.core.store.state.LevelState;
+import cn.wxiach.core.store.state.TurnState;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.types.StonePlaceEvent;
-import cn.wxiach.gomoku.store.GomokuStore;
-import cn.wxiach.gomoku.store.state.BoardState;
-import cn.wxiach.gomoku.store.state.LevelState;
-import cn.wxiach.gomoku.store.state.TurnState;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;
 import cn.wxiach.model.Stone;

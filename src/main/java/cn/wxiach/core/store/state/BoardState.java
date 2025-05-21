@@ -1,7 +1,7 @@
-package cn.wxiach.gomoku.store.state;
+package cn.wxiach.core.store.state;
 
-import cn.wxiach.gomoku.rule.BoardCheck;
-import cn.wxiach.gomoku.rule.PositionOccupiedException;
+import cn.wxiach.core.rule.BoardCheck;
+import cn.wxiach.core.rule.PositionOccupiedException;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Stone;
 

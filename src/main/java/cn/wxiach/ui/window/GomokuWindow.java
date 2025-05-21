@@ -1,7 +1,7 @@
 package cn.wxiach.ui.window;
 
 
-import cn.wxiach.gomoku.GomokuFlow;
+import cn.wxiach.core.GomokuFlow;
 import cn.wxiach.ui.action.RevertButton;
 import cn.wxiach.ui.action.StartGameButton;
 import cn.wxiach.ui.action.SurrenderButton;

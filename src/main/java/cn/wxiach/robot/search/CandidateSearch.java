@@ -1,6 +1,6 @@
 package cn.wxiach.robot.search;
 
-import cn.wxiach.gomoku.rule.BoardCheck;
+import cn.wxiach.core.rule.BoardCheck;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;

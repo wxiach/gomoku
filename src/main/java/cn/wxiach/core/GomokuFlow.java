@@ -1,10 +1,10 @@
-package cn.wxiach.gomoku;
+package cn.wxiach.core;
 
+import cn.wxiach.core.rule.WinConditionCheck;
+import cn.wxiach.core.store.GomokuStore;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.SubscriberPriority;
 import cn.wxiach.event.types.*;
-import cn.wxiach.gomoku.rule.WinConditionCheck;
-import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.robot.RobotEngine;
 
 public class GomokuFlow implements EventBusAware {

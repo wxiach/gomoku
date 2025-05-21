@@ -1,5 +1,7 @@
 package cn.wxiach.ui.board;
 
+import cn.wxiach.core.rule.BoardCheck;
+import cn.wxiach.core.store.GomokuStore;
 import cn.wxiach.event.EventBusAware;
 import cn.wxiach.event.GomokuEventBus;
 import cn.wxiach.event.SubscriberPriority;
@@ -7,8 +9,6 @@ import cn.wxiach.event.types.BoardUpdateEvent;
 import cn.wxiach.event.types.GameOverEvent;
 import cn.wxiach.event.types.GameStartEvent;
 import cn.wxiach.event.types.StonePlaceEvent;
-import cn.wxiach.gomoku.rule.BoardCheck;
-import cn.wxiach.gomoku.store.GomokuStore;
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;
 import cn.wxiach.model.Point;

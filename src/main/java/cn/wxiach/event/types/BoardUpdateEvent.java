@@ -1,7 +1,7 @@
 package cn.wxiach.event.types;
 
+import cn.wxiach.core.store.GomokuStore;
 import cn.wxiach.event.GomokuEvent;
-import cn.wxiach.gomoku.store.GomokuStore;
 
 public class BoardUpdateEvent extends GomokuEvent {
 

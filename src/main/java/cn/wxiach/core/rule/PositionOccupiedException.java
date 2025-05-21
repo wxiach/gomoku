@@ -1,4 +1,4 @@
-package cn.wxiach.gomoku.rule;
+package cn.wxiach.core.rule;
 
 public class PositionOccupiedException extends RuntimeException {
 

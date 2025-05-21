@@ -1,4 +1,4 @@
-package cn.wxiach.gomoku.store.state;
+package cn.wxiach.core.store.state;
 
 import cn.wxiach.model.Color;
 

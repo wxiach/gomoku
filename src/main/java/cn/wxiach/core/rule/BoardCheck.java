@@ -1,4 +1,4 @@
-package cn.wxiach.gomoku.rule;
+package cn.wxiach.core.rule;
 
 import cn.wxiach.model.Board;
 import cn.wxiach.model.Color;

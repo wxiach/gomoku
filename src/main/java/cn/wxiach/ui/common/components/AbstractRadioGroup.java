@@ -162,7 +162,7 @@ public abstract class AbstractRadioGroup<T extends Enum<T>> extends JPanel imple
         for (Map.Entry<AbstractButton, T> entry : buttonValueMap.entrySet()) {
             if (valueToSelect.equals(entry.getValue())) {
                 if (!entry.getKey().isSelected()) {
-                    // There can't use setSelected() method, because it will not trigger the ActionListener
+                    // 这里不能使用setSelected()方法，因为它不会触发ActionListener
                     entry.getKey().doClick();
                 }
                 return;
