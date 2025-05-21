@@ -105,7 +105,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             g2d.setStroke(new BasicStroke(2));
 
             int size = 4;
-            int offset = STONE_DIMENSION / 2 + 2;
+            int offset = STONE_DIMENSION / 2 + 1;
 
             g2d.translate(coordinate.x(), coordinate.y());
             for (int i = 0; i < 4; i++) {
@@ -145,7 +145,7 @@ public class GomokuBoard extends JPanel implements EventBusAware {
             g2d.setStroke(new BasicStroke(2));
 
             int size = 4;
-            int offset = STONE_DIMENSION / 2 + 2;
+            int offset = STONE_DIMENSION / 2 + 1;
 
             g2d.translate(coordinate.x(), coordinate.y());
             for (int i = 0; i < 4; i++) {

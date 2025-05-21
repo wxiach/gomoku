@@ -1,11 +1,11 @@
-# Gomoku - 五子棋对弈系统
+# Gomoku - 五子棋 AI 对弈系统
 
 [![JDK](https://img.shields.io/badge/JDK-21-brightgreen.svg)](https://jdk.java.net/21/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![GUI](https://img.shields.io/badge/GUI-Swing-orange.svg)]()
 
-基于 Java 开发的五子棋对弈系统，支持 AI 对战。
+基于 Java 开发的五子棋 AI 对弈系统。
 
 > AI 当前搜索深度限制为 8 层，正在持续优化中。
 
@@ -24,7 +24,7 @@
 1. **AI 决策系统**
     - 迭代加深的 Alpha-Beta 剪枝搜索
     - 基于棋型识别的增量式局面评估
-    - 启发式走法排序（指对候选点的排序）
+    - 启发式走法排序（对候选点排序）
 
 2. **性能优化**
     - 使用 AC 自动机进行快速棋型匹配
